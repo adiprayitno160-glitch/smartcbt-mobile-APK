@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Top Header Banner -->
+        <LinearLayout
+            android:id="@+id/layoutHeaderBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#059669"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="22dp">
+
+            <TextView
+                android:id="@+id/tvScanResultIcon"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@drawable/circle_white_alpha"
+                android:gravity="center"
+                android:text="✓"
+                android:textColor="#059669"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvScanResultTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Presensi Berhasil Dicatat!"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvScanResultSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="Data kehadiran terverifikasi &amp; tersimpan di sistem"
+                android:textColor="#D1FAE5"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Body Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Student Profile Badge -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F8FAFC"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <!-- Student Profile Photo & Avatar -->
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="#E2E8F0">
+
+                        <ImageView
+                            android:id="@+id/ivStudentPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_avatar_placeholder"
+                            android:contentDescription="Foto Siswa" />
+
+                        <TextView
+                            android:id="@+id/tvStudentAvatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#059669"
+                            android:gravity="center"
+                            android:text="S"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+                    </androidx.cardview.widget.CardView>
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvStudentName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama Siswa"
+                        android:textColor="#0F172A"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvStudentClassNisn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kelas VII-A • NISN: 12345678"
+                        android:textColor="#64748B"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Detail Rows -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="5dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="⏰ Waktu Presensi"
+                        android:textColor="#64748B"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tvScanTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="07:12:45 WIB"
+                        android:textColor="#0F172A"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="5dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="🚪 Tipe Presensi"
+                        android:textColor="#64748B"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tvGateTypeBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#ECFDF5"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:text="Gate-In (Masuk)"
+                        android:textColor="#065F46"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="5dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="📍 Koordinat GPS HP"
+                        android:textColor="#64748B"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tvGpsStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-8.125506, 111.893526"
+                        android:textColor="#059669"
+                        android:textSize="11sp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Parent Notification Badge -->
+                <LinearLayout
+                    android:id="@+id/layoutParentNotifBadge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="#F0FDF4"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📱"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/tvParentNotifText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="Notifikasi Terkirim Otomatis ke Orang Tua &amp; Portal Siswa"
+                        android:textColor="#166534"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Message Detail Description -->
+            <TextView
+                android:id="@+id/tvScanResultMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#F1F5F9"
+                android:padding="10dp"
+                android:text="Keterangan presensi..."
+                android:textColor="#334155"
+                android:textSize="11sp" />
+
+            <!-- Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnScanResultSecondary"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#E2E8F0"
+                    android:text="Scan Ulang"
+                    android:textColor="#475569"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnScanResultPrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#059669"
+                    android:text="Selesai &amp; Tutup"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

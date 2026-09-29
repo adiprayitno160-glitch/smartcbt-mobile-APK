@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8FAFC">
+
+    <!-- ================= TOP APP BAR ================= -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#0A2E5C"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBackAttendance"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Kembali"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvAttendanceTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kalender Presensi Siswa"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvAttendanceSubheader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kalender Presensi &amp; Kehadiran Harian Gerbang Sekolah"
+                android:textColor="#94A3B8"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnRefreshAttendance"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Segarkan"
+            android:src="@android:drawable/ic_popup_sync"
+            app:tint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- Tab bar hidden: hanya menampilkan kalender presensi -->
+    <HorizontalScrollView
+        android:id="@+id/tabBarAttendanceScroll"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        android:scrollbars="none"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="8dp">
+
+        <LinearLayout
+            android:id="@+id/tabBarAttendance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Tab 1: Hari Ini & Kalender (Electric Royal Blue Theme) -->
+            <LinearLayout
+                android:id="@+id/tabBtnTodayCalendar"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:layout_marginEnd="6dp">
+                <TextView
+                    android:id="@+id/tvTabTodayCalendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📅 Kalender"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Tab 2: Riwayat Lengkap (Emerald Green Theme) -->
+            <LinearLayout
+                android:id="@+id/tabBtnHistoryList"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:layout_marginEnd="6dp">
+                <TextView
+                    android:id="@+id/tvTabHistoryList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📜 Riwayat Lengkap"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Tab 3: Statistik & Rekap (Royal Violet / Purple Theme) -->
+            <LinearLayout
+                android:id="@+id/tabBtnSemesterStats"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:layout_marginEnd="6dp">
+                <TextView
+                    android:id="@+id/tvTabSemesterStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Statistik"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Tab 4: Presensi per JP (Sunset Amber / Orange Theme) -->
+            <LinearLayout
+                android:id="@+id/tabBtnPeriodAttendance"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp">
+                <TextView
+                    android:id="@+id/tvTabPeriodAttendance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏰ Presensi JP"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ================= TAB 1 CONTAINER: HARI INI & KALENDER ================= -->
+            <LinearLayout
+                android:id="@+id/containerTabTodayCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <!-- 1. LIVE TODAY ATTENDANCE CARD -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="🔴 STATUS HARI INI"
+                                android:textColor="#0A2E5C"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvTodayDateBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#EFF6FF"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="Senin, 07 Sep 2026"
+                                android:textColor="#1D4ED8"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Large Presence Status Banner -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="#F0FDF4"
+                            android:padding="14dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvTodayStatusIcon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="✅"
+                                android:textSize="28sp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTodayStatusText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hadir Tepat Waktu"
+                                    android:textColor="#15803D"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvTodayGateNote"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Gerbang Depan Sekolah • Terverifikasi QR Statis"
+                                    android:textColor="#166534"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Gate In & Gate Out Times (Multi-color Cards) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/cardTodayGateIn"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="#F0F9FF"
+                                android:padding="12dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="🚪 JAM MASUK"
+                                    android:textColor="#0284C7"
+                                    android:textSize="10.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvTodayGateInTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:text="06:42 WIB"
+                                    android:textColor="#0C4A6E"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="10dp"
+                                android:layout_height="match_parent" />
+
+                            <LinearLayout
+                                android:id="@+id/cardTodayGateOut"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="#FFF7ED"
+                                android:padding="12dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="🏠 JAM PULANG"
+                                    android:textColor="#EA580C"
+                                    android:textSize="10.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvTodayGateOutTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:text="--:-- WIB"
+                                    android:textColor="#7C2D12"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Quick QR Scanner Button (Royal Blue) -->
+                        <Button
+                            android:id="@+id/btnQuickScanAttendance"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:layout_marginTop="12dp"
+                            android:backgroundTint="#2563EB"
+                            android:text="📷 Pindai QR Presensi Gerbang / Kelas"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 1.5 GRAFIK TREN KEHADIRAN & REKAP PERSENTASE -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardAttendanceTrend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="📈 GRAFIK TREN KEHADIRAN"
+                                android:textColor="#1E40AF"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvAttendanceRateBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#DCFCE7"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="98.0% Hadir"
+                                android:textColor="#15803D"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Visualisasi tren dan konsistensi presensi gerbang sekolah"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <!-- Horizontal Scrollable Visual Trend Bars Container -->
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:scrollbars="none">
+
+                            <LinearLayout
+                                android:id="@+id/layoutAttendanceTrendBars"
+                                android:layout_width="wrap_content"
+                                android:layout_height="125dp"
+                                android:gravity="bottom"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="4dp"
+                                android:paddingVertical="4dp">
+                                <!-- Dynamically populated in AttendanceActivity.kt -->
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
+                        <!-- Legend -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🟢 Hadir"
+                                android:textColor="#15803D"
+                                android:textSize="9.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="🟡 Telat"
+                                android:textColor="#B45309"
+                                android:textSize="9.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="🔵 Izin/Sakit"
+                                android:textColor="#1D4ED8"
+                                android:textSize="9.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="🔴 Alpa"
+                                android:textColor="#B91C1C"
+                                android:textSize="9.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- 4 Breakdown Percentage Badges -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="#F0FDF4"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:id="@+id/tvTrendHadirPercent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="95.5%"
+                                    android:textColor="#15803D"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hadir Tepat"
+                                    android:textColor="#166534"
+                                    android:textSize="9.5sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="match_parent" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="#FFFBEB"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:id="@+id/tvTrendLatePercent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="4.5%"
+                                    android:textColor="#B45309"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Terlambat"
+                                    android:textColor="#92400E"
+                                    android:textSize="9.5sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="match_parent" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="#EFF6FF"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:id="@+id/tvTrendSickPermitPercent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.0%"
+                                    android:textColor="#1D4ED8"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sakit/Izin"
+                                    android:textColor="#1E40AF"
+                                    android:textSize="9.5sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="match_parent" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="#FEF2F2"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:id="@+id/tvTrendAlpaPercent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.0%"
+                                    android:textColor="#B91C1C"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Alpa"
+                                    android:textColor="#991B1B"
+                                    android:textSize="9.5sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 2. MONTHLY CALENDAR CARD -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="📅 KALENDER PRESENSI BULANAN"
+                                android:textColor="#1E40AF"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="#EFF6FF"
+                                android:paddingHorizontal="6dp"
+                                android:paddingVertical="3dp"
+                                android:orientation="horizontal">
+
+                                <ImageButton
+                                    android:id="@+id/btnPrevMonth"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:src="@android:drawable/ic_media_previous"
+                                    android:contentDescription="Bulan Sebelumnya"
+                                    app:tint="#2563EB" />
+
+                                <TextView
+                                    android:id="@+id/tvCalendarCurrentMonth"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="6dp"
+                                    android:text="September 2026"
+                                    android:textColor="#1E40AF"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold" />
+
+                                <ImageButton
+                                    android:id="@+id/btnNextMonth"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:src="@android:drawable/ic_media_next"
+                                    android:contentDescription="Bulan Berikutnya"
+                                    app:tint="#2563EB" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Calendar Day Labels (M S S R K J S) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
+
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Min" android:textColor="#EF4444" android:textSize="11sp" android:textStyle="bold" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Sen" android:textColor="#64748B" android:textSize="11sp" android:textStyle="bold" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Sel" android:textColor="#64748B" android:textSize="11sp" android:textStyle="bold" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Rab" android:textColor="#64748B" android:textSize="11sp" android:textStyle="bold" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Kam" android:textColor="#64748B" android:textSize="11sp" android:textStyle="bold" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Jum" android:textColor="#0D9488" android:textSize="11sp" android:textStyle="bold" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Sab" android:textColor="#2563EB" android:textSize="11sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="6dp"
+                            android:background="#E2E8F0" />
+
+                        <!-- Calendar Grid Container -->
+                        <GridLayout
+                            android:id="@+id/gridCalendarDays"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="7"
+                            android:layout_marginTop="8dp">
+                            <!-- Dynamically filled with 35 day cells -->
+                        </GridLayout>
+
+                        <!-- Multi-color Calendar Legend Pins -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#DCFCE7"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="🟢 Hadir"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#15803D" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:background="#FEF3C7"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="🟡 Telat"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#B45309" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:background="#DBEAFE"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="🔵 Izin"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#1D4ED8" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:background="#F3E8FF"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="🟣 Sakit"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#7C3AED" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:background="#FEE2E2"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="🔴 Alpa"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#B91C1C" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

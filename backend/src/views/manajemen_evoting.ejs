@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗳️ Manajemen e-Voting OSIS - Smart School Portal</title>
+    <script src="/js/tailwind.js"></script>
+    <link rel="stylesheet" href="/css/portal-theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 flex min-h-screen text-slate-800">
+    <!-- Sidebar Admin -->
+    <%- include('partials/sidebar_admin') %>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 md:p-8 ml-64 overflow-y-auto h-screen bg-slate-50/70 transition-all duration-300 ease-in-out">
+        <!-- Top Bar Header -->
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-200/80">
+            <div class="flex items-center gap-3">
+                <button onclick="togglePortalSidebar()" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition-colors shadow-sm cursor-pointer" title="Toggle Sidebar (Ctrl+B)">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <div>
+                    <h1 class="text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <span class="p-2 bg-gradient-to-tr from-indigo-500 to-purple-600 text-white rounded-xl text-xl shadow-md shadow-indigo-500/20">🗳️</span>
+                        <span>e-Voting Pemilihan Ketua &amp; Wakil OSIS</span>
+                    </h1>
+                    <p class="text-slate-500 text-xs mt-0.5">Sistem Pemilihan Umum Digital Siswa — Terpusat, Asas LUBER JURDIL, &amp; Real-Time Multi-Color Analytics</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <button onclick="loadElectionData()" class="px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all">
+                    <span>🔄</span> Refresh Data
+                </button>
+                <div id="moduleStatusIndicator" class="px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 border bg-emerald-50 text-emerald-800 border-emerald-200 shadow-xs">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="moduleStatusText">MEMUAT STATUS...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body Stack -->
+        <div class="space-y-6 max-w-7xl">
+
+            <!-- Card 1: Master Control & Feature Toggle -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-2xl shadow-md shadow-indigo-500/20">
+                            🎛️
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-gray-900">Master Switch Modul e-Voting SIAKAD</h2>
+                            <p class="text-xs text-gray-500">Jika switch ini MATI (OFF), menu e-Voting di APK siswa otomatis terkunci dan seluruh endpoint ditolak (403 Forbidden)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-200">
+                        <span id="toggleLabel" class="text-xs font-extrabold text-slate-700">Status: NONAKTIF</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="masterToggleInput" onchange="handleMasterToggle(this.checked)" class="sr-only peer">
+                            <div class="w-14 h-7 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-500"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Form Konfigurasi Waktu & Judul -->
+                <form id="formConfig" onsubmit="handleSaveConfig(event)" class="mt-5 grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                    <div class="md:col-span-2">
+                        <label class="block font-bold text-gray-700 mb-1">Judul Agenda Pemilihan OSIS *</label>
+                        <input type="text" id="cfgTitle" class="w-full border rounded-xl p-2.5 font-semibold text-xs focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white" required placeholder="Contoh: Pemilihan Ketua & Wakil Ketua OSIS SMPN 1 Boyolangu 2026/2027">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Waktu Buka Sesi (Mulai)</label>
+                        <input type="datetime-local" id="cfgStartTime" class="w-full border rounded-xl p-2.5 font-mono text-xs focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Waktu Tutup Sesi (Selesai)</label>
+                        <input type="datetime-local" id="cfgEndTime" class="w-full border rounded-xl p-2.5 font-mono text-xs focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white">
+                    </div>
+                    <div class="md:col-span-4 flex justify-end gap-2 pt-1">
+                        <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md shadow-indigo-600/20 transition-all flex items-center gap-1.5">
+                            <span>💾</span> Simpan Konfigurasi Jadwal
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Card 2: Multi-Color Dashboard Metric Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Stat Card 1: Electric Blue / Indigo (DPT Pemilih) -->
+                <div class="rounded-3xl p-6 shadow-lg bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-800 text-white relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:scale-125 transition-transform"></div>
+                    <div class="flex items-center justify-between text-blue-100">
+                        <span class="text-xs font-black uppercase tracking-wider">Total DPT Siswa</span>
+                        <span class="text-2xl bg-white/15 p-2 rounded-2xl backdrop-blur-xs">👥</span>
+                    </div>
+                    <p id="statTotalDpt" class="text-3xl font-black mt-3 tracking-tight">0</p>
+                    <p class="text-[11px] text-blue-200 mt-1 font-medium">Siswa terdaftar hak suara aktif</p>
+                </div>
+
+                <!-- Stat Card 2: Deep Violet / Pink Gradient (Suara Masuk) -->
+                <div class="rounded-3xl p-6 shadow-lg bg-gradient-to-br from-purple-600 via-pink-600 to-rose-600 text-white relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:scale-125 transition-transform"></div>
+                    <div class="flex items-center justify-between text-purple-100">
+                        <span class="text-xs font-black uppercase tracking-wider">Suara Masuk (Sah)</span>
+                        <span class="text-2xl bg-white/15 p-2 rounded-2xl backdrop-blur-xs">📥</span>
+                    </div>
+                    <p id="statTotalVotes" class="text-3xl font-black mt-3 tracking-tight">0</p>
+                    <p class="text-[11px] text-purple-200 mt-1 font-medium">Terekam anonim di bilik suara</p>
+                </div>
+
+                <!-- Stat Card 3: Amber / Orange Gradient (Belum Memilih) -->
+                <div class="rounded-3xl p-6 shadow-lg bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 text-white relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:scale-125 transition-transform"></div>
+                    <div class="flex items-center justify-between text-amber-100">
+                        <span class="text-xs font-black uppercase tracking-wider">Belum Menggunakan Hak</span>
+                        <span class="text-2xl bg-white/15 p-2 rounded-2xl backdrop-blur-xs">⏳</span>
+                    </div>
+                    <p id="statUnvoted" class="text-3xl font-black mt-3 tracking-tight">0</p>
+                    <p class="text-[11px] text-amber-200 mt-1 font-medium">Siswa belum hadir mencoblos</p>
+                </div>
+
+                <!-- Stat Card 4: Emerald / Teal Gradient (Partisipasi) -->
+                <div class="rounded-3xl p-6 shadow-lg bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 text-white relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:scale-125 transition-transform"></div>
+                    <div class="flex items-center justify-between text-emerald-100">
+                        <span class="text-xs font-black uppercase tracking-wider">Tingkat Partisipasi</span>
+                        <span class="text-2xl bg-white/15 p-2 rounded-2xl backdrop-blur-xs">📊</span>
+                    </div>
+                    <p id="statPercentage" class="text-3xl font-black mt-3 tracking-tight">0.0%</p>
+                    <div class="w-full bg-white/20 rounded-full h-2.5 mt-2.5 overflow-hidden">
+                        <div id="statProgressBar" class="bg-white h-2.5 rounded-full transition-all duration-700" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Multi-Color Perolehan Suara Pasangan Calon (Live Cards) -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-base font-black text-gray-900 flex items-center gap-2">
+                            <span>🏆</span> Hasil Perolehan Suara Pasangan Calon (Multi-Color Quick Count)
+                        </h2>
+                        <p class="text-xs text-gray-500">Perhitungan suara langsung dari kotak suara terenkripsi tanpa rekayasa</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500 animate-ping"></span> Live Counting
+                        </span>
+                        <button onclick="handleResetElection()" class="px-3 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-full text-xs font-bold transition-all" title="Reset Pemilu">
+                            ⚠️ Reset Pemilu
+                        </button>
+                    </div>
+                </div>
+
+                <div id="candidatesResultsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic multi-color rendering via JS -->
+                </div>
+            </div>
+
+            <!-- Card 4: Multi-Color Rekap Partisipasi per Kelas -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-base font-black text-gray-900 flex items-center gap-2">
+                            <span>🏫</span> Rekapitulasi Partisipasi Pemilih per Rombel Kelas
+                        </h2>
+                        <p class="text-xs text-gray-500">Tingkat kehadiran siswa menggunakan hak suara di masing-masing kelas</p>
+                    </div>
+                </div>
+
+                <div id="classTurnoutContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                    <!-- Dynamic rendering per kelas -->
+                </div>
+            </div>
+
+            <!-- Card 5: Manajemen Data Paslon & Form CRUD -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-base font-black text-gray-900 flex items-center gap-2">
+                            <span>📋</span> Master Data Pasangan Calon (Kandidat OSIS)
+                        </h2>
+                        <p class="text-xs text-gray-500">Kelola nomor urut resmi, foto profil paslon, nama lengkap, serta visi &amp; misi</p>
+                    </div>
+                    <button onclick="openCandidateModal()" class="px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-md shadow-indigo-500/20 transition-all">
+                        <span>➕</span> Tambah Paslon Baru
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 text-slate-600 uppercase font-extrabold border-y border-slate-200">
+                            <tr>
+                                <th class="p-3.5 text-center">No. Urut</th>
+                                <th class="p-3.5">Foto Paslon</th>
+                                <th class="p-3.5">Nama Ketua &amp; Wakil</th>
+                                <th class="p-3.5">Visi Utama</th>
+                                <th class="p-3.5">Rincian Misi</th>
+                                <th class="p-3.5 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="candidateTableBody" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="6" class="p-6 text-center text-slate-400">Memuat data pasangan calon...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Card 6: Audit Trail Kehadiran Pemilih (LUBER JURDIL - Pilihan Tetap Rahasia) -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-base font-black text-gray-900 flex items-center gap-2">
+                            <span>🛡️</span> Log Audit Kehadiran Pemilih (Asas Rahasia Terjamin)
+                        </h2>
+                        <p class="text-xs text-gray-500">Mencatat siswa yang telah memberikan hak suara beserta waktu dan fingerprint device. Database TIDAK menyimpan pilihan paslon siswa.</p>
+                    </div>
+                    <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                        🔒 Zero-Knowledge Voter Privacy
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 text-slate-600 uppercase font-extrabold border-y border-slate-200">
+                            <tr>
+                                <th class="p-3">#</th>
+                                <th class="p-3">Nama Siswa</th>
+                                <th class="p-3">Kelas</th>
+                                <th class="p-3">Waktu Pencoblosan</th>
+                                <th class="p-3 font-mono">Fingerprint Device</th>
+                                <th class="p-3 text-center">Status Suara</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentAttendanceTableBody" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="6" class="p-6 text-center text-slate-400">Belum ada siswa yang menggunakan hak suara.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal Form Tambah/Edit Paslon -->
+    <div id="candidateModal" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-3 border-b mb-4">
+                <h3 id="modalTitle" class="font-bold text-base text-slate-900">Tambah Pasangan Calon</h3>
+                <button onclick="closeCandidateModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+            </div>
+            <form id="candidateForm" onsubmit="handleSaveCandidateForm(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="candidateFormId">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">No. Urut *</label>
+                        <input type="number" id="formCandidateNumber" class="w-full border rounded-xl p-2.5 font-bold text-center text-sm focus:ring-2 focus:ring-indigo-500 outline-none" required min="1" max="20" placeholder="1">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block font-bold text-gray-700 mb-1">Foto Pasangan Calon (Upload / URL)</label>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center overflow-hidden shrink-0">
+                                <img id="candidatePhotoPreview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394A3B8'><circle cx='12' cy='8' r='4'/><path d='M12 14c-5 0-9 3-9 6v1h18v-1c0-3-4-6-9-6z'/></svg>" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 space-y-1">
+                                <input type="file" id="formPhotoFile" accept="image/*" onchange="handleUploadPhoto(event)" class="w-full text-[11px] file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                                <input type="text" id="formPhotoUrl" class="w-full border rounded-lg p-1.5 text-[11px] text-slate-500 focus:ring-1 focus:ring-indigo-500 outline-none" placeholder="/uploads/candidates/paslon.jpg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Nama Calon Ketua OSIS *</label>
+                    <input type="text" id="formChairmanName" class="w-full border rounded-xl p-2.5 font-semibold text-xs focus:ring-2 focus:ring-indigo-500 outline-none" required placeholder="Contoh: Muhammad Al-Fatih (VIII-A)">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Nama Calon Wakil Ketua OSIS *</label>
+                    <input type="text" id="formViceChairmanName" class="w-full border rounded-xl p-2.5 font-semibold text-xs focus:ring-2 focus:ring-indigo-500 outline-none" required placeholder="Contoh: Siti Aisyah Nur (VII-B)">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Visi Pasangan Calon *</label>
+                    <textarea id="formVision" rows="2" class="w-full border rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none" required placeholder="Visi yang diusung oleh pasangan calon..."></textarea>
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Misi Paslon (Pisahkan tiap poin dengan baris baru / Enter) *</label>
+                    <textarea id="formMission" rows="4" class="w-full border rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none" required placeholder="1. Meningkatkan kedisiplinan dan akhlak mulia siswa&#10;2. Mengoptimalkan kegiatan ekstrakurikuler seni &amp; olahraga&#10;3. Menyelenggarakan lomba kreatif tingkat sekolah"></textarea>
+                </div>
+                <div class="pt-3 border-t flex justify-end gap-2">
+                    <button type="button" onclick="closeCandidateModal()" class="px-4 py-2 border rounded-xl text-slate-600 font-bold hover:bg-slate-100 transition-all">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all">Simpan Paslon</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Logika Frontend Admin Portal -->
+    <script>
+        let cachedElectionData = null;
+
+        // Palette multi-color modern untuk tiap paslon
+        const COLOR_PALETTES = [
+            { bgGrad: 'from-blue-600 to-indigo-700', textCol: 'text-indigo-600', badgeBg: 'bg-indigo-100 text-indigo-800', barBg: 'bg-indigo-600', borderCol: 'border-indigo-500' },
+            { bgGrad: 'from-emerald-600 to-teal-700', textCol: 'text-emerald-600', badgeBg: 'bg-emerald-100 text-emerald-800', barBg: 'bg-emerald-600', borderCol: 'border-emerald-500' },
+            { bgGrad: 'from-amber-500 to-orange-600', textCol: 'text-amber-600', badgeBg: 'bg-amber-100 text-amber-800', barBg: 'bg-amber-500', borderCol: 'border-amber-500' },
+            { bgGrad: 'from-rose-600 to-pink-600', textCol: 'text-rose-600', badgeBg: 'bg-rose-100 text-rose-800', barBg: 'bg-rose-600', borderCol: 'border-rose-500' },
+            { bgGrad: 'from-purple-600 to-violet-700', textCol: 'text-purple-600', badgeBg: 'bg-purple-100 text-purple-800', barBg: 'bg-purple-600', borderCol: 'border-purple-500' },
+            { bgGrad: 'from-cyan-600 to-blue-700', textCol: 'text-cyan-600', badgeBg: 'bg-cyan-100 text-cyan-800', barBg: 'bg-cyan-600', borderCol: 'border-cyan-500' },
+        ];
+
+        function getCookie(name) {
+            const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
+        }
+
+        function getAuthToken() {
+            return localStorage.getItem('token') || localStorage.getItem('admin_token') || localStorage.getItem('jwt_token') || getCookie('token') || getCookie('admin_token') || getCookie('jwt_token') || '';
+        }
+
+        async function apiRequest(url, method = 'GET', body = null) {
+            const token = getAuthToken();
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+            const opts = { method, headers };
+            if (body) opts.body = JSON.stringify(body);
+            const res = await fetch(url, opts);
+            return await res.json();
+        }
+
+        async function loadElectionData() {
+            try {
+                const res = await apiRequest('/api/admin/evoting/results');
+                if (res.success && res.data) {
+                    cachedElectionData = res.data;
+                    renderData(res.data);
+                }
+            } catch (err) {
+                console.error('Error loadElectionData:', err);
+            }
+        }
+
+        function renderData(data) {
+            const config = data.config || {};
+            const isVotingActive = config.isActive || false;
+
+            // Toggle & Status Indicator
+            const toggleInput = document.getElementById('masterToggleInput');
+            toggleInput.checked = isVotingActive;
+            document.getElementById('toggleLabel').textContent = isVotingActive ? 'Status: AKTIF (ONLINE)' : 'Status: NONAKTIF (LOCKED)';
+
+            const statusIndicator = document.getElementById('moduleStatusIndicator');
+            const statusText = document.getElementById('moduleStatusText');
+            if (isVotingActive) {
+                statusIndicator.className = 'px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 border bg-emerald-50 text-emerald-800 border-emerald-200 shadow-xs';
+                statusText.textContent = 'MODUL ONLINE (AKTIF)';
+            } else {
+                statusIndicator.className = 'px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 border bg-red-50 text-red-800 border-red-200 shadow-xs';
+                statusText.textContent = 'MODUL DIKUNCI (OFF)';
+            }
+
+            // Form Values
+            document.getElementById('cfgTitle').value = config.title || '';
+            if (config.startTime) document.getElementById('cfgStartTime').value = config.startTime.substring(0, 16);
+            if (config.endTime) document.getElementById('cfgEndTime').value = config.endTime.substring(0, 16);
+
+            // Stats
+            document.getElementById('statTotalDpt').textContent = data.total_dpt.toLocaleString('id-ID');
+            document.getElementById('statTotalVotes').textContent = data.total_ballots.toLocaleString('id-ID');
+            document.getElementById('statUnvoted').textContent = (data.unvoted_count || 0).toLocaleString('id-ID');
+            document.getElementById('statPercentage').textContent = data.turn_out_percentage + '%';
+            document.getElementById('statProgressBar').style.width = Math.min(data.turn_out_percentage, 100) + '%';
+
+            // Multi-Color Candidates Results Cards
+            const resultsContainer = document.getElementById('candidatesResultsContainer');
+            resultsContainer.innerHTML = '';
+
+            const candidates = data.candidate_stats || [];
+            if (candidates.length === 0) {
+                resultsContainer.innerHTML = '<div class="col-span-3 text-center py-8 text-slate-400 text-xs">Belum ada pasangan calon yang ditambahkan. Silakan klik "Tambah Paslon Baru" di bawah.</div>';
+            } else {
+                candidates.forEach((c, idx) => {
+                    const theme = COLOR_PALETTES[idx % COLOR_PALETTES.length];
+                    const card = document.createElement('div');
+                    card.className = `border rounded-3xl p-5 hover:shadow-xl transition-all flex flex-col justify-between bg-white relative overflow-hidden group ${theme.borderCol}`;
+                    card.innerHTML = `
+                        <div>
+                            <!-- Header Paslon Multi Color -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr ${theme.bgGrad} text-white font-black text-xl flex items-center justify-center shadow-md">
+                                    ${c.candidateNumber}
+                                </div>
+                                <span class="text-xs font-black px-3.5 py-1.5 rounded-full ${theme.badgeBg}">
+                                    ${c.percentage}% Suara
+                                </span>
+                            </div>
+
+                            <!-- Foto Paslon Visual -->
+                            <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-3 border border-slate-200 bg-slate-100">
+                                <img src="${c.photoUrl}" alt="Foto Paslon" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2394A3B8\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M12 14c-5 0-9 3-9 6v1h18v-1c0-3-4-6-9-6z\'/></svg>'">
+                                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 text-white">
+                                    <h3 class="font-extrabold text-sm leading-tight">${c.chairmanName}</h3>
+                                    <p class="text-[11px] text-slate-300">Wakil: ${c.viceChairmanName}</p>
+                                </div>
+                            </div>
+
+                            <p class="text-[11px] text-slate-600 line-clamp-2 mt-2 italic bg-slate-50 p-2 rounded-xl border border-slate-100">"${c.vision}"</p>
+
+                            <!-- Progress Bar Multi Color -->
+                            <div class="w-full bg-slate-100 rounded-full h-3.5 mt-4 overflow-hidden border border-slate-200/80">
+                                <div class="${theme.barBg} h-3.5 rounded-full transition-all duration-700" style="width: ${c.percentage}%"></div>
+                            </div>
+                            <div class="flex justify-between items-center text-xs font-bold text-slate-700 mt-2">
+                                <span>Perolehan Suara:</span>
+                                <span class="font-black font-mono text-sm ${theme.textCol}">${c.votes.toLocaleString('id-ID')} Suara</span>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(card);
+                });
+            }
+
+            // Multi-Color Class Turnout Grid
+            const classContainer = document.getElementById('classTurnoutContainer');
+            classContainer.innerHTML = '';
+            const classStats = data.class_stats || [];
+            if (classStats.length === 0) {
+                classContainer.innerHTML = '<div class="col-span-6 text-center text-slate-400 text-xs">Belum ada data rombel kelas.</div>';
+            } else {
+                classStats.forEach((cls, idx) => {
+                    const theme = COLOR_PALETTES[idx % COLOR_PALETTES.length];
+                    const item = document.createElement('div');
+                    item.className = 'bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex flex-col justify-between hover:bg-white hover:shadow-sm transition-all';
+                    item.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="font-extrabold text-xs text-slate-800">${cls.className}</span>
+                            <span class="text-[10px] font-black px-1.5 py-0.5 rounded ${theme.badgeBg}">${cls.percentage}%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-1.5 mt-2 overflow-hidden">
+                            <div class="${theme.barBg} h-1.5 rounded-full" style="width: ${cls.percentage}%"></div>
+                        </div>
+                        <p class="text-[10px] text-slate-500 font-semibold mt-1">${cls.votedCount} / ${cls.totalStudents} siswa</p>
+                    `;
+                    classContainer.appendChild(item);
+                });
+            }
+
+            // Candidates Table
+            const tbody = document.getElementById('candidateTableBody');
+            tbody.innerHTML = '';
+            if (candidates.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada kandidat paslon.</td></tr>';
+            } else {
+                candidates.forEach(c => {
+                    const missions = Array.isArray(c.mission) ? c.mission : [c.mission];
+                    const missionHtml = missions.map(m => `<li>• ${m}</li>`).join('');
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition-colors';
+                    tr.innerHTML = `
+                        <td class="p-3.5 text-center font-black text-base text-indigo-600 font-mono">${c.candidateNumber}</td>
+                        <td class="p-3.5">
+                            <img src="${c.photoUrl}" alt="Foto Paslon" class="w-14 h-14 object-cover rounded-2xl border border-slate-200 shadow-xs" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2394A3B8\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M12 14c-5 0-9 3-9 6v1h18v-1c0-3-4-6-9-6z\'/></svg>'">
+                        </td>
+                        <td class="p-3.5">
+                            <p class="font-bold text-slate-900">${c.chairmanName}</p>
+                            <p class="text-slate-500 text-[11px]">Wakil: ${c.viceChairmanName}</p>
+                        </td>
+                        <td class="p-3.5 max-w-xs text-slate-700 truncate" title="${c.vision}">${c.vision}</td>
+                        <td class="p-3.5 max-w-xs text-slate-600">
+                            <ul class="text-[11px] space-y-0.5 max-h-16 overflow-y-auto">${missionHtml}</ul>
+                        </td>
+                        <td class="p-3.5 text-center whitespace-nowrap">
+                            <button onclick='openCandidateModal(${JSON.stringify(c)})' class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl font-bold text-[11px] mr-1">Edit</button>
+                            <button onclick="handleDeleteCandidate('${c.id}')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl font-bold text-[11px]">Hapus</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Recent Attendance Table (Zero candidate reveal)
+            const attBody = document.getElementById('recentAttendanceTableBody');
+            attBody.innerHTML = '';
+            const recentAtt = data.recent_attendance || [];
+            if (recentAtt.length === 0) {
+                attBody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada siswa yang memberikan suara.</td></tr>';
+            } else {
+                recentAtt.forEach((a, i) => {
+                    const timeStr = a.votedAt ? new Date(a.votedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB' : '-';
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition-colors text-xs';
+                    tr.innerHTML = `
+                        <td class="p-3 text-slate-400 font-mono">${i + 1}</td>
+                        <td class="p-3 font-bold text-slate-900">${a.studentName}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 rounded-md font-semibold text-slate-700">${a.className}</span></td>
+                        <td class="p-3 font-mono text-slate-600">${timeStr}</td>
+                        <td class="p-3 font-mono text-slate-500">${a.deviceFingerprint}</td>
+                        <td class="p-3 text-center">
+                            <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full font-bold text-[10px]">✅ SUARA SAH MASUK</span>
+                        </td>
+                    `;
+                    attBody.appendChild(tr);
+                });
+            }
+        }
+
+        async function handleMasterToggle(isChecked) {
+            try {
+                const res = await apiRequest('/api/admin/evoting/toggle', 'POST', { isActive: isChecked });
+                if (res.success) {
+                    loadElectionData();
+                } else {
+                    alert(res.message || 'Gagal mengubah status modul.');
+                }
+            } catch (err) {
+                alert('Gagal menghubungi server.');
+            }
+        }
+
+        async function handleSaveConfig(e) {
+            e.preventDefault();
+            const title = document.getElementById('cfgTitle').value;
+            const startTime = document.getElementById('cfgStartTime').value;
+            const endTime = document.getElementById('cfgEndTime').value;
+
+            try {
+                const res = await apiRequest('/api/admin/evoting/config', 'POST', {
+                    title,
+                    startTime: startTime ? new Date(startTime).toISOString() : '',
+                    endTime: endTime ? new Date(endTime).toISOString() : ''
+                });
+                if (res.success) {
+                    alert('Konfigurasi e-Voting berhasil disimpan!');
+                    loadElectionData();
+                } else {
+                    alert(res.message || 'Gagal menyimpan konfigurasi.');
+                }
+            } catch (err) {
+                alert('Gagal menghubungi server.');
+            }
+        }
+
+        async function handleUploadPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const preview = document.getElementById('candidatePhotoPreview');
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append('photo', file);
+
+            try {
+                const token = getAuthToken();
+                const headers = {};
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const res = await fetch('/api/admin/evoting/upload-photo', {
+                    method: 'POST',
+                    headers,
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success && data.photoUrl) {
+                    document.getElementById('formPhotoUrl').value = data.photoUrl;
+                    preview.src = data.photoUrl;
+                } else {
+                    alert(data.message || 'Gagal mengunggah foto');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Terjadi kesalahan saat upload berkas foto.');
+            }
+        }
+
+        function openCandidateModal(candidate = null) {
+            const modal = document.getElementById('candidateModal');
+            const title = document.getElementById('modalTitle');
+            const idInput = document.getElementById('candidateFormId');
+            const numInput = document.getElementById('formCandidateNumber');
+            const photoInput = document.getElementById('formPhotoUrl');
+            const photoPreview = document.getElementById('candidatePhotoPreview');
+            const fileInput = document.getElementById('formPhotoFile');
+            const chairInput = document.getElementById('formChairmanName');
+            const viceInput = document.getElementById('formViceChairmanName');
+            const visionInput = document.getElementById('formVision');
+            const missionInput = document.getElementById('formMission');
+
+            if (fileInput) fileInput.value = '';
+
+            const fallbackSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394A3B8'><circle cx='12' cy='8' r='4'/><path d='M12 14c-5 0-9 3-9 6v1h18v-1c0-3-4-6-9-6z'/></svg>";
+
+            if (candidate) {
+                title.textContent = 'Edit Pasangan Calon No. ' + candidate.candidateNumber;
+                idInput.value = candidate.id;
+                numInput.value = candidate.candidateNumber;
+                photoInput.value = candidate.photoUrl || '';
+                photoPreview.src = candidate.photoUrl || fallbackSvg;
+                chairInput.value = candidate.chairmanName;
+                viceInput.value = candidate.viceChairmanName;
+                visionInput.value = candidate.vision;
+                missionInput.value = Array.isArray(candidate.mission) ? candidate.mission.join('\n') : candidate.mission;
+            } else {
+                title.textContent = 'Tambah Pasangan Calon Baru';
+                idInput.value = '';
+                numInput.value = (cachedElectionData?.candidate_stats?.length || 0) + 1;
+                photoInput.value = '';
+                photoPreview.src = fallbackSvg;
+                chairInput.value = '';
+                viceInput.value = '';
+                visionInput.value = '';
+                missionInput.value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeCandidateModal() {
+            document.getElementById('candidateModal').classList.add('hidden');
+        }
+
+        async function handleSaveCandidateForm(e) {
+            e.preventDefault();
+            const id = document.getElementById('candidateFormId').value;
+            const candidateNumber = document.getElementById('formCandidateNumber').value;
+            const photoUrl = document.getElementById('formPhotoUrl').value;
+            const chairmanName = document.getElementById('formChairmanName').value;
+            const viceChairmanName = document.getElementById('formViceChairmanName').value;
+            const vision = document.getElementById('formVision').value;
+            const missionText = document.getElementById('formMission').value;
+
+            const missionList = missionText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+
+            try {
+                const res = await apiRequest('/api/admin/evoting/candidates', 'POST', {
+                    id: id || undefined,
+                    candidateNumber,
+                    photoUrl,
+                    chairmanName,
+                    viceChairmanName,
+                    vision,
+                    mission: missionList
+                });
+
+                if (res.success) {
+                    closeCandidateModal();
+                    loadElectionData();
+                } else {
+                    alert(res.message || 'Gagal menyimpan paslon.');
+                }
+            } catch (err) {
+                alert('Gagal menghubungi server.');
+            }
+        }
+
+        async function handleDeleteCandidate(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus kandidat paslon ini?')) return;
+            try {
+                const res = await apiRequest(`/api/admin/evoting/candidates/${id}`, 'DELETE');
+                if (res.success) {
+                    loadElectionData();
+                } else {
+                    alert(res.message || 'Gagal menghapus kandidat.');
+                }
+            } catch (err) {
+                alert('Gagal menghubungi server.');
+            }
+        }
+
+        async function handleResetElection() {
+            const input = prompt('PERINGATAN KRITIS: Seluruh rekaman suara masuk di bilik suara dan data kehadiran pemilih akan direset ke nol!\n\nKetik "RESET" dengan huruf kapital untuk mengonfirmasi:');
+            if (input !== 'RESET') {
+                alert('Reset dibatalkan.');
+                return;
+            }
+
+            try {
+                const res = await apiRequest('/api/admin/evoting/reset', 'POST', {});
+                if (res.success) {
+                    alert('Bilik suara berhasil direset ke nol!');
+                    loadElectionData();
+                } else {
+                    alert(res.message || 'Gagal mereset data pemilu.');
+                }
+            } catch (err) {
+                alert('Gagal menghubungi server.');
+            }
+        }
+
+        // Jalankan saat halaman dibuka
+        window.addEventListener('DOMContentLoaded', () => {
+            loadElectionData();
+            // Polling auto-refresh setiap 10 detik
+            setInterval(loadElectionData, 10000);
+        });
+    </script>
+</body>
+</html>

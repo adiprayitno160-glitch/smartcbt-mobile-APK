@@ -1,0 +1,1274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    android:orientation="vertical">
+
+    <!-- Top App Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#0D5C3A"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBackBk"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Kembali"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvBkTopTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🕊️ Ruang BK &amp; Konseling Siswa"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvBkTopSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Privasi Terjamin • Bimbingan Belajar &amp; Karakter"
+                android:textColor="#A7F3D0"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnRefreshBk"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Segarkan"
+            android:src="@android:drawable/ic_popup_sync"
+            app:tint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- Modern Horizontal Scrollable Pill Tabs -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Tab BK: Rekap Kelas Ampuan (Counselor Mode) -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkRecap"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#059669"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkRecap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Rekap Kelas BK"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Tab BK: Presensi Hari Ini (Counselor Mode) -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkToday"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkToday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏱️ Presensi BK Hari Ini"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab BK: Approval Izin Siswa (Counselor Mode) -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkLeaves"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkLeaves"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📋 Izin Siswa &amp; Bukti Surat"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab BK: Presensi Siswa Tanpa HP (Counselor Mode) -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkManual"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkManual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📱 Presensi Tanpa HP"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab BK: Rekap 360 Derajat Gerbang, Mapel, Sholat (Counselor Mode) -->
+            <LinearLayout
+                android:id="@+id/tabBtnBk360"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBk360"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌐 Rekap 360°"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab 0: Balasan BK -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkReplies"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#059669"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkReplies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💬 Balasan BK"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Tab 1: Curhat & Pengaduan -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkReport"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🛡️ Curhat &amp; Lapor"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab 2: Janji Temu -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkAppointment"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkAppointment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📅 Janji Temu"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab 3: Poin & Konselor -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📜 Buku Poin &amp; Guru"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab 4: Digital Gatepass Siswa (Izin Pulang Resmi) -->
+            <LinearLayout
+                android:id="@+id/tabBtnBkGatepass"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#ECFDF5"
+                android:paddingHorizontal="14dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:id="@+id/tvTabBkGatepass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🚪 Digital Gatepass"
+                    android:textColor="#059669"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ScrollView
+        android:id="@+id/scrollViewBk"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- TAB BK: REKAP KELAS AMPUAN BK -->
+            <LinearLayout
+                android:id="@+id/containerTabBkRecap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Filter Kelas & Refresh Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🏫 PILIH KELAS AMPUAN BIMBINGAN KONSELING"
+                            android:textColor="#059669"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <Spinner
+                                android:id="@+id/spinnerBkClassFilter"
+                                android:layout_width="0dp"
+                                android:layout_height="44dp"
+                                android:layout_weight="1"
+                                android:background="@android:drawable/btn_dropdown" />
+
+                            <Button
+                                android:id="@+id/btnRefreshBkRecap"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="8dp"
+                                android:text="🔄 Muat"
+                                android:textSize="12sp"
+                                android:backgroundTint="#059669" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Ringkasan Statistik Presensi & SP Siswa -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <!-- Hadir -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#DCFCE7"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvBkRecapTotalHadir"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#15803D"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hadir"
+                            android:textColor="#166534"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Terlambat -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#FEF3C7"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvBkRecapTotalTerlambat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#B45309"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Terlambat"
+                            android:textColor="#92400E"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Sakit & Izin -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#E0E7FF"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvBkRecapTotalSakitIzin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#3730A3"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sakit/Izin"
+                            android:textColor="#4338CA"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Alpa -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#FEE2E2"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvBkRecapTotalAlpa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#B91C1C"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Alpa"
+                            android:textColor="#991B1B"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Kena SP -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#FFEDD5"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvBkRecapTotalSp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#C2410C"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kena SP"
+                            android:textColor="#9A3412"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Daftar Siswa Kelas Ampuan -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvBkRecapHeaderTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="👥 DAFTAR SISWA KELAS AMPUAN"
+                        android:textColor="#0F172A"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvBkRecapStudentCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 Siswa"
+                        android:textColor="#64748B"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/containerBkRecapStudents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB BK: PRESENSI BK HARI INI (LATE & EARLY LEAVE) -->
+            <LinearLayout
+                android:id="@+id/containerTabBkToday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Siswa Terlambat Masuk -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🏃 SISWA TERLAMBAT MASUK HARI INI (SCAN QR BK)"
+                    android:textColor="#DC2626"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBkTodayLateCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Menampilkan siswa yang check-in via QR BK setelah jam 07:00 WIB"
+                    android:textColor="#64748B"
+                    android:textSize="10.5sp" />
+
+                <LinearLayout
+                    android:id="@+id/containerBkTodayLate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+
+                <!-- Siswa Izin Pulang Cepat -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="🚪 SISWA IZIN PULANG CEPAT HARI INI (SCAN QR BK)"
+                    android:textColor="#2563EB"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBkTodayEarlyCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Menampilkan siswa yang izin pulang cepat dengan persetujuan Guru BK"
+                    android:textColor="#64748B"
+                    android:textSize="10.5sp" />
+
+                <LinearLayout
+                    android:id="@+id/containerBkTodayEarly"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB BK: APPROVAL IZIN SISWA DARI ORANG TUA (DENGAN PREVIEW FOTO SURAT) -->
+            <LinearLayout
+                android:id="@+id/containerTabBkLeaves"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📋 PERMOHONAN IZIN SISWA (ORANG TUA)"
+                            android:textColor="#2563EB"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvBkLeavesSummary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Verifikasi izin/sakit ananda dari orang tua beserta bukti surat dokter"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <Button
+                            android:id="@+id/btnRefreshBkLeaves"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="#EFF6FF"
+                            android:text="🔄 Segarkan Permohonan Izin Siswa"
+                            android:textColor="#2563EB"
+                            android:textSize="11.5sp" />
+
+                        <Button
+                            android:id="@+id/btnOpenBkDynamicQr"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="#059669"
+                            android:text="⚡ Buka Dynamic Rotating QR Ruang BK (Scan Layar Siswa)"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/llBkLeavesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB BK: PRESENSI MANUAL SISWA TANPA HP -->
+            <LinearLayout
+                android:id="@+id/containerTabBkManual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📱 PRESENSI MANUAL SISWA TANPA HP"
+                            android:textColor="#059669"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Antisipasi siswa yang HP-nya tertinggal, baterai habis, atau rusak"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <Button
+                            android:id="@+id/btnOpenBkManualForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="12dp"
+                            android:backgroundTint="#059669"
+                            android:text="➕ Catat Presensi Siswa Tanpa HP"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="📜 Riwayat Presensi Manual BK Hari Ini"
+                    android:textColor="#334155"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/llBkManualLogsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB BK: PUSAT DATA & STATISTIK PRESENSI 360 DERAJAT -->
+            <LinearLayout
+                android:id="@+id/containerTabBk360"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🌐 PUSAT STATISTIK PRESENSI 360°"
+                            android:textColor="#7C3AED"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Integrasi menyeluruh: Gerbang Utama, Jam Pelajaran (Mapel), dan Sholat Berjamaah"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <Button
+                            android:id="@+id/btnRefreshBk360"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="#F5F3FF"
+                            android:text="🔄 Muat Rekap 360 Derajat"
+                            android:textColor="#7C3AED"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/llBk360Cards"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB 0: KOTAK MASUK & BALASAN BK (DEFAULT VISIBLE) -->
+            <LinearLayout
+                android:id="@+id/containerTabBkReplies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="💬 KOTAK MASUK &amp; BALASAN GURU BK"
+                        android:textColor="#0F172A"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvBkMessageCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 Konsultasi"
+                        android:textColor="#64748B"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/containerBkMessages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:padding="20dp"
+                        android:text="Belum ada riwayat pesan atau pengaduan bimbingan konseling."
+                        android:textColor="#94A3B8"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- TAB 1: FORM PENGADUAN & CURHAT SISWA (GONE) -->
+            <LinearLayout
+                android:id="@+id/containerTabBkReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardReportForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/tvReportCardTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🛡️ Pengaduan Siswa &amp; Anti-Bullying"
+                            android:textColor="#0F172A"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvReportCardSub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Sampaikan keluhan, tekanan belajar, atau tindakan perundungan secara aman"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerReportCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="10dp"
+                            android:background="#F1F5F9"
+                            android:paddingHorizontal="12dp" />
+
+                        <EditText
+                            android:id="@+id/etReportSubject"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#F1F5F9"
+                            android:hint="Judul Pengaduan / Keluhan"
+                            android:paddingHorizontal="12dp"
+                            android:textSize="12sp" />
+
+                        <EditText
+                            android:id="@+id/etReportMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#F1F5F9"
+                            android:gravity="top|start"
+                            android:hint="Jelaskan secara rinci permasalahan yang Anda alami..."
+                            android:padding="12dp"
+                            android:textSize="12sp" />
+
+                        <!-- Identity Selector Header -->
+                        <TextView
+                            android:id="@+id/tvIdentityOptionTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Pilihan Identitas Pengirim:"
+                            android:textColor="#334155"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+
+                        <!-- Identity Selector Cards Container -->
+                        <LinearLayout
+                            android:id="@+id/containerIdentityCards"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="vertical">
+
+                            <!-- Card 1: Tampilkan Identitas (Default) -->
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardIdentityOpen"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="6dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="1dp"
+                                app:cardBackgroundColor="#EFF6FF"
+                                android:clickable="true"
+                                android:focusable="true">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:paddingHorizontal="12dp"
+                                    android:paddingVertical="10dp">
+
+                                    <RadioButton
+                                        android:id="@+id/rbIdentityOpen"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="true"
+                                        android:clickable="false"
+                                        android:focusable="false" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:layout_marginStart="6dp"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvIdentityOpenTitle"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="👤 Tampilkan Identitas (Nama &amp; Kelas Terbuka)"
+                                            android:textColor="#1D4ED8"
+                                            android:textSize="12sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tvIdentityOpenSub"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Nama dan kelas Anda dapat dilihat oleh Guru BK untuk pendampingan langsung."
+                                            android:textColor="#64748B"
+                                            android:textSize="10.5sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Card 2: Sembunyikan Nama (Anonim / Whistleblower) -->
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardIdentityAnon"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="1dp"
+                                app:cardBackgroundColor="#F8FAFC"
+                                android:clickable="true"
+                                android:focusable="true">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:paddingHorizontal="12dp"
+                                    android:paddingVertical="10dp">
+
+                                    <RadioButton
+                                        android:id="@+id/rbIdentityAnon"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="false"
+                                        android:clickable="false"
+                                        android:focusable="false" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:layout_marginStart="6dp"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvIdentityAnonTitle"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="🔒 Sembunyikan Nama (Anonim / Whistleblower)"
+                                            android:textColor="#475569"
+                                            android:textSize="12sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tvIdentityAnonSub"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Identitas Anda 100% dirahasiakan, aman untuk laporan perundungan / darurat."
+                                            android:textColor="#64748B"
+                                            android:textSize="10.5sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btnSubmitReport"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="#DC2626"
+                            android:text="Kirim Laporan Pengaduan"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- TAB 2: FORM AJUKAN JANJI TEMU TATAP MUKA (GONE) -->
+            <LinearLayout
+                android:id="@+id/containerTabBkAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardAppointmentForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📅 Ajukan Janji Temu Konseling Tatap Muka"
+                            android:textColor="#0F172A"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Jadwalkan sesi bimbingan langsung di ruang BK sekolah"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <EditText
+                            android:id="@+id/etAppointmentTopic"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="10dp"
+                            android:background="#F1F5F9"
+                            android:hint="Topik (Cth: Minat Jurusan / Masalah Belajar)"
+                            android:paddingHorizontal="12dp"
+                            android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/etAppointmentDate"
+                                android:layout_width="0dp"
+                                android:layout_height="44dp"
+                                android:layout_marginEnd="4dp"
+                                android:layout_weight="1"
+                                android:background="#F1F5F9"
+                                android:hint="Tanggal (Besok/Kamis)"
+                                android:paddingHorizontal="12dp"
+                                android:textSize="12sp" />
+
+                            <EditText
+                                android:id="@+id/etAppointmentTime"
+                                android:layout_width="0dp"
+                                android:layout_height="44dp"
+                                android:layout_marginStart="4dp"
+                                android:layout_weight="1"
+                                android:background="#F1F5F9"
+                                android:hint="Jam (Istirahat/10:00)"
+                                android:paddingHorizontal="12dp"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btnSubmitAppointment"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:layout_marginTop="12dp"
+                            android:backgroundTint="#0D5C3A"
+                            android:text="Kirim Jadwal Janji Temu"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- TAB 3: PROFIL GURU BK & POIN KEDISIPLINAN (GONE) -->
+            <LinearLayout
+                android:id="@+id/containerTabBkPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Counselor Profile Banner -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="#064E3B">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/circle_white_alpha"
+                                android:gravity="center"
+                                android:text="👩‍🏫"
+                                android:textSize="24sp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Guru Pembimbing BK Anda:"
+                                    android:textColor="#A7F3D0"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvBkCounselorName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Belum Ditugaskan"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#059669"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="🟢 Online"
+                                android:textColor="#FFFFFF"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Ruang aman untuk berdiskusi masalah belajar, kesulitan adaptasi, pertemanan, maupun rencana masa depan secara rahasia dan profesional."
+                            android:textColor="#D1FAE5"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Disciplinary Points / SP Summary Badge -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="14dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="POIN KEDISIPLINAN SISWA"
+                                android:textColor="#64748B"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvBkTotalPoints"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="0 Poin Pelanggaran"
+                                android:textColor="#059669"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvBkSpBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#ECFDF5"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="5dp"
+                            android:text="🛡️ Status: Tertib"
+                            android:textColor="#065F46"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

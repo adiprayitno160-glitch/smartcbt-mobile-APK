@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    android:orientation="vertical">
+
+    <!-- Top App Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0F172A"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="14dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Surat Suara Digital"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Asas LUBER JURDIL • Pilihan Rahasia"
+                android:textColor="#94A3B8"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvVotingStatusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#10B981"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:text="● SESI BUKA"
+            android:textColor="#FFFFFF"
+            android:textSize="10.5sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Main Content ScrollView -->
+        <ScrollView
+            android:id="@+id/scrollViewContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Header Info Banner -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardElectionInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="14dp">
+
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_icon_indigo"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:src="@drawable/ic_vote_ballot"
+                                app:tint="#FFFFFF" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvElectionTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pemilihan Ketua &amp; Wakil Ketua OSIS"
+                                android:textColor="#0F172A"
+                                android:textSize="13.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvElectionSchedule"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:text="Sentuh foto atau tombol paslon untuk memilih. 1 siswa berhak memilih 1 kali."
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Khusus Pengurus Kelas: Monitoring DPT & Partisipasi Kelas -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardClassOfficerMonitoring"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="#EEF2FF"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvOfficerBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#4F46E5"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="PENGURUS KELAS"
+                                android:textColor="#FFFFFF"
+                                android:textSize="9.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvOfficerClassTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="1"
+                                android:text="DPT &amp; Progres Pemilih Kelas"
+                                android:textColor="#1E1B4B"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvOfficerTurnoutPct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="#4F46E5"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ProgressBar
+                            android:id="@+id/pbClassTurnout"
+                            style="@android:style/Widget.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_marginTop="10dp"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressTint="#4F46E5" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvOfficerClassStats"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Memuat data DPT..."
+                                android:textColor="#475569"
+                                android:textSize="11sp" />
+
+                            <Button
+                                android:id="@+id/btnViewClassmates"
+                                android:layout_width="wrap_content"
+                                android:layout_height="34dp"
+                                android:backgroundTint="#4F46E5"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="0dp"
+                                android:text="Cek Siswa"
+                                android:textColor="#FFFFFF"
+                                android:textSize="10.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- State: Sudah Memilih (Already Voted) Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardAlreadyVotedState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="#F0FDF4"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <ImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:src="@drawable/ic_attendance"
+                            app:tint="#15803D" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Hak Suara Anda Telah Sah Digunakan"
+                            android:textColor="#166534"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvAlreadyVotedTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Tercatat di server SIAKAD"
+                            android:textColor="#15803D"
+                            android:textSize="11.5sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="#DCFCE7"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="KODE TANDA TERIMA DIGITAL (BUKTI SAH):"
+                                android:textColor="#166534"
+                                android:textSize="9.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvAlreadyVotedReceipt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:fontFamily="monospace"
+                                android:text="EVT-VERIFIED-VOTE"
+                                android:textColor="#0F172A"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="Sesuai asas LUBER JURDIL, pilihan paslon Anda tidak dapat dilihat oleh siapa pun dan tersimpan secara anonim."
+                            android:textColor="#64748B"
+                            android:textSize="10.5sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Section Label -->
+                <TextView
+                    android:id="@+id/tvSectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="DAFTAR PASANGAN CALON (KETUK FOTO UNTUK MEMILIH)"
+                    android:textColor="#475569"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <!-- Dynamic Container for Candidates Cards -->
+                <LinearLayout
+                    android:id="@+id/layoutCandidatesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <!-- Space for Bottom Submit Bar -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Loading View Overlay -->
+        <LinearLayout
+            android:id="@+id/layoutLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80FFFFFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
+
+            <TextView
+                android:id="@+id/tvLoadingMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Memuat data pasangan calon..."
+                android:textColor="#0F172A"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- Floating Bottom Submit Bar -->
+    <LinearLayout
+        android:id="@+id/layoutSubmitBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="12dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvSelectedCandidateSummary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Paslon Terpilih: No. 1"
+                android:textColor="#0F172A"
+                android:textSize="12.5sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvBadgePilihan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#EEF2FF"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="Siap Dikirim"
+                android:textColor="#4F46E5"
+                android:textSize="10.5sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSubmitVote"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#4F46E5"
+            android:text="KIRIM SUARA SAH (COBLOS)"
+            android:textColor="#FFFFFF"
+            android:textSize="13.5sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8FAFC">
+
+    <!-- Header Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#065F46"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBackParentHomework"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Kembali"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tugas &amp; PR Ananda"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvParentHomeworkSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Monitoring Tugas Sekolah &amp; Deadline Pengumpulan"
+                android:textColor="#A7F3D0"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnRefreshParentHomework"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Segarkan"
+            android:src="@android:drawable/ic_popup_sync"
+            app:tint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- Tab Filter Chips (Horizontal Scrollable agar tidak terpotong) -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:scrollbars="none"
+        android:paddingVertical="6dp"
+        android:paddingHorizontal="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnFilterAllHw"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minWidth="90dp"
+                android:backgroundTint="#065F46"
+                android:text="Semua Tugas"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:paddingHorizontal="14dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnFilterPendingHw"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:minWidth="140dp"
+                android:backgroundTint="#F1F5F9"
+                android:text="⚠️ Perlu Dikerjakan"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:paddingHorizontal="14dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnFilterDoneHw"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:minWidth="130dp"
+                android:backgroundTint="#F1F5F9"
+                android:text="✅ Sudah Selesai"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:paddingHorizontal="14dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/containerParentHomework"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+    </ScrollView>
+</LinearLayout>

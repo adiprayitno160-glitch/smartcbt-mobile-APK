@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/containerEmptyState"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/ivEmptyIcon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/ic_search"
+        android:contentDescription="Empty state icon"
+        android:alpha="0.4" />
+
+    <TextView
+        android:id="@+id/tvEmptyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Belum Ada Data"
+        style="@style/SmartSchool_Text_H2"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvEmptySubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Data akan tampil otomatis di sini jika sudah tersedia."
+        style="@style/SmartSchool_Text_Body"
+        android:textAlignment="center" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEmptyAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Muat Ulang"
+        style="@style/SmartSchool_Button_Primary"
+        android:visibility="gone" />
+</LinearLayout>

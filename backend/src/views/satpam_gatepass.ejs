@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ Pos Keamanan &amp; Scanner Gatepass - Smart School</title>
+    <script src="/js/tailwind.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <link rel="stylesheet" href="/css/portal-theme.css">
+    <style>
+        .pulse-border {
+            animation: pulse-border-anim 1.5s infinite;
+        }
+        @keyframes pulse-border-anim {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 14px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        .pulse-border-red {
+            animation: pulse-border-red-anim 1.5s infinite;
+        }
+        @keyframes pulse-border-red-anim {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header Pos Keamanan Satpam -->
+    <header class="bg-slate-950/80 border-b border-slate-800 backdrop-blur sticky top-0 z-40 px-4 py-3 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="/admin" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors" title="Kembali ke Dashboard">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </a>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+                        <span>🛡️</span> Pos Keamanan &amp; Scanner Gatepass
+                        <span class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">Gerbang Utama</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Verifikasi Tiket Digital Gatepass &amp; Dynamic Single-Use QR Anti-Screenshot</p>
+                </div>
+            </div>
+
+            <!-- Stats & Quick Actions -->
+            <div class="flex items-center gap-3 text-xs">
+                <div class="bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-1.5 flex items-center gap-2">
+                    <span class="text-slate-400">Hari Ini:</span>
+                    <span id="statTotalToday" class="font-extrabold text-white">0</span>
+                </div>
+                <div class="bg-emerald-950/40 border border-emerald-800/50 text-emerald-400 rounded-xl px-3 py-1.5 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Di Luar: <b id="statCompletedToday">0</b></span>
+                </div>
+                <button onclick="refreshGatepassList()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-indigo-600/20">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Kolom Kiri: Scanner Hardware & Kamera (5 Kolom) -->
+        <div class="lg:col-span-5 space-y-6">
+            <!-- Mode Aksi Gerbang -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 shadow-xl">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Pilih Aksi Verifikasi Gerbang:</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="btnModeCheckout" onclick="setScanAction('CHECKOUT')" class="py-2.5 px-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all bg-emerald-600 text-white shadow-lg shadow-emerald-600/30">
+                        <span>🚪</span> <span>Keluar Sekolah</span>
+                    </button>
+                    <button id="btnModeReturn" onclick="setScanAction('RETURN')" class="py-2.5 px-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all bg-slate-800 text-slate-300 hover:bg-slate-700">
+                        <span>🏫</span> <span>Kembali ke Sekolah</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scanner Hardware Barcode Gun / Input Manual -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                        <span>🔫</span> Scanner Fisik (USB Gun / Input)
+                    </h2>
+                    <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-semibold">Auto-Focus Ready</span>
+                </div>
+                <form id="formManualScan" onsubmit="handleManualSubmit(event)" class="space-y-2">
+                    <div class="relative">
+                        <input type="text" id="manualTokenInput" placeholder="Arahkan Barcode Gun atau ketik Token/ID..." autocomplete="off"
+                            class="w-full bg-slate-900 border-2 border-indigo-600/60 focus:border-indigo-400 text-white font-mono text-sm px-4 py-3 rounded-xl outline-none transition-all placeholder:text-slate-500">
+                        <button type="submit" class="absolute right-2 top-2 bottom-2 bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+                            <span>Verifikasi</span>
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-slate-400">💡 Scanner barcode/QR hardware akan otomatis submit saat membaca kartu siswa.</p>
+                </form>
+            </div>
+
+            <!-- Kamera Scanner QR (Webcam / HP Satpam) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                        <span>📷</span> Kamera Scanner QR
+                    </h2>
+                    <button id="btnToggleCamera" onclick="toggleCameraScanner()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-lg font-bold border border-slate-700 transition-colors">
+                        Aktifkan Kamera
+                    </button>
+                </div>
+                
+                <div id="cameraContainer" class="hidden overflow-hidden rounded-xl bg-slate-900 border border-slate-800 aspect-square flex items-center justify-center relative">
+                    <div id="qr-reader" class="w-full h-full"></div>
+                </div>
+                <div id="cameraPlaceholder" class="rounded-xl bg-slate-900/60 border border-dashed border-slate-800 p-8 text-center text-xs text-slate-500">
+                    Kamera scanner dinonaktifkan. Klik tombol di atas untuk membuka pemindaian kamera.
+                </div>
+            </div>
+        </div>
+
+        <!-- Kolom Kanan: Hasil Verifikasi & Log Gerbang Real-Time (7 Kolom) -->
+        <div class="lg:col-span-7 space-y-6">
+            <!-- Kartu Status Verifikasi Instan -->
+            <div id="verificationResultCard" class="hidden rounded-2xl p-6 transition-all shadow-2xl">
+                <!-- Konten dinamis dirender via JS -->
+            </div>
+
+            <!-- Placeholder Hasil Awal -->
+            <div id="emptyScanPlaceholder" class="bg-slate-950 border border-slate-800 rounded-2xl p-10 text-center space-y-3 shadow-xl">
+                <div class="w-16 h-16 bg-slate-900 text-slate-600 rounded-2xl flex items-center justify-center mx-auto text-3xl border border-slate-800">
+                    🛡️
+                </div>
+                <h3 class="text-base font-bold text-slate-300">Siaga Pemindaian Gerbang</h3>
+                <p class="text-xs text-slate-500 max-w-sm mx-auto">
+                    Pindai Dynamic QR pada smartphone siswa atau masukkan token tiket permohonan izin untuk memeriksa status keabsahan.
+                </p>
+            </div>
+
+            <!-- Daftar Aktivitas Gerbang Hari Ini (Real-Time Log) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                            <span>📋</span> Log Aktivitas Gatepass Hari Ini
+                        </h2>
+                        <p class="text-[11px] text-slate-400">Data siswa yang telah disetujui Guru BK atau telah melewati gerbang</p>
+                    </div>
+                    <span id="logCountBadge" class="text-[11px] font-bold bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full">0 Siswa</span>
+                </div>
+
+                <div class="overflow-x-auto max-h-[460px] overflow-y-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900/80 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 z-10 border-b border-slate-800">
+                            <tr>
+                                <th class="py-3 px-4">Siswa</th>
+                                <th class="py-3 px-3">Kelas</th>
+                                <th class="py-3 px-3">Kategori</th>
+                                <th class="py-3 px-3">Waktu Keluar</th>
+                                <th class="py-3 px-3">Status</th>
+                                <th class="py-3 px-4 text-center">Aksi Cepat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gatepassLogBody" class="divide-y divide-slate-800/60 font-medium text-slate-300">
+                            <tr>
+                                <td colspan="6" class="py-8 text-center text-slate-500">Memuat log gatepass...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script Client Pos Satpam Gatepass -->
+    <script>
+        let currentScanAction = 'CHECKOUT';
+        let html5QrScanner = null;
+        let isCameraActive = false;
+        let audioCtx = null;
+
+        // Sound Effects synthesizer Web Audio API
+        function playBeep(success) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (success) {
+                    // Two high pleasant chimes
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, now); // D5
+                    osc.frequency.setValueAtTime(880, now + 0.1); // A5
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else {
+                    // Low buzzing alert
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(146.83, now + 0.15);
+                    gain.gain.setValueAtTime(0.4, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                }
+            } catch (e) {
+                console.warn('Audio feedback failed:', e);
+            }
+        }
+
+        function setScanAction(action) {
+            currentScanAction = action;
+            const btnCheckout = document.getElementById('btnModeCheckout');
+            const btnReturn = document.getElementById('btnModeReturn');
+            if (action === 'CHECKOUT') {
+                btnCheckout.className = 'py-2.5 px-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all bg-emerald-600 text-white shadow-lg shadow-emerald-600/30';
+                btnReturn.className = 'py-2.5 px-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all bg-slate-800 text-slate-300 hover:bg-slate-700';
+            } else {
+                btnReturn.className = 'py-2.5 px-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all bg-blue-600 text-white shadow-lg shadow-blue-600/30';
+                btnCheckout.className = 'py-2.5 px-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all bg-slate-800 text-slate-300 hover:bg-slate-700';
+            }
+            focusScannerInput();
+        }
+
+        function focusScannerInput() {
+            const input = document.getElementById('manualTokenInput');
+            if (input) input.focus();
+        }
+
+        // Handle Barcode Gun / Manual Input Submit
+        async function handleManualSubmit(e) {
+            if (e) e.preventDefault();
+            const input = document.getElementById('manualTokenInput');
+            const token = input ? input.value.trim() : '';
+            if (!token) return;
+            await processVerification(token);
+            if (input) input.value = '';
+            focusScannerInput();
+        }
+
+        // Core Verifikasi ke Backend
+        async function processVerification(qrPayload) {
+            const card = document.getElementById('verificationResultCard');
+            const placeholder = document.getElementById('emptyScanPlaceholder');
+
+            try {
+                const res = await fetch('/api/gatepass/verify-scan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        qrPayload: qrPayload,
+                        action: currentScanAction
+                    })
+                });
+
+                const data = await res.json();
+                placeholder.classList.add('hidden');
+                card.classList.remove('hidden');
+
+                if (res.ok && data.success) {
+                    playBeep(true);
+                    renderSuccessCard(data);
+                    refreshGatepassList();
+                } else {
+                    playBeep(false);
+                    renderErrorCard(data);
+                }
+            } catch (err) {
+                console.error('Error scanning gatepass:', err);
+                playBeep(false);
+                renderErrorCard({
+                    message: 'Gagal terhubung ke server. Periksa koneksi jaringan Pos Satpam.',
+                    code: 'NETWORK_ERROR'
+                });
+            }
+        }
+
+        function renderSuccessCard(result) {
+            const card = document.getElementById('verificationResultCard');
+            const gp = result.data || {};
+            const st = gp.student || {};
+            const isReturn = result.action === 'RETURN';
+
+            card.className = `rounded-2xl p-6 transition-all shadow-2xl border-2 ${
+                isReturn ? 'bg-blue-950/40 border-blue-500 pulse-border' : 'bg-emerald-950/40 border-emerald-500 pulse-border'
+            }`;
+
+            const badgeBg = isReturn ? 'bg-blue-500 text-white' : 'bg-emerald-500 text-white';
+            const actionText = isReturn ? 'KEMBALI KE SEKOLAH SAH' : 'SAH KELUAR GERBANG SEKOLAH';
+            const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+
+            card.innerHTML = `
+                <div class="flex items-start justify-between gap-4 mb-4 pb-4 border-b border-slate-700/60">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">${isReturn ? '🏫' : '🚪'}</span>
+                        <div>
+                            <span class="text-[11px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider ${badgeBg}">
+                                ${actionText}
+                            </span>
+                            <h2 class="text-lg font-black text-white mt-1.5">${st.name || 'Siswa CBT'}</h2>
+                            <p class="text-xs text-slate-300">Kelas ${st.className || '-'} &bull; NISN: ${st.nisn || '-'}</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-slate-300 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">
+                        ${timeStr}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs mb-4">
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+                        <span class="text-[10px] text-slate-400 block font-bold">Kategori Permohonan:</span>
+                        <span class="font-extrabold text-white text-sm">${gp.leaveCategory || 'Izin Keluar'}</span>
+                    </div>
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+                        <span class="text-[10px] text-slate-400 block font-bold">Penjemput:</span>
+                        <span class="font-bold text-amber-300 text-sm">${gp.pickupBy || 'Mandiri'}</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-xs mb-4">
+                    <span class="text-[10px] text-slate-400 block font-bold">Alasan Izin Pulang/Keluar:</span>
+                    <p class="text-slate-200 mt-0.5 italic">"${gp.reason || '-'}"</p>
+                </div>
+
+                <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/80">
+                    <span>Diverifikasi Guru BK: <b class="text-slate-200">${gp.approvedByBk?.name || 'Guru BK'}</b></span>
+                    <span>Status Tiket: <b class="text-emerald-400">COMPLETED</b></span>
+                </div>
+            `;
+        }
+
+        function renderErrorCard(errData) {
+            const card = document.getElementById('verificationResultCard');
+            card.className = 'rounded-2xl p-6 transition-all shadow-2xl bg-rose-950/40 border-2 border-rose-500 pulse-border-red';
+
+            card.innerHTML = `
+                <div class="flex items-start gap-4">
+                    <span class="text-4xl text-rose-500">⛔</span>
+                    <div class="space-y-1.5 flex-1">
+                        <span class="text-[11px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider bg-rose-600 text-white">
+                            DITOLAK / TIDAK SAH
+                        </span>
+                        <h2 class="text-base font-black text-white mt-1">Verifikasi Gerbang Gagal!</h2>
+                        <p class="text-xs text-rose-300 font-medium">${errData.message || 'Tiket Gatepass tidak memenuhi kriteria verifikasi.'}</p>
+                        ${errData.code ? `<span class="inline-block font-mono text-[10px] text-rose-400 bg-rose-900/40 border border-rose-800 px-2 py-0.5 rounded mt-2">Kode: ${errData.code}</span>` : ''}
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-rose-900/60 flex items-center justify-between text-xs">
+                    <span class="text-slate-400">Tindakan Satpam:</span>
+                    <span class="font-bold text-amber-300">Tahan siswa &amp; arahkan kembali ke Ruang BK</span>
+                </div>
+            `;
+        }
+
+        // Log Aktivitas Gerbang Real-Time
+        async function refreshGatepassList() {
+            try {
+                const res = await fetch('/api/satpam/gatepass/list');
+                const data = await res.json();
+                if (!data.success) return;
+
+                const tbody = document.getElementById('gatepassLogBody');
+                const list = data.data || [];
+                const stats = data.stats || {};
+
+                document.getElementById('statTotalToday').innerText = stats.totalToday || list.length;
+                document.getElementById('statCompletedToday').innerText = stats.completed || 0;
+                document.getElementById('logCountBadge').innerText = `${list.length} Siswa`;
+
+                if (list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-slate-500">Belum ada permohonan gatepass hari ini.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = list.map(g => {
+                    const st = g.student || {};
+                    const isDone = g.status === 'COMPLETED';
+                    const isAct = g.status === 'ACTIVE_APPROVED';
+                    const exitTime = g.exitTimestamp ? new Date(g.exitTimestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '-';
+                    
+                    let badge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-400">PENDING</span>';
+                    if (isDone) badge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">KELUAR</span>';
+                    else if (isAct) badge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950 text-amber-400 border border-amber-800">SIAP SCAN</span>';
+                    else if (g.status === 'EXPIRED') badge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-950 text-rose-400 border border-rose-800">EXPIRED</span>';
+
+                    return `
+                        <tr class="hover:bg-slate-900/60 transition-colors">
+                            <td class="py-3 px-4">
+                                <div class="font-bold text-white">${st.name || '-'}</div>
+                                <div class="text-[10px] text-slate-400 font-mono">NISN: ${st.nisn || '-'}</div>
+                            </td>
+                            <td class="py-3 px-3 font-semibold text-slate-200">${st.className || '-'}</td>
+                            <td class="py-3 px-3 text-slate-300">${g.leaveCategory || '-'}</td>
+                            <td class="py-3 px-3 font-mono text-slate-300">${exitTime}</td>
+                            <td class="py-3 px-3">${badge}</td>
+                            <td class="py-3 px-4 text-center">
+                                ${isAct ? `
+                                    <button onclick="processVerification('${g.singleUseCheckoutToken || g.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all shadow">
+                                        Scan Lolos
+                                    </button>
+                                ` : isDone ? `
+                                    <button onclick="setScanAction('RETURN'); processVerification('${g.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all shadow">
+                                        Kembali
+                                    </button>
+                                ` : '-'}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (e) {
+                console.error('Failed refreshing gatepass log:', e);
+            }
+        }
+
+        // Camera QR Scanner Toggle
+        function toggleCameraScanner() {
+            const container = document.getElementById('cameraContainer');
+            const placeholder = document.getElementById('cameraPlaceholder');
+            const btn = document.getElementById('btnToggleCamera');
+
+            if (!isCameraActive) {
+                container.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                btn.innerText = 'Matikan Kamera';
+                btn.className = 'text-xs bg-rose-800 hover:bg-rose-700 text-white px-3 py-1 rounded-lg font-bold border border-rose-700 transition-colors';
+
+                html5QrScanner = new Html5Qrcode("qr-reader");
+                html5QrScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    (decodedText) => {
+                        // Scan success
+                        processVerification(decodedText);
+                    },
+                    (err) => {}
+                ).catch(err => {
+                    alert('Tidak dapat mengakses kamera: ' + err);
+                    toggleCameraScanner();
+                });
+                isCameraActive = true;
+            } else {
+                if (html5QrScanner) {
+                    html5QrScanner.stop().then(() => {
+                        container.classList.add('hidden');
+                        placeholder.classList.remove('hidden');
+                        btn.innerText = 'Aktifkan Kamera';
+                        btn.className = 'text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-lg font-bold border border-slate-700 transition-colors';
+                        isCameraActive = false;
+                    }).catch(() => {
+                        isCameraActive = false;
+                    });
+                }
+            }
+        }
+
+        // Inisialisasi halaman
+        window.addEventListener('DOMContentLoaded', () => {
+            focusScannerInput();
+            refreshGatepassList();
+            setInterval(refreshGatepassList, 15000); // Polling setiap 15 detik
+        });
+    </script>
+</body>
+</html>

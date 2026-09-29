@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="8dp"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="2dp"
+    android:background="#16213E"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <!-- Checkbox for Multi-Select -->
+    <CheckBox
+        android:id="@+id/cbSelectFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:buttonTint="#E94560" />
+
+    <!-- File Thumbnail / Icon Container -->
+    <FrameLayout
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
+        android:background="#0F3460">
+
+        <!-- Image / Video Thumbnail -->
+        <ImageView
+            android:id="@+id/ivFileThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <!-- Fallback Category Emoji Icon -->
+        <TextView
+            android:id="@+id/tvFileIcon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="📄"
+            android:textSize="22sp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp">
+
+        <TextView
+            android:id="@+id/tvFileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="file_name.pdf"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvFileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1.5 MB • pdf"
+            android:textColor="#888888"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/tvFileSynced"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last mod: -"
+            android:textColor="#666666"
+            android:textSize="9sp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvFileCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DOC"
+        android:textColor="#9C27B0"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:background="#1A1A2E"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:layout_gravity="center_vertical" />
+</LinearLayout>

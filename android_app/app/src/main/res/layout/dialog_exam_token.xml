@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="10dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Top Header Banner with Gradient -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_profile_card"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="20dp">
+
+            <TextView
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="@drawable/circle_white_alpha"
+                android:gravity="center"
+                android:text="🔑"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/tvTokenDialogTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Konfirmasi Token Ujian"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTokenDialogSubject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="#26FFFFFF"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:text="Mata Pelajaran (0 Menit)"
+                android:textColor="#E0F2FE"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Body Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Instruction Box -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_dialog_input"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ℹ️"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="Silakan masukkan 6 Digit Token yang diberikan Pengawas di ruang kelas. Hubungi Pengawas jika Anda baru reset sesi."
+                    android:textColor="#475569"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="2dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="TOKEN PENGAWAS RUANG:"
+                android:textColor="#1E293B"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <!-- Monospace Centered Token Input -->
+            <EditText
+                android:id="@+id/etExamTokenInput"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_token_input"
+                android:gravity="center"
+                android:hint="MASUKKAN TOKEN"
+                android:inputType="textCapCharacters"
+                android:maxLength="10"
+                android:textColor="#0F172A"
+                android:textColorHint="#94A3B8"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.2" />
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCancelTokenDialog"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#F1F5F9"
+                    android:text="Batal"
+                    android:textAllCaps="false"
+                    android:textColor="#475569"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp" />
+
+                <Button
+                    android:id="@+id/btnSubmitTokenDialog"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1.5"
+                    android:backgroundTint="#2563EB"
+                    android:text="🚀 Mulai Ujian"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

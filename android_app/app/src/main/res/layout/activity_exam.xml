@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC">
+
+    <!-- Top Header Navy Bar -->
+    <LinearLayout
+        android:id="@+id/headerBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0A2E5C"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="14dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvStudentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama Siswa"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvExamTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Matematika (90 Menit)"
+                android:textColor="#BBDEFB"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Sisa Waktu Ujian Box -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#1565C0"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SISA WAKTU"
+                android:textColor="#BBDEFB"
+                android:textSize="8sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01:30:00"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- UNBK Status & Quick Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/unbkStatusBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerBar"
+        android:background="#1E293B"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="8dp">
+
+        <Button
+            android:id="@+id/btnDaftarSoal"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:backgroundTint="#3B82F6"
+            android:paddingHorizontal="10dp"
+            android:text="📋 Daftar Soal"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <!-- Status Counters -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Terjawab Badge -->
+            <TextView
+                android:id="@+id/tvAnsweredCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#10B981"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="🟢 Terjawab: 0"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <!-- Ragu Badge -->
+            <TextView
+                android:id="@+id/tvDoubtCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="#F59E0B"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="🟡 Ragu: 0"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <!-- Belum Badge -->
+            <TextView
+                android:id="@+id/tvUnansweredCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="#64748B"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="⚪ Belum: 4"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Question Card Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav"
+        android:layout_below="@id/unbkStatusBar"
+        android:padding="16dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="3dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvQuestionNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#E3F2FD"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="Soal No. 1 dari 4"
+                        android:textColor="#1565C0"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvQuestionStatusBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="#E2E8F0"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="3dp"
+                        android:text="Belum Dijawab"
+                        android:textColor="#64748B"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- 🎧 LISTENING AUDIO PLAYER (Untuk Soal Listening / Dikte / Audio Quran) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardListeningAudio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#F5F3FF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="12dp">
+
+                        <Button
+                            android:id="@+id/btnPlayAudio"
+                            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:backgroundTint="#7C3AED"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:padding="0dp"
+                            android:text="▶"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="22dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="🎧 Audio Listening Section"
+                                    android:textColor="#5B21B6"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvAudioDuration"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="00:00 / 00:00"
+                                    android:textColor="#7C3AED"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <SeekBar
+                                android:id="@+id/seekBarAudio"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:max="100"
+                                android:progress="0"
+                                android:progressTint="#7C3AED"
+                                android:thumbTint="#6D28D9" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 🖼️ GAMBAR LAMPIRAN SOAL (Diagram / Bagan / Foto) -->
+                <ImageView
+                    android:id="@+id/ivQuestionImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="260dp"
+                    android:scaleType="fitCenter"
+                    android:visibility="gone" />
+
+                <!-- 📄 TEKS SOAL (Biasa) -->
+                <TextView
+                    android:id="@+id/tvQuestionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="Berapakah hasil dari 15 x 12 - 50?"
+                    android:textColor="#1E293B"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- 🧮 WEBVIEW KATEX (Rumus Matematika & Rich HTML) -->
+                <WebView
+                    android:id="@+id/wvQuestionMath"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone" />
+
+                <!-- ✍️ KOTAK LEMBAR JAWABAN ESSAI / URAIAN SISWA -->
+                <LinearLayout
+                    android:id="@+id/layoutEssayContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:background="#F8FAFC"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="✍️ Lembar Jawaban Uraian / Essai Siswa:"
+                            android:textColor="#0F172A"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvEssayCharCounter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 kata • 0 karakter"
+                            android:textColor="#64748B"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etEssayAnswer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_profile_card"
+                        android:gravity="top|start"
+                        android:hint="Tuliskan jawaban uraian Anda secara runtut dan lengkap di sini..."
+                        android:lineSpacingExtra="3dp"
+                        android:minLines="5"
+                        android:padding="14dp"
+                        android:textColor="#0F172A"
+                        android:textColorHint="#94A3B8"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvEssayAutoSaveNotice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="💾 Jawaban tersimpan otomatis ke lembar ujian"
+                        android:textColor="#10B981"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- 🔘 PILIHAN GANDA (A, B, C, D) -->
+                <RadioGroup
+                    android:id="@+id/rgOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
+
+    <!-- Bottom Navigation Bar for Exam -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
+
+        <Button
+            android:id="@+id/btnPrev"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:backgroundTint="#64748B"
+            android:text="❮ Sebelumnya"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnDoubt"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginHorizontal="6dp"
+            android:layout_weight="1"
+            android:backgroundTint="#F59E0B"
+            android:text="🟡 Ragu-Ragu"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1.2"
+            android:backgroundTint="#1565C0"
+            android:text="Selanjutnya ❯"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

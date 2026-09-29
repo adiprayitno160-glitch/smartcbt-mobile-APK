@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presensi Geofencing &amp; Antrean Verifikasi - SmartSchool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b1120; color: #f8fafc; }
+        .glass-card { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(51, 65, 85, 0.7); backdrop-filter: blur(12px); border-radius: 18px; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+    <%- (typeof isOperator !== 'undefined' && isOperator) ? include('partials/sidebar_operator') : include('partials/sidebar_admin') %>
+
+    <main class="flex-1 p-4 md:p-8 ml-0 md:ml-64 transition-all">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+            <div>
+                <div class="flex items-center gap-2.5">
+                    <span class="text-2xl">📍</span>
+                    <h1 class="text-xl md:text-2xl font-black tracking-tight text-white">Presensi Geofencing &amp; Verifikasi Kurikulum</h1>
+                </div>
+                <p class="text-xs md:text-sm text-slate-400 mt-1">Sistem presensi anti-kecurangan berbasis ruangan, verifikasi foto, dan antrean GPS gedung.</p>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <button onclick="loadManualQueue()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2">
+                    <span>🔄 Refresh Data</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Metric Badges -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <div class="glass-card p-5 border-amber-500/30">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-bold mb-1">
+                    <span>ANTREAN VERIFIKASI MANUAL</span>
+                    <span class="text-amber-400">⚠️ Perlu Tindakan</span>
+                </div>
+                <span id="countManualQueue" class="text-3xl font-black text-amber-300">0</span>
+                <p class="text-[11px] text-slate-400 mt-1">Presensi dengan GPS lemah di gedung tertutup</p>
+            </div>
+
+            <div class="glass-card p-5 border-emerald-500/30">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-bold mb-1">
+                    <span>SKOR KEDISIPLINAN GURU</span>
+                    <span class="text-emerald-400">✨ Kurikulum</span>
+                </div>
+                <span id="scoreDiscipline" class="text-3xl font-black text-emerald-400">98%</span>
+                <p class="text-[11px] text-slate-400 mt-1">Tepat waktu dalam batas toleransi 15 menit</p>
+            </div>
+
+            <div class="glass-card p-5 border-sky-500/30">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-bold mb-1">
+                    <span>LAPISAN ANTI-FRAUD</span>
+                    <span class="text-sky-400">🛡️ Aktif</span>
+                </div>
+                <span class="text-2xl font-black text-sky-300">5 Lapisan</span>
+                <p class="text-[11px] text-slate-400 mt-1">Mock GPS, Root, Dev Mode, WiFi, Device-Binding</p>
+            </div>
+        </div>
+
+        <!-- Antrean Verifikasi Manual Table -->
+        <div class="glass-card p-6 mt-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+                    <span>📋 Antrean Kasus "Perlu Verifikasi Manual" Kurikulum</span>
+                </h3>
+                <span class="text-xs text-slate-400">Review foto &amp; SSID WiFi untuk mencegah alpa sepihak</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="text-slate-400 border-b border-slate-800">
+                        <tr>
+                            <th class="py-2.5 px-3">Guru / Pengajar</th>
+                            <th class="py-2.5 px-3">Jadwal &amp; Ruangan</th>
+                            <th class="py-2.5 px-3">Waktu Tab Server</th>
+                            <th class="py-2.5 px-3">WiFi SSID</th>
+                            <th class="py-2.5 px-3">Foto Bukti</th>
+                            <th class="py-2.5 px-3 text-right">Aksi Review</th>
+                        </tr>
+                    </thead>
+                    <tbody id="manualQueueBody" class="divide-y divide-slate-800/60 text-slate-300">
+                        <tr>
+                            <td colspan="6" class="py-6 text-center text-slate-500">Tidak ada antrean verifikasi manual pending saat ini. Semua presensi valid.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rekap Kedisiplinan Kurikulum -->
+        <div class="glass-card p-6 mt-6">
+            <h3 class="text-sm font-extrabold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span>📊 Rekap Kedisiplinan Pengajar &amp; Siswa</span>
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="text-slate-400 border-b border-slate-800">
+                        <tr>
+                            <th class="py-2.5 px-3">Status</th>
+                            <th class="py-2.5 px-3">Jadwal / Sesi</th>
+                            <th class="py-2.5 px-3">Waktu Masuk</th>
+                            <th class="py-2.5 px-3">Waktu Selesai</th>
+                            <th class="py-2.5 px-3">Sinkronisasi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recapTableBody" class="divide-y divide-slate-800/60 text-slate-300">
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-slate-500">Memuat rekap data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function loadManualQueue() {
+            try {
+                const res = await fetch('/api/attendance/geofence/manual-verification-queue');
+                if (!res.ok) return;
+                const d = await res.json();
+                document.getElementById('countManualQueue').innerText = d.count || 0;
+                const tbody = document.getElementById('manualQueueBody');
+                if (d.data && d.data.length > 0) {
+                    tbody.innerHTML = d.data.map(item => `
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="py-3 px-3 font-bold text-white">${item.guruId}</td>
+                            <td class="py-3 px-3">${item.jadwal ? (item.jadwal.roomName || item.jadwal.kelasId) : item.jadwalId}</td>
+                            <td class="py-3 px-3 text-slate-400">${new Date(item.waktuTabMasukServer).toLocaleTimeString('id-ID')}</td>
+                            <td class="py-3 px-3 font-mono text-sky-400">${item.wifiSsid || 'Sinyal Gedung'}</td>
+                            <td class="py-3 px-3">
+                                ${item.fotoVerifikasiUrl ? `<a href="${item.fotoVerifikasiUrl}" target="_blank" class="text-indigo-400 font-bold hover:underline">Lihat Foto ↗</a>` : '<span class="text-slate-500">Selfie</span>'}
+                            </td>
+                            <td class="py-3 px-3 text-right space-x-2">
+                                <button onclick="verifyTab('${item.id}', 'APPROVE')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[11px]">Setujui Tepat Waktu</button>
+                                <button onclick="verifyTab('${item.id}', 'REJECT')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold text-[11px]">Tolak</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-500">Tidak ada antrean verifikasi manual pending saat ini. Semua presensi valid.</td></tr>';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function verifyTab(id, action) {
+            const note = prompt(action === 'APPROVE' ? 'Catatan persetujuan (opsional):' : 'Alasan penolakan:');
+            try {
+                const res = await fetch('/api/attendance/geofence/manual-verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ attendanceId: id, action, note, reviewerId: 'KURIKULUM_ADMIN' })
+                });
+                const d = await res.json();
+                alert(d.message);
+                loadManualQueue();
+            } catch (e) {
+                alert('Gagal memverifikasi: ' + e.message);
+            }
+        }
+
+        async function loadRecap() {
+            try {
+                const res = await fetch('/api/attendance/geofence/rekap-kurikulum');
+                if (!res.ok) return;
+                const d = await res.json();
+                if (d.stats) {
+                    document.getElementById('scoreDiscipline').innerText = d.stats.disciplineScore + '%';
+                }
+                const tbody = document.getElementById('recapTableBody');
+                if (d.data && d.data.length > 0) {
+                    tbody.innerHTML = d.data.slice(0, 10).map(r => `
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="py-2.5 px-3">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.status === 'TEPAT_WAKTU' ? 'bg-emerald-950 text-emerald-300' : 'bg-amber-950 text-amber-300'}">
+                                    ${r.status}
+                                </span>
+                            </td>
+                            <td class="py-2.5 px-3">${r.jadwal ? (r.jadwal.roomName || r.jadwal.kelasId) : r.jadwalId}</td>
+                            <td class="py-2.5 px-3 text-slate-400">${new Date(r.waktuTabMasukServer).toLocaleTimeString('id-ID')}</td>
+                            <td class="py-2.5 px-3 text-slate-400">${r.waktuTabSelesaiServer ? new Date(r.waktuTabSelesaiServer).toLocaleTimeString('id-ID') : '-'}</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] bg-sky-950 text-sky-300 font-bold">${r.statusSinkronisasi}</span></td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-500">Belum ada riwayat sesi hari ini.</td></tr>';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        loadManualQueue();
+        loadRecap();
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Folder Back / Shield -->
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M11,10h12l3,4h11c2.2,0 4,1.8 4,4v20c0,2.2 -1.8,4 -4,4H11c-2.2,0 -4,-1.8 -4,-4V14c0,-2.2 1.8,-4 4,-4z" />
+    <!-- White Document Inside -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M15,16h18c1.1,0 2,0.9 2,2v20c0,1.1 -0.9,2 -2,2H15c-1.1,0 -2,-0.9 -2,-2V18c0,-1.1 0.9,-2 2,-2z" />
+    <!-- Seal Ribbon -->
+    <path
+        android:fillColor="#059669"
+        android:pathData="M24,20a5,5 0 1,0 0.001,0z" />
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M24,22a3,3 0 1,0 0.001,0z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M22.5,22l1,1 2,-2 0.8,0.8 -2.8,2.8 -1.8,-1.8z" />
+    <!-- Document Lines -->
+    <path
+        android:fillColor="#CBD5E1"
+        android:pathData="M17,29h14v2h-14z" />
+    <path
+        android:fillColor="#CBD5E1"
+        android:pathData="M17,33h10v2h-10z" />
+</vector>

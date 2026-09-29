@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Biodata Siswa Terpadu (TU) - Smart School</title>
+    <script src="/js/tailwind.js"></script>
+    <link rel="stylesheet" href="/css/portal-theme.css">
+    <style>
+        .doc-viewport {
+            overflow: hidden;
+            position: relative;
+            background: #0f172a;
+            border-radius: 1rem;
+            height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+        }
+        .doc-viewport:active {
+            cursor: grabbing;
+        }
+        .doc-image {
+            max-width: 90%;
+            max-height: 90%;
+            transition: transform 0.15s ease-out;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 flex">
+    <!-- Sidebar -->
+    <%- include('partials/sidebar_admin') %>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 md:p-8 ml-0 md:ml-64 overflow-y-auto h-screen bg-slate-50/60 transition-all duration-300 ease-in-out">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-3">
+                <button onclick="togglePortalSidebar()" class="p-2 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-100 text-slate-700 transition-colors shadow-sm cursor-pointer" title="Toggle Sidebar">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <div>
+                    <h1 class="text-2xl font-black text-slate-800 flex items-center gap-2">
+                        <span>📑</span> Verifikasi Biodata Siswa Terpadu (Staf TU)
+                    </h1>
+                    <p class="text-slate-500 text-xs">Pemeriksaan Staging Berkas KK/Akta dari APK Orang Tua &amp; Sinkronisasi Otomatis ke Database Master</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="loadSubmissions()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-2 border border-indigo-200 transition-all">
+                    <span>🔄</span> <span>Segarkan Antrean</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 1. FEATURE TOGGLE & BATAS WAKTU PENGISIAN MODUL -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm mb-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-2xl font-black">
+                        ⚙️
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-black text-slate-800">Feature Toggle &amp; Batas Waktu Pengisian Formulir (APK Orang Tua)</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Jika toggle dinonaktifkan, menu Formulir Biodata di APK Orang Tua terkunci otomatis dengan pesan resmi.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <label class="flex items-center gap-2.5 cursor-pointer bg-slate-50 border px-3.5 py-2 rounded-xl">
+                        <input type="checkbox" id="toggleBiodataActive" class="w-4 h-4 text-indigo-600 rounded">
+                        <span class="text-xs font-bold text-slate-700" id="labelToggleBiodata">Pengisian Aktif</span>
+                    </label>
+
+                    <div class="flex items-center gap-2 bg-slate-50 border px-3 py-1.5 rounded-xl">
+                        <span class="text-xs font-bold text-slate-500">Batas Waktu:</span>
+                        <input type="datetime-local" id="inputBiodataDeadline" class="text-xs font-semibold text-slate-700 bg-transparent outline-none">
+                    </div>
+
+                    <button onclick="saveToggleSettings()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5">
+                        <span>💾</span> <span>Simpan Pengaturan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. STATISTIK KARTU ANTREAN VALIDASI -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div onclick="filterStatus('PENDING')" class="bg-white p-4 rounded-2xl border shadow-sm cursor-pointer hover:border-amber-400 transition-all flex items-center justify-between group">
+                <div>
+                    <p class="text-[11px] text-amber-700 font-bold uppercase">⏳ Menunggu Verifikasi</p>
+                    <p class="text-2xl font-black text-amber-600" id="statPendingCount">0</p>
+                    <p class="text-[10px] text-amber-600 font-semibold mt-0.5">Antrean pemeriksaan staf TU</p>
+                </div>
+                <div class="p-3 bg-amber-50 text-amber-600 rounded-2xl text-2xl group-hover:scale-110 transition-transform">📝</div>
+            </div>
+            <div onclick="filterStatus('APPROVED')" class="bg-white p-4 rounded-2xl border shadow-sm cursor-pointer hover:border-emerald-400 transition-all flex items-center justify-between group">
+                <div>
+                    <p class="text-[11px] text-emerald-700 font-bold uppercase">✅ Disetujui &amp; Disinkron</p>
+                    <p class="text-2xl font-black text-emerald-600" id="statApprovedCount">0</p>
+                    <p class="text-[10px] text-emerald-600 font-semibold mt-0.5">Tersalin ke tabel master siswa</p>
+                </div>
+                <div class="p-3 bg-emerald-50 text-emerald-600 rounded-2xl text-2xl group-hover:scale-110 transition-transform">✓</div>
+            </div>
+            <div onclick="filterStatus('REJECTED')" class="bg-white p-4 rounded-2xl border shadow-sm cursor-pointer hover:border-rose-400 transition-all flex items-center justify-between group">
+                <div>
+                    <p class="text-[11px] text-rose-700 font-bold uppercase">❌ Perlu Revisi / Ditolak</p>
+                    <p class="text-2xl font-black text-rose-600" id="statRejectedCount">0</p>
+                    <p class="text-[10px] text-rose-600 font-semibold mt-0.5">Form di APK terbuka untuk revisi</p>
+                </div>
+                <div class="p-3 bg-rose-50 text-rose-600 rounded-2xl text-2xl group-hover:scale-110 transition-transform">✕</div>
+            </div>
+            <div onclick="filterStatus('ALL')" class="bg-white p-4 rounded-2xl border shadow-sm cursor-pointer hover:border-indigo-400 transition-all flex items-center justify-between group">
+                <div>
+                    <p class="text-[11px] text-indigo-700 font-bold uppercase">📊 Total Seluruh Pengajuan</p>
+                    <p class="text-2xl font-black text-indigo-600" id="statTotalCount">0</p>
+                    <p class="text-[10px] text-indigo-600 font-semibold mt-0.5">Rekapitulasi berkas</p>
+                </div>
+                <div class="p-3 bg-indigo-50 text-indigo-600 rounded-2xl text-2xl group-hover:scale-110 transition-transform">📁</div>
+            </div>
+        </div>
+
+        <!-- 3. TAB FILTER & PENCARIAN -->
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm mb-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="filterStatus('PENDING')" id="btnTabPending" class="px-3.5 py-1.5 rounded-xl font-bold text-xs bg-amber-500 text-white shadow-sm transition-all">
+                    ⏳ Antrean Pending (<span id="tabCountPending">0</span>)
+                </button>
+                <button onclick="filterStatus('APPROVED')" id="btnTabApproved" class="px-3.5 py-1.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
+                    ✅ Disetujui (<span id="tabCountApproved">0</span>)
+                </button>
+                <button onclick="filterStatus('REJECTED')" id="btnTabRejected" class="px-3.5 py-1.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
+                    ❌ Revisi (<span id="tabCountRejected">0</span>)
+                </button>
+                <button onclick="filterStatus('ALL')" id="btnTabAll" class="px-3.5 py-1.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
+                    Semua (<span id="tabCountAll">0</span>)
+                </button>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cari nama siswa / NISN..." class="w-full text-xs pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <span class="absolute left-2.5 top-2 text-slate-400 text-xs">🔍</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. TABEL DAFTAR PENGISIAN BIODATA -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-slate-600">
+                    <thead class="bg-slate-50/80 text-slate-700 uppercase font-black tracking-wider text-[11px] border-b">
+                        <tr>
+                            <th class="py-3 px-4">Siswa &amp; Kelas</th>
+                            <th class="py-3 px-4">Identitas (NISN / NIK)</th>
+                            <th class="py-3 px-4">Waktu Submit</th>
+                            <th class="py-3 px-4 text-center">Berkas Lampiran</th>
+                            <th class="py-3 px-4 text-center">Status Validasi</th>
+                            <th class="py-3 px-4 text-center">Aksi Verifikasi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="submissionsTableBody" class="divide-y divide-slate-100">
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-slate-400">Memuat data pengajuan biodata...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- 5. MODAL SPLIT-SCREEN VERIFIKASI DOKUMEN TU -->
+    <!-- ======================================================== -->
+    <div id="modalSplitScreen" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 md:p-6 overflow-hidden">
+        <div class="bg-white rounded-3xl w-full max-w-7xl h-[95vh] shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-xl">
+                        ⚖️
+                    </div>
+                    <div>
+                        <h3 class="text-base font-black flex items-center gap-2">
+                            <span>Verifikasi Berkas &amp; Validasi Biodata Siswa</span>
+                            <span id="modalHeaderStatusBadge" class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">PENDING</span>
+                        </h3>
+                        <p class="text-xs text-slate-400" id="modalHeaderStudentInfo">Memeriksa siswa...</p>
+                    </div>
+                </div>
+
+                <button onclick="closeSplitScreenModal()" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center text-lg font-bold transition-all">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Modal Body (Split-Screen: Sisi Kiri Dokumen, Sisi Kanan Form Teks) -->
+            <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+                <!-- SISI KIRI: VIEWER DOKUMEN ASLI DENGAN ZOOM & ROTATE -->
+                <div class="w-full lg:w-1/2 p-5 bg-slate-950 flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800">
+                    <!-- Dokumen Switcher & Controls Bar -->
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                            <button id="btnDocTabKk" onclick="switchDocumentTab('kk')" class="px-3 py-1 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all">
+                                👨‍👩‍👧‍👦 Kartu Keluarga (KK)
+                            </button>
+                            <button id="btnDocTabAkta" onclick="switchDocumentTab('akta')" class="px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all">
+                                📜 Akta Kelahiran
+                            </button>
+                            <button id="btnDocTabBantuan" onclick="switchDocumentTab('bantuan')" class="px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all">
+                                💳 Kartu Bantuan / KIP
+                            </button>
+                        </div>
+
+                        <!-- Zoom & Rotate Toolbar -->
+                        <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                            <button onclick="zoomDoc(-0.2)" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 text-xs font-bold flex items-center justify-center" title="Perkecil">
+                                ➖
+                            </button>
+                            <button onclick="zoomDoc(0.2)" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 text-xs font-bold flex items-center justify-center" title="Perbesar">
+                                ➕
+                            </button>
+                            <button onclick="rotateDoc()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 text-xs font-bold flex items-center justify-center" title="Putar 90°">
+                                🔄
+                            </button>
+                            <button onclick="resetDocTransform()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 text-xs font-bold flex items-center justify-center" title="Reset">
+                                ↺
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dokumen Viewport -->
+                    <div class="doc-viewport flex-1" id="docViewport" onmousedown="startDocPan(event)">
+                        <img id="docImage" src="" alt="Berkas Lampiran" class="doc-image" onerror="handleImageError(this)">
+                        <div id="docPlaceholder" class="hidden text-center text-slate-500 p-6">
+                            <p class="text-4xl mb-2">📁</p>
+                            <p class="text-xs font-semibold">Tidak ada berkas yang diunggah</p>
+                        </div>
+                    </div>
+
+                    <!-- Zoom Level Status -->
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2 px-1">
+                        <span>🔍 Skala: <strong id="lblDocZoom">100%</strong> | Rotasi: <strong id="lblDocRotate">0°</strong></span>
+                        <a id="btnDocExternalOpen" href="#" target="_blank" class="text-indigo-400 hover:underline">Buka Berkas Asli di Tab Baru ↗</a>
+                    </div>
+                </div>
+
+                <!-- SISI KANAN: FORMULIR TEKS PERBANDINGAN & VALIDASI TU -->
+                <div class="w-full lg:w-1/2 p-6 overflow-y-auto bg-slate-50/50 flex flex-col">
+                    <div class="mb-4 bg-blue-50 border border-blue-200 rounded-2xl p-3 flex items-start gap-2.5">
+                        <span class="text-blue-600 text-lg">💡</span>
+                        <p class="text-xs text-blue-900 leading-relaxed">
+                            <strong>Petunjuk Staf TU:</strong> Cocokkan data input orang tua dengan dokumen KK/Akta di sisi kiri. Data ini dapat Anda rapikan langsung sebelum menekan <strong>Setujui (Approve)</strong>.
+                        </p>
+                    </div>
+
+                    <form id="formReviewData" class="space-y-4 flex-1">
+                        <!-- Grup 1: Identitas Pribadi Siswa -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <h4 class="text-xs font-black uppercase text-indigo-700 tracking-wider">1. Identitas Pribadi Siswa</h4>
+
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">Nama Lengkap Siswa</label>
+                                <input type="text" id="revStudentName" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white focus:ring-2 focus:ring-indigo-500">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">NISN (10 Digit)</label>
+                                    <input type="text" id="revStudentNisn" readonly class="w-full text-xs p-2.5 rounded-xl border bg-slate-100 font-mono text-slate-500 cursor-not-allowed">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-indigo-700 block mb-1">NIK Siswa (16 Digit) *</label>
+                                    <input type="text" id="revStudentNik" class="w-full text-xs p-2.5 rounded-xl border-2 border-indigo-400 bg-white font-mono font-bold focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Tempat Lahir</label>
+                                    <input type="text" id="revStudentPob" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Tanggal Lahir (YYYY-MM-DD)</label>
+                                    <input type="date" id="revStudentDob" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Jenis Kelamin</label>
+                                    <select id="revStudentGender" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white">
+                                        <option value="L">Laki-laki (L)</option>
+                                        <option value="P">Perempuan (P)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Agama</label>
+                                    <select id="revStudentReligion" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white">
+                                        <option value="Islam">Islam</option>
+                                        <option value="Kristen Protestan">Kristen Protestan</option>
+                                        <option value="Katolik">Katolik</option>
+                                        <option value="Hindu">Hindu</option>
+                                        <option value="Buddha">Buddha</option>
+                                        <option value="Khonghucu">Khonghucu</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grup 2: Alamat Tempat Tinggal -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <h4 class="text-xs font-black uppercase text-indigo-700 tracking-wider">2. Alamat Tempat Tinggal</h4>
+
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">Jalan / Dusun / RT-RW</label>
+                                <input type="text" id="revAddressStreet" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white">
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">RT</label>
+                                    <input type="text" id="revAddressRt" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold text-center">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">RW</label>
+                                    <input type="text" id="revAddressRw" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold text-center">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Kode Pos</label>
+                                    <input type="text" id="revAddressPostalCode" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold text-center">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Kelurahan / Desa</label>
+                                    <input type="text" id="revAddressVillage" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Kecamatan</label>
+                                    <input type="text" id="revAddressDistrict" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grup 3: Orang Tua Kandung (Status, Pekerjaan, & Penghasilan Terpisah) -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                            <h4 class="text-xs font-black uppercase text-indigo-700 tracking-wider">3. Data Orang Tua Kandung</h4>
+
+                            <!-- Data Ayah -->
+                            <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-100 space-y-3">
+                                <span class="text-[11px] font-black text-blue-900 block uppercase">👨 Data Ayah Kandung</span>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[11px] font-bold text-slate-600 block mb-1">Nama Ayah Kandung</label>
+                                        <input type="text" id="revFatherName" class="w-full text-xs p-2.5 rounded-xl border bg-white font-semibold focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-bold text-slate-600 block mb-1">Status Ayah</label>
+                                        <select id="revFatherStatus" class="w-full text-xs p-2.5 rounded-xl border bg-white font-semibold">
+                                            <option value="Masih Hidup">Masih Hidup</option>
+                                            <option value="Sudah Meninggal">Sudah Meninggal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[11px] font-bold text-slate-600 block mb-1">Pekerjaan Ayah</label>
+                                        <input type="text" id="revFatherJob" placeholder="Contoh: Wiraswasta / Buruh" class="w-full text-xs p-2.5 rounded-xl border bg-white font-semibold">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-bold text-indigo-700 block mb-1">Penghasilan Ayah (Per Bulan) *</label>
+                                        <input type="text" id="revFatherIncome" placeholder="Contoh: Rp 2.500.000 / Bulan" class="w-full text-xs p-2.5 rounded-xl border-2 border-indigo-200 bg-white font-semibold focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Data Ibu -->
+                            <div class="p-3 bg-rose-50/50 rounded-xl border border-rose-100 space-y-3">
+                                <span class="text-[11px] font-black text-rose-900 block uppercase">👩 Data Ibu Kandung</span>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[11px] font-bold text-slate-600 block mb-1">Nama Ibu Kandung</label>
+                                        <input type="text" id="revMotherName" class="w-full text-xs p-2.5 rounded-xl border bg-white font-semibold focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-bold text-slate-600 block mb-1">Status Ibu</label>
+                                        <select id="revMotherStatus" class="w-full text-xs p-2.5 rounded-xl border bg-white font-semibold">
+                                            <option value="Masih Hidup">Masih Hidup</option>
+                                            <option value="Sudah Meninggal">Sudah Meninggal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[11px] font-bold text-slate-600 block mb-1">Pekerjaan Ibu</label>
+                                        <input type="text" id="revMotherJob" placeholder="Contoh: Ibu Rumah Tangga / Karyawan" class="w-full text-xs p-2.5 rounded-xl border bg-white font-semibold">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-bold text-indigo-700 block mb-1">Penghasilan Ibu (Per Bulan) *</label>
+                                        <input type="text" id="revMotherIncome" placeholder="Contoh: Rp 1.500.000 / Bulan" class="w-full text-xs p-2.5 rounded-xl border-2 border-indigo-200 bg-white font-semibold focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">No. WhatsApp Aktif Orang Tua / Wali</label>
+                                <input type="text" id="revParentPhone" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-mono font-semibold focus:bg-white">
+                            </div>
+                        </div>
+
+                        <!-- Grup 4: Kesejahteraan & Bantuan Sosial (Afirmasi) -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <h4 class="text-xs font-black uppercase text-indigo-700 tracking-wider">4. Bantuan Sosial &amp; Kesejahteraan (Afirmasi)</h4>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Status Kartu Bantuan</label>
+                                    <select id="revHasAssistance" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white">
+                                        <option value="TIDAK">❌ Tidak Punya (Default)</option>
+                                        <option value="PUNYA">✅ Memiliki Kartu Bantuan Sosial</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Jenis Kartu Bantuan</label>
+                                    <select id="revAssistanceType" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-semibold focus:bg-white">
+                                        <option value="KIP (Kartu Indonesia Pintar)">KIP (Kartu Indonesia Pintar)</option>
+                                        <option value="PKH (Program Keluarga Harapan)">PKH (Program Keluarga Harapan)</option>
+                                        <option value="KKS (Kartu Keluarga Sejahtera)">KKS (Kartu Keluarga Sejahtera)</option>
+                                        <option value="SKTM (Surat Keterangan Tidak Mampu)">SKTM (Surat Ket. Tidak Mampu)</option>
+                                        <option value="DTKS Kemensos">DTKS Kemensos</option>
+                                        <option value="Lainnya">Lainnya / Bantuan Daerah</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Nomor Kartu Bantuan</label>
+                                    <input type="text" id="revAssistanceNumber" placeholder="Nomor resmi KIP / PKH / KKS" class="w-full text-xs p-2.5 rounded-xl border bg-slate-50 font-mono font-bold focus:bg-white">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-600 block mb-1">Status Berkas Kartu</label>
+                                    <div id="revBantuanStatusBadge" class="text-xs p-2.5 rounded-xl bg-slate-100 text-slate-600 font-semibold flex items-center gap-1.5">
+                                        <span>📁</span> <span id="revBantuanStatusText">Tidak dilampirkan</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal Action Footer -->
+            <div class="px-6 py-4 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 font-semibold">Tindakan Petugas TU:</span>
+                    <span id="txtSubmissionStatusBadge" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-amber-100 text-amber-700">Menunggu</span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="openRejectReasonDialog()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs px-5 py-2.5 rounded-xl border border-rose-200 transition-all flex items-center gap-1.5">
+                        <span>❌</span> <span>Tolak / Minta Revisi</span>
+                    </button>
+
+                    <button onclick="approveCurrentSubmission()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg transition-all flex items-center gap-2">
+                        <span>✅</span> <span>Setujui (Approve) &amp; Sinkronkan ke Master</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 6. DIALOG ALASAN PENOLAKAN / REVISI TU -->
+    <!-- ======================================================== -->
+    <div id="modalRejectDialog" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl font-bold">
+                    ⚠️
+                </div>
+                <div>
+                    <h4 class="text-sm font-black text-slate-800">Alasan Penolakan / Permintaan Revisi</h4>
+                    <p class="text-xs text-slate-500">Pesan ini akan tampil langsung di APK Orang Tua.</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-xs font-bold text-slate-700 block mb-1">Catatan Revisi:</label>
+                <textarea id="txtRejectReason" rows="3" class="w-full text-xs p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-500 outline-none" placeholder="Contoh: Foto KK buram tidak terbaca, dan NIK siswa masih kurang dari 16 digit."></textarea>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeRejectReasonDialog()" class="px-4 py-2 text-xs font-bold text-slate-500 hover:bg-slate-100 rounded-xl">Batal</button>
+                <button onclick="submitRejectAction()" class="px-5 py-2 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow">Kirim Alasan &amp; Buka Revisi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let allSubmissions = [];
+        let currentFilter = 'PENDING';
+        let activeSubmission = null;
+        let activeDocTab = 'kk';
+        let docZoom = 1;
+        let docRotation = 0;
+        let isPanning = false;
+        let startX = 0, startY = 0, translateX = 0, translateY = 0;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadToggleSettings();
+            loadSubmissions();
+        });
+
+        async function loadToggleSettings() {
+            try {
+                const res = await fetch('/api/v1/mobile/modules');
+                const data = await res.json();
+                if (data.success && data.data?.modules?.biodata_submission) {
+                    const m = data.data.modules.biodata_submission;
+                    document.getElementById('toggleBiodataActive').checked = m.is_active;
+                    document.getElementById('labelToggleBiodata').textContent = m.is_active ? 'Pengisian Aktif' : 'Pengisian Nonaktif';
+                    if (m.deadline) {
+                        const d = new Date(m.deadline);
+                        const localIso = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+                        document.getElementById('inputBiodataDeadline').value = localIso;
+                    }
+                }
+            } catch (e) {
+                console.error('Gagal memuat toggle settings:', e);
+            }
+        }
+
+        async function saveToggleSettings() {
+            const isActive = document.getElementById('toggleBiodataActive').checked;
+            const deadlineVal = document.getElementById('inputBiodataDeadline').value;
+            const deadline = deadlineVal ? new Date(deadlineVal).toISOString() : null;
+
+            try {
+                const res = await fetch('/api/v1/admin/modules/biodata/toggle', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ isActive, deadline })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('✅ Pengaturan toggle modul biodata berhasil disimpan!');
+                    document.getElementById('labelToggleBiodata').textContent = isActive ? 'Pengisian Aktif' : 'Pengisian Nonaktif';
+                } else {
+                    alert('Gagal: ' + (result.message || 'Terjadi kesalahan'));
+                }
+            } catch (e) {
+                alert('Kesalahan jaringan: ' + e.message);
+            }
+        }
+
+        async function loadSubmissions() {
+            try {
+                const res = await fetch('/api/v1/admin/biodata/submissions');
+                const result = await res.json();
+                if (result.success) {
+                    allSubmissions = result.data || [];
+                    updateStats();
+                    renderTable();
+                } else {
+                    console.error('Error loadSubmissions:', result.message);
+                }
+            } catch (e) {
+                console.error('Gagal memuat antrean:', e);
+            }
+        }
+
+        function updateStats() {
+            const pending = allSubmissions.filter(s => s.status === 'PENDING').length;
+            const approved = allSubmissions.filter(s => s.status === 'APPROVED').length;
+            const rejected = allSubmissions.filter(s => s.status === 'REJECTED').length;
+            const total = allSubmissions.length;
+
+            document.getElementById('statPendingCount').textContent = pending;
+            document.getElementById('statApprovedCount').textContent = approved;
+            document.getElementById('statRejectedCount').textContent = rejected;
+            document.getElementById('statTotalCount').textContent = total;
+
+            document.getElementById('tabCountPending').textContent = pending;
+            document.getElementById('tabCountApproved').textContent = approved;
+            document.getElementById('tabCountRejected').textContent = rejected;
+            document.getElementById('tabCountAll').textContent = total;
+        }
+
+        function filterStatus(status) {
+            currentFilter = status;
+            ['Pending', 'Approved', 'Rejected', 'All'].forEach(name => {
+                const btn = document.getElementById('btnTab' + name);
+                if (status === name.toUpperCase()) {
+                    btn.className = 'px-3.5 py-1.5 rounded-xl font-bold text-xs bg-indigo-600 text-white shadow-sm transition-all';
+                } else {
+                    btn.className = 'px-3.5 py-1.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all';
+                }
+            });
+            renderTable();
+        }
+
+        function renderTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+            const tbody = document.getElementById('submissionsTableBody');
+
+            let filtered = allSubmissions;
+            if (currentFilter !== 'ALL') {
+                filtered = filtered.filter(s => s.status === currentFilter);
+            }
+
+            if (search) {
+                filtered = filtered.filter(s => {
+                    const name = (s.student?.name || '').toLowerCase();
+                    const nisn = (s.student?.nisn || '').toLowerCase();
+                    const nik = (s.student?.nik || '').toLowerCase();
+                    const cls = (s.student?.className || '').toLowerCase();
+                    return name.includes(search) || nisn.includes(search) || nik.includes(search) || cls.includes(search);
+                });
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="py-12 text-center text-slate-400">
+                            <p class="text-3xl mb-1">📭</p>
+                            <p class="text-xs font-semibold">Tidak ada data pengajuan dalam filter ini.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(sub => {
+                const st = sub.student || {};
+                const hasKk = !!sub.kkFileUrl;
+                const hasAkta = !!sub.aktaFileUrl;
+                const submittedDate = sub.submittedAt ? new Date(sub.submittedAt).toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                }) : '-';
+
+                let statusBadge = '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">⏳ PENDING</span>';
+                if (sub.status === 'APPROVED') {
+                    statusBadge = '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">✅ APPROVED</span>';
+                } else if (sub.status === 'REJECTED') {
+                    statusBadge = '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">❌ REVISI</span>';
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-3 px-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-slate-100 overflow-hidden border flex-shrink-0 flex items-center justify-center font-bold text-slate-400 text-xs">
+                                    ${st.profilePicUrl ? `<img src="${st.profilePicUrl}" class="w-full h-full object-cover">` : '👤'}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-xs">${st.name || 'Siswa'}</p>
+                                    <p class="text-[10px] text-slate-400">${st.className || 'Kelas Belum Ditentukan'}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4">
+                            <p class="font-mono text-slate-700 font-semibold text-xs">NISN: ${st.nisn || '-'}</p>
+                            <p class="font-mono text-[10px] text-slate-400">NIK: ${st.nik || 'Belum Tercatat'}</p>
+                        </td>
+                        <td class="py-3 px-4 font-mono text-[11px] text-slate-500">
+                            ${submittedDate}
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <div class="flex items-center justify-center gap-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${hasKk ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-400'}">KK ${hasKk ? '✓' : '✕'}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${hasAkta ? 'bg-teal-100 text-teal-700' : 'bg-slate-100 text-slate-400'}">Akta ${hasAkta ? '✓' : '✕'}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            ${statusBadge}
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="openSplitScreen('${sub.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 rounded-xl font-bold text-xs shadow transition-all flex items-center gap-1.5 mx-auto">
+                                <span>⚖️</span> <span>Verifikasi</span>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openSplitScreen(id) {
+            const sub = allSubmissions.find(s => s.id === id);
+            if (!sub) return;
+            activeSubmission = sub;
+
+            const st = sub.student || {};
+            document.getElementById('modalHeaderStudentInfo').textContent = `${st.name || 'Siswa'} • NISN: ${st.nisn || '-'} • Kelas: ${st.className || '-'}`;
+
+            const badge = document.getElementById('modalHeaderStatusBadge');
+            badge.textContent = sub.status;
+            if (sub.status === 'APPROVED') {
+                badge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+            } else if (sub.status === 'REJECTED') {
+                badge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+            } else {
+                badge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+            }
+
+            document.getElementById('txtSubmissionStatusBadge').textContent = sub.status;
+
+            // Parse Step Data
+            let s1 = {}, s2 = {}, s3 = {}, s4 = {};
+            try {
+                if (sub.step1Data) s1 = JSON.parse(sub.step1Data);
+                if (sub.step2Data) s2 = JSON.parse(sub.step2Data);
+                if (sub.step3Data) s3 = JSON.parse(sub.step3Data);
+                if (sub.step4Data) s4 = JSON.parse(sub.step4Data);
+            } catch (e) {}
+
+            document.getElementById('revStudentName').value = s1.nama || st.name || '';
+            document.getElementById('revStudentNisn').value = s1.nisn || st.nisn || '';
+            document.getElementById('revStudentNik').value = s1.nik || st.nik || '';
+            document.getElementById('revStudentPob').value = s1.tempatLahir || st.pob || '';
+            document.getElementById('revStudentDob').value = s1.tanggalLahir || st.dob || '';
+            document.getElementById('revStudentGender').value = s1.jenisKelamin || (st.gender === 'PEREMPUAN' || st.gender === 'P' ? 'P' : 'L');
+            document.getElementById('revStudentReligion').value = s1.agama || st.religion || 'Islam';
+
+            document.getElementById('revAddressStreet').value = s2.alamat || st.address || '';
+            document.getElementById('revAddressRt').value = s2.rt || '';
+            document.getElementById('revAddressRw').value = s2.rw || '';
+            document.getElementById('revAddressPostalCode').value = s2.kodePos || '';
+            document.getElementById('revAddressVillage').value = s2.desa || '';
+            document.getElementById('revAddressDistrict').value = s2.kecamatan || '';
+
+            // Data Ayah & Ibu (Status, Pekerjaan, Penghasilan Terpisah)
+            document.getElementById('revFatherName').value = s3.namaAyah || st.fatherName || '';
+            document.getElementById('revFatherStatus').value = s3.statusAyah || 'Masih Hidup';
+            document.getElementById('revFatherJob').value = s3.pekerjaanAyah || '';
+            document.getElementById('revFatherIncome').value = s3.penghasilanAyah || '';
+
+            document.getElementById('revMotherName').value = s3.namaIbu || st.motherName || '';
+            document.getElementById('revMotherStatus').value = s3.statusIbu || 'Masih Hidup';
+            document.getElementById('revMotherJob').value = s3.pekerjaanIbu || '';
+            document.getElementById('revMotherIncome').value = s3.penghasilanIbu || '';
+
+            document.getElementById('revParentPhone').value = s3.noHpOrtu || st.parentPhone || '';
+
+            // Kesejahteraan & Bantuan Sosial
+            const hasAst = s4.hasAssistance === true || s4.hasAssistance === 'true' || !!s4.noKip || !!s4.assistanceNumber;
+            document.getElementById('revHasAssistance').value = hasAst ? 'PUNYA' : 'TIDAK';
+            if (s4.assistanceType) {
+                document.getElementById('revAssistanceType').value = s4.assistanceType;
+            }
+            document.getElementById('revAssistanceNumber').value = s4.assistanceNumber || s4.noKip || s4.noPkh || '';
+
+            let payloadObj = {};
+            try {
+                if (sub.payloadJson) payloadObj = JSON.parse(sub.payloadJson);
+            } catch (e) {}
+
+            const bantuanUrl = sub.bantuanFileUrl || s4.bantuanFileUrl || payloadObj.bantuanFileUrl;
+            const badgeEl = document.getElementById('revBantuanStatusBadge');
+            const badgeTxt = document.getElementById('revBantuanStatusText');
+            if (bantuanUrl) {
+                badgeEl.className = 'text-xs p-2.5 rounded-xl bg-emerald-50 text-emerald-700 font-bold flex items-center gap-1.5 cursor-pointer hover:bg-emerald-100';
+                badgeEl.onclick = () => switchDocumentTab('bantuan');
+                badgeTxt.textContent = '✅ Berkas Dilampirkan (Lihat Tab)';
+            } else {
+                badgeEl.className = 'text-xs p-2.5 rounded-xl bg-slate-100 text-slate-500 font-semibold flex items-center gap-1.5';
+                badgeEl.onclick = null;
+                badgeTxt.textContent = 'Tidak dilampirkan';
+            }
+
+            // Buka tab KK default
+            switchDocumentTab('kk');
+            resetDocTransform();
+
+            document.getElementById('modalSplitScreen').classList.remove('hidden');
+        }
+
+        function closeSplitScreenModal() {
+            document.getElementById('modalSplitScreen').classList.add('hidden');
+            activeSubmission = null;
+        }
+
+        function switchDocumentTab(tab) {
+            activeDocTab = tab;
+            const btnKk = document.getElementById('btnDocTabKk');
+            const btnAkta = document.getElementById('btnDocTabAkta');
+            const btnBantuan = document.getElementById('btnDocTabBantuan');
+            const img = document.getElementById('docImage');
+            const placeholder = document.getElementById('docPlaceholder');
+            const extLink = document.getElementById('btnDocExternalOpen');
+
+            btnKk.className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all';
+            btnAkta.className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all';
+            if (btnBantuan) btnBantuan.className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all';
+
+            let url = null;
+            if (tab === 'kk') {
+                btnKk.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all';
+                url = activeSubmission?.kkFileUrl;
+            } else if (tab === 'akta') {
+                btnAkta.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all';
+                url = activeSubmission?.aktaFileUrl;
+            } else if (tab === 'bantuan') {
+                if (btnBantuan) btnBantuan.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all';
+                let payloadObj = {};
+                try {
+                    if (activeSubmission?.payloadJson) payloadObj = JSON.parse(activeSubmission.payloadJson);
+                } catch (e) {}
+                let s4 = {};
+                try {
+                    if (activeSubmission?.step4Data) s4 = JSON.parse(activeSubmission.step4Data);
+                } catch (e) {}
+                url = activeSubmission?.bantuanFileUrl || s4.bantuanFileUrl || payloadObj.bantuanFileUrl;
+            }
+
+            if (url) {
+                img.src = url;
+                img.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                extLink.href = url;
+                extLink.classList.remove('hidden');
+            } else {
+                img.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                extLink.classList.add('hidden');
+            }
+            resetDocTransform();
+        }
+
+        function handleImageError(img) {
+            img.classList.add('hidden');
+            document.getElementById('docPlaceholder').classList.remove('hidden');
+        }
+
+        function zoomDoc(delta) {
+            docZoom = Math.max(0.5, Math.min(4.0, docZoom + delta));
+            applyDocTransform();
+        }
+
+        function rotateDoc() {
+            docRotation = (docRotation + 90) % 360;
+            applyDocTransform();
+        }
+
+        function resetDocTransform() {
+            docZoom = 1;
+            docRotation = 0;
+            translateX = 0;
+            translateY = 0;
+            applyDocTransform();
+        }
+
+        function applyDocTransform() {
+            const img = document.getElementById('docImage');
+            img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${docZoom}) rotate(${docRotation}deg)`;
+            document.getElementById('lblDocZoom').textContent = `${Math.round(docZoom * 100)}%`;
+            document.getElementById('lblDocRotate').textContent = `${docRotation}°`;
+        }
+
+        function startDocPan(e) {
+            if (e.target.tagName === 'BUTTON') return;
+            isPanning = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            window.addEventListener('mousemove', onDocPan);
+            window.addEventListener('mouseup', stopDocPan);
+        }
+
+        function onDocPan(e) {
+            if (!isPanning) return;
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            applyDocTransform();
+        }
+
+        function stopDocPan() {
+            isPanning = false;
+            window.removeEventListener('mousemove', onDocPan);
+            window.removeEventListener('mouseup', stopDocPan);
+        }
+
+        async function approveCurrentSubmission() {
+            if (!activeSubmission) return;
+
+            const nik = document.getElementById('revStudentNik').value.trim();
+            if (nik.length < 16) {
+                alert('⚠️ NIK Siswa harus 16 digit sesuai Kartu Keluarga.');
+                return;
+            }
+
+            if (!confirm(`Setujui biodata untuk ${activeSubmission.student?.name || 'siswa ini'}?\nData akan langsung disinkronkan ke tabel master siswa dan formulir di APK dikunci (Read-Only).`)) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/v1/admin/biodata/${activeSubmission.id}/action`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'APPROVE' })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('🎉 Biodata siswa berhasil disetujui & disinkronkan ke data master!');
+                    closeSplitScreenModal();
+                    loadSubmissions();
+                } else {
+                    alert('Gagal: ' + (result.message || 'Terjadi kesalahan'));
+                }
+            } catch (e) {
+                alert('Kesalahan jaringan: ' + e.message);
+            }
+        }
+
+        function openRejectReasonDialog() {
+            document.getElementById('txtRejectReason').value = '';
+            document.getElementById('modalRejectDialog').classList.remove('hidden');
+        }
+
+        function closeRejectReasonDialog() {
+            document.getElementById('modalRejectDialog').classList.add('hidden');
+        }
+
+        async function submitRejectAction() {
+            if (!activeSubmission) return;
+            const reason = document.getElementById('txtRejectReason').value.trim();
+            if (!reason) {
+                alert('Wajib mengisi catatan alasan revisi untuk orang tua.');
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/v1/admin/biodata/${activeSubmission.id}/action`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'REJECT', rejectionReason: reason })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('❌ Pengajuan ditolak dan dikembalikan ke orang tua untuk revisi.');
+                    closeRejectReasonDialog();
+                    closeSplitScreenModal();
+                    loadSubmissions();
+                } else {
+                    alert('Gagal: ' + (result.message || 'Terjadi kesalahan'));
+                }
+            } catch (e) {
+                alert('Kesalahan jaringan: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>

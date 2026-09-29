@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Monitor Outer Body -->
+    <path
+        android:fillColor="#3B82F6"
+        android:pathData="M9,9h30c2.2,0 4,1.8 4,4v20c0,2.2 -1.8,4 -4,4H9c-2.2,0 -4,-1.8 -4,-4V13c0,-2.2 1.8,-4 4,-4z" />
+    <!-- Screen Glass -->
+    <path
+        android:fillColor="#F0F9FF"
+        android:pathData="M11,12h26c1.1,0 2,0.9 2,2v16c0,1.1 -0.9,2 -2,2H11c-1.1,0 -2,-0.9 -2,-2V14c0,-1.1 0.9,-2 2,-2z" />
+    <!-- Stand / Base -->
+    <path
+        android:fillColor="#1D4ED8"
+        android:pathData="M22,37h4v4h-4z" />
+    <path
+        android:fillColor="#1D4ED8"
+        android:pathData="M16,41h16c1.1,0 2,0.9 2,2H14c0,-1.1 0.9,-2 2,-2z" />
+    <!-- Chart Bars on Screen -->
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M14,24h3v6h-3z" />
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M19,20h3v10h-3z" />
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M24,16h3v14h-3z" />
+    <!-- Checkmark on Screen -->
+    <path
+        android:fillColor="#059669"
+        android:pathData="M30,22l2,2 5,-5 1.5,1.5 -6.5,6.5 -3.5,-3.5z" />
+</vector>

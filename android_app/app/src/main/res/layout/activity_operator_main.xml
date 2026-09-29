@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    android:orientation="vertical">
+
+    <!-- Top App Bar with Colorful Indigo Gradient -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1E1B4B"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnBackOperator"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Kembali"
+                android:src="@android:drawable/ic_menu_revert"
+                app:tint="#FFFFFF" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvOpTopTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚙️ Dashboard Operator Sekolah"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvOpTopSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Approval Izin Guru • Broadcast PDF • CBT • Reset Device"
+                    android:textColor="#C7D2FE"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSwitchToTeacherMode"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:background="@drawable/bg_btn_amber_rounded"
+                android:paddingHorizontal="12dp"
+                android:text="👨‍🏫 Mode Guru"
+                android:textColor="#1E1B4B"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Horizontal Scrollable Pill Tabs -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Tab 0: Izin Guru -->
+            <LinearLayout
+                android:id="@+id/tabBtnOpLeaves"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="#312E81"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="14dp">
+
+                <TextView
+                    android:id="@+id/tvTabOpLeaves"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📋 Izin Guru &amp; Piket"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Tab 1: Broadcast PDF -->
+            <LinearLayout
+                android:id="@+id/tabBtnOpBroadcast"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="#F1F5F9"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="14dp">
+
+                <TextView
+                    android:id="@+id/tvTabOpBroadcast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📢 Broadcast PDF"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab 2: Token CBT -->
+            <LinearLayout
+                android:id="@+id/tabBtnOpCbt"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="#F1F5F9"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="14dp">
+
+                <TextView
+                    android:id="@+id/tvTabOpCbt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔑 Token CBT"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab 3: Reset Device -->
+            <LinearLayout
+                android:id="@+id/tabBtnOpDevice"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="#F1F5F9"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="14dp">
+
+                <TextView
+                    android:id="@+id/tvTabOpDevice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📱 Reset Device"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab 4: Jadwal Sholat -->
+            <LinearLayout
+                android:id="@+id/tabBtnOpPrayer"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="14dp">
+
+                <TextView
+                    android:id="@+id/tvTabOpPrayer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🕌 Jadwal Sholat"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Tab 5: Rekap Presensi PDF -->
+            <LinearLayout
+                android:id="@+id/tabBtnOpAttendancePdf"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="#F1F5F9"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="14dp">
+
+                <TextView
+                    android:id="@+id/tvTabOpAttendancePdf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📄 Rekap Presensi PDF"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ================= TAB 0: APPROVAL IZIN GURU ================= -->
+            <LinearLayout
+                android:id="@+id/containerTabOpLeaves"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📋 PERSETUJUAN IZIN GURU OLEH OPERATOR"
+                            android:textColor="#312E81"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvOpLeavesSummary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Izin yang disetujui otomatis meneruskan tugas mandiri ke Posko Guru Piket"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <Button
+                            android:id="@+id/btnRefreshOpLeaves"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="#EEF2FF"
+                            android:text="🔄 Segarkan Data Izin Guru"
+                            android:textColor="#312E81"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/llOpLeavesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- ================= TAB 1: BROADCAST RESMI & PDF ================= -->
+            <LinearLayout
+                android:id="@+id/containerTabOpBroadcast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📢 KIRIM BROADCAST PENGUMUMAN &amp; SURAT PDF"
+                            android:textColor="#312E81"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Kirim pengumuman langsung ke portal dan APK siswa/orang tua dengan lampiran PDF resmi"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <EditText
+                            android:id="@+id/etOpBroadcastTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="12dp"
+                            android:background="#F1F5F9"
+                            android:hint="Judul Pengumuman / Surat Resmi"
+                            android:paddingHorizontal="14dp"
+                            android:textSize="12.5sp" />
+
+                        <EditText
+                            android:id="@+id/etOpBroadcastMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="#F1F5F9"
+                            android:gravity="top"
+                            android:hint="Isi pengumuman / ringkasan edaran surat..."
+                            android:minLines="3"
+                            android:padding="14dp"
+                            android:textSize="12.5sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Target Sasaran Pengumuman:"
+                            android:textColor="#334155"
+                            android:textSize="11.5sp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerOpBroadcastTarget"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@android:drawable/btn_dropdown" />
+
+                        <EditText
+                            android:id="@+id/etOpBroadcastClass"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="6dp"
+                            android:background="#F1F5F9"
+                            android:hint="Nama Kelas (Contoh: VII-A)"
+                            android:paddingHorizontal="14dp"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="#F8FAFC"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <Button
+                                android:id="@+id/btnOpPickPdf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:backgroundTint="#4338CA"
+                                android:text="📎 Pilih PDF"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/tvOpPdfFileName"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="Belum ada file PDF dipilih"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btnOpSendBroadcast"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="12dp"
+                            android:backgroundTint="#312E81"
+                            android:text="🚀 Kirim Pengumuman &amp; PDF Sekarang"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="📜 Riwayat Broadcast Pengumuman Resmi"
+                    android:textColor="#334155"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/llOpBroadcastHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- ================= TAB 2: TOKEN & SESI CBT ================= -->
+            <LinearLayout
+                android:id="@+id/containerTabOpCbt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔑 KONTROL TOKEN CBT &amp; PENGAWAS"
+                            android:textColor="#312E81"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Pantau ujian aktif dan kelola token ruang ujian CBT secara real-time"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <Button
+                            android:id="@+id/btnRefreshOpCbt"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="#EEF2FF"
+                            android:text="🔄 Segarkan Token &amp; Ujian Aktif"
+                            android:textColor="#312E81"
+                            android:textSize="11.5sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/llOpCbtExamsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- ================= TAB 3: RESET DEVICE BINDING ================= -->
+            <LinearLayout
+                android:id="@+id/containerTabOpDevice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📱 RESET KUNCI PERANGKAT SISWA (DEVICE BINDING)"
+                            android:textColor="#312E81"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Bantu siswa yang ganti ponsel atau lupa reset kunci perangkat agar dapat login kembali"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <EditText
+                            android:id="@+id/etOpDeviceStudentQuery"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="14dp"
+                            android:background="#F1F5F9"
+                            android:hint="Ketik NISN atau Username Siswa"
+                            android:paddingHorizontal="14dp"
+                            android:textSize="12.5sp" />
+
+                        <Button
+                            android:id="@+id/btnOpDoResetDevice"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="#059669"
+                            android:text="🔓 Reset Device Binding Siswa"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- ================= TAB 4: KELOLA JADWAL SHOLAT ================= -->
+            <LinearLayout
+                android:id="@+id/containerTabOpPrayer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🕌 ROTASI JADWAL SHOLAT BERJAMAAH MASJID"
+                            android:textColor="#059669"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Atur rotasi giliran kelas sholat berjamaah di masjid per hari"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Pilih Hari:"
+                            android:textColor="#334155"
+                            android:textSize="11.5sp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerOpPrayerDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@android:drawable/btn_dropdown" />
+
+                        <EditText
+                            android:id="@+id/etOpPrayerClasses"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="10dp"
+                            android:background="#F1F5F9"
+                            android:hint="Daftar Rombel (Contoh: VII-A, VII-B, VII-C)"
+                            android:paddingHorizontal="14dp"
+                            android:textSize="12.5sp" />
+
+                        <Button
+                            android:id="@+id/btnOpSavePrayerSchedule"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="12dp"
+                            android:backgroundTint="#059669"
+                            android:text="💾 Simpan Jadwal Rotasi Sholat"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/llOpPrayerTodayInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB 5 CONTAINER: REKAP PRESENSI PDF LENGKAP -->
+            <LinearLayout
+                android:id="@+id/containerTabOpAttendancePdf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📄 Unduh Laporan Rekap Presensi Siswa (A4)"
+                            android:textColor="#0F172A"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Dokumen laporan presensi resmi SMPN 1 Boyolangu. Dilengkapi rekapitulasi kehadiran per kelas, status hadir, terlambat, sakit, izin, dan alpa."
+                            android:textColor="#64748B"
+                            android:textSize="11.5sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:text="Pilih Cakupan Laporan (Scope):"
+                            android:textColor="#334155"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinnerOpPdfScope"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="6dp"
+                            android:background="#F1F5F9"
+                            android:paddingHorizontal="12dp" />
+
+                        <TextView
+                            android:id="@+id/tvOpPdfClassLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Pilih Rombel Kelas:"
+                            android:textColor="#334155"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                        <Spinner
+                            android:id="@+id/spinnerOpPdfClass"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="6dp"
+                            android:background="#F1F5F9"
+                            android:paddingHorizontal="12dp"
+                            android:visibility="gone" />
+
+                        <Button
+                            android:id="@+id/btnOpPrintPdf"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="18dp"
+                            android:backgroundTint="#0284C7"
+                            android:text="🖨️ Cetak / Simpan PDF (Sistem Android)"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12.5sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/btnOpOpenBrowserPdf"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="#059669"
+                            android:text="🌐 Buka / Unduh di Browser HP"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

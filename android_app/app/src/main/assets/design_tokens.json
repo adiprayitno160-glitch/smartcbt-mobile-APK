@@ -1,0 +1,27 @@
+{
+  "name": "SmartSchool Design Tokens",
+  "version": "1.0.0",
+  "colors": {
+    "primary": "#0D47A1",
+    "primaryVariant": "#0A2E5C",
+    "primaryLight": "#1E40AF",
+    "primarySurface": "#EFF6FF",
+    "secondary": "#0284C7",
+    "success": "#10B981",
+    "warning": "#F59E0B",
+    "danger": "#EF4444",
+    "background": "#F8FAFC",
+    "card": "#FFFFFF",
+    "border": "#E2E8F0",
+    "textPrimary": "#0F172A",
+    "textSecondary": "#475569",
+    "textMuted": "#94A3B8"
+  },
+  "navigation": {
+    "STUDENT": ["Beranda", "Tugas", "Absensi", "Pesan", "Profil"],
+    "TEACHER": ["Beranda", "Kelas Saya", "Tugas/CBT", "Pesan", "Profil"],
+    "PARENT": ["Beranda", "Akademik", "Kesehatan/BK", "Pesan", "Profil"],
+    "OPERATOR": ["Beranda", "Modul", "Pengumuman", "Server", "Profil"],
+    "COUNSELOR": ["Beranda", "Kasus", "Kalender", "Pesan", "Profil"]
+  }
+}

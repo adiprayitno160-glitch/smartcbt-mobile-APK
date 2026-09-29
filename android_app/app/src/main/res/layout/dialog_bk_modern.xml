@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#F8FAFC">
+
+    <!-- Header Card Konseling & BK -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#064E3B"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🕊️"
+                android:textSize="24sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bimbingan &amp; Konseling (BK)"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBkCounselorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guru BK: Memuat..."
+                    android:textColor="#A7F3D0"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnCloseBkDialog"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="#FFFFFF" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Horizontal Tab Bar (4 Tab Pilihan Siswa) -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:background="#047857"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="6dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnTabBkReplies"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="💬 Balasan BK"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#064E3B"
+                android:backgroundTint="#FFFFFF"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/btnTabBkReport"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="🔒 Curhat Anonim"
+                android:textSize="11sp"
+                android:textColor="#D1FAE5"
+                android:backgroundTint="#065F46"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/btnTabBkAppointment"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="📅 Janji Temu"
+                android:textSize="11sp"
+                android:textColor="#D1FAE5"
+                android:backgroundTint="#065F46"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/btnTabBkPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="🎖️ Buku Poin"
+                android:textSize="11sp"
+                android:textColor="#D1FAE5"
+                android:backgroundTint="#065F46"
+                android:paddingHorizontal="12dp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Scrollable Body Container -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:fillViewport="true"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- TAB 1: KOTAK MASUK & BALASAN BK -->
+            <LinearLayout
+                android:id="@+id/containerTabBkReplies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Riwayat Konseling &amp; Jawaban Guru BK"
+                        android:textColor="#1E293B"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnRefreshReplies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="⟳ Refresh"
+                        android:textSize="10sp"
+                        android:backgroundTint="#059669"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutRepliesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvEmptyReplies"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Belum ada pesan konsultasi yang diajukan ke Guru BK."
+                        android:textColor="#94A3B8"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:padding="20dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- TAB 2: CURHAT & LAPOR RAHASIA / ANONIM -->
+            <LinearLayout
+                android:id="@+id/containerTabBkReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔒 Ruang Curhat &amp; Pengaduan Rahasia"
+                    android:textColor="#0F172A"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Kerahasiaan Anda terjamin. Anda juga dapat memilih mode anonim."
+                    android:textColor="#64748B"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Kategori Masalah:"
+                    android:textColor="#334155"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerReportCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_dialog_input" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Judul / Hal yang Dirasakan:"
+                    android:textColor="#334155"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etReportSubject"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_dialog_input"
+                    android:hint="Cth: Merasa cemas menghadapi ujian / masalah teman"
+                    android:paddingHorizontal="12dp"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Isi Curhat / Laporan:"
+                    android:textColor="#334155"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etReportMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_dialog_input"
+                    android:gravity="top|start"
+                    android:hint="Ceritakan apa yang kamu rasakan atau alami..."
+                    android:padding="12dp"
+                    android:textSize="12sp" />
+
+                <CheckBox
+                    android:id="@+id/cbIsAnonymous"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="🕊️ Kirim sebagai Anonim (Nama &amp; NISN Disamarkan)"
+                    android:textColor="#065F46"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnSubmitReport"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="12dp"
+                    android:text="🚀 Kirim Curhat ke Guru BK"
+                    android:backgroundTint="#059669"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- TAB 3: JANJI TEMU TATAP MUKA -->
+            <LinearLayout
+                android:id="@+id/containerTabBkAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📅 Pengajuan Janji Temu Konseling"
+                    android:textColor="#0F172A"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Jadwalkan sesi konsultasi langsung di Ruang Bimbingan &amp; Konseling."
+                    android:textColor="#64748B"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Perihal / Topik Konseling:"
+                    android:textColor="#334155"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etAppointmentTopic"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_dialog_input"
+                    android:hint="Cth: Konsultasi pemilihan jurusan / motivasi belajar"
+                    android:paddingHorizontal="12dp"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Rencana Tanggal &amp; Waktu (Jam Ke / Istirahat):"
+                    android:textColor="#334155"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etAppointmentDateTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_dialog_input"
+                    android:hint="Cth: Besok saat jam istirahat pertama (10:00)"
+                    android:paddingHorizontal="12dp"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Catatan Tambahan untuk Guru BK:"
+                    android:textColor="#334155"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etAppointmentNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_dialog_input"
+                    android:gravity="top|start"
+                    android:hint="Tuliskan catatan penting jika ada..."
+                    android:padding="12dp"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btnSubmitAppointment"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="12dp"
+                    android:text="📅 Ajukan Jadwal Konseling"
+                    android:backgroundTint="#059669"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- TAB 4: RIWAYAT POIN KARAKTER -->
+            <LinearLayout
+                android:id="@+id/containerTabBkPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Summary Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#F0FDF4"
+                    android:layout_marginBottom="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎖️"
+                            android:textSize="28sp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Status Karakter &amp; Disiplin Siswa"
+                                android:textColor="#166534"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/tvBkPointsTotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0 Poin Pelanggaran (Sangat Baik)"
+                                android:textColor="#15803D"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Catatan Kedisiplinan &amp; Prestasi:"
+                    android:textColor="#334155"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
+
+                <LinearLayout
+                    android:id="@+id/layoutPointsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvEmptyPoints"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tidak ada catatan pelanggaran disiplin. Pertahankan integritas!"
+                        android:textColor="#94A3B8"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:padding="16dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

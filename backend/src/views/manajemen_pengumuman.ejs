@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siaran Pengumuman Bertingkat - SmartSchool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b1120; color: #f8fafc; }
+        .glass-card { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(51, 65, 85, 0.7); backdrop-filter: blur(12px); border-radius: 18px; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+    <%- (typeof isOperator !== 'undefined' && isOperator) ? include('partials/sidebar_operator') : include('partials/sidebar_admin') %>
+
+    <main class="flex-1 p-4 md:p-8 ml-0 md:ml-64 transition-all">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+            <div>
+                <div class="flex items-center gap-2.5">
+                    <span class="text-2xl">📢</span>
+                    <h1 class="text-xl md:text-2xl font-black tracking-tight text-white">Broadcast Pengumuman &amp; Respon Cepat</h1>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Siaran Resmi</span>
+                </div>
+                <p class="text-xs md:text-sm text-slate-400 mt-1">Siaran pesan prioritas resmi ke Siswa dan Orang Tua dengan estimasi penerima real-time.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="/admin" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold border border-slate-700 transition-all flex items-center gap-1.5">
+                    <span>🏛️</span> Dashboard Utama
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+            <!-- Form Buat Pengumuman -->
+            <div class="glass-card p-6 lg:col-span-1">
+                <h3 class="text-sm font-extrabold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span>✍️ Buat Siaran Baru</span>
+                </h3>
+                <form id="formAnnouncement" onsubmit="submitAnnouncement(event)" class="space-y-4 text-xs">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Judul Pengumuman *</label>
+                        <input type="text" id="inputJudul" required placeholder="Contoh: Jadwal Penilaian Akhir Semester 2026"
+                               class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:border-indigo-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Tingkat Prioritas *</label>
+                        <select id="inputPrioritas" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:border-indigo-500 focus:outline-none">
+                            <option value="BIASA">📢 Biasa (Informasi Standar)</option>
+                            <option value="PENTING">⚠️ Penting (Wajib Baca & Highlight)</option>
+                            <option value="MENDESAK">🚨 Mendesak (Darurat / Push Notif)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Target Penerima *</label>
+                        <select id="inputTargetLevel" onchange="onTargetLevelChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:border-indigo-500 focus:outline-none">
+                            <option value="STUDENT_ONLY">👨‍🎓 Siswa Saja</option>
+                            <option value="STUDENT_PARENT">👨‍👩‍👦 Siswa &amp; Orang Tua</option>
+                            <option value="PARENT_ONLY">👪 Orang Tua Saja</option>
+                            <option value="TINGKAT">🎓 Tingkat Jenjang (Kelas 7 / 8 / 9)</option>
+                            <option value="KELAS">🏢 Rombel / Kelas Tertentu</option>
+                        </select>
+                    </div>
+
+                    <div id="wrapperTargetTingkat" class="hidden">
+                        <label class="block font-bold text-slate-300 mb-1">Pilih Tingkat Jenjang</label>
+                        <select id="inputTargetTingkat" onchange="previewAudience()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:border-indigo-500 focus:outline-none">
+                            <option value="VII">Kelas 7 (Tingkat VII)</option>
+                            <option value="VIII">Kelas 8 (Tingkat VIII)</option>
+                            <option value="IX">Kelas 9 (Tingkat IX)</option>
+                        </select>
+                    </div>
+
+                    <div id="wrapperTargetKelas" class="hidden">
+                        <label class="block font-bold text-slate-300 mb-1">Pilih Rombel / Kelas</label>
+                        <select id="inputTargetKelas" onchange="previewAudience()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:border-indigo-500 focus:outline-none">
+                            <option value="">Memuat daftar kelas...</option>
+                        </select>
+                    </div>
+
+                    <div id="wrapperTargetRole" class="hidden">
+                        <label class="block font-bold text-slate-300 mb-1">Pilih Target Pengguna</label>
+                        <select id="inputTargetRole" onchange="previewAudience()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:border-indigo-500 focus:outline-none">
+                            <option value="STUDENT">👨‍🎓 Siswa Saja</option>
+                            <option value="STUDENT_PARENT">👨‍👩‍👦 Siswa &amp; Orang Tua</option>
+                            <option value="PARENT">👪 Orang Tua Saja</option>
+                        </select>
+                    </div>
+
+                    <!-- Live Audience Preview Box -->
+                    <div id="previewAudienceBox" class="p-3 bg-indigo-950/60 border border-indigo-500/30 rounded-xl text-[11.5px] text-indigo-200">
+                        Memuat estimasi audiens penerima...
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Isi Pesan / Instruksi *</label>
+                        <textarea id="inputIsi" required rows="4" placeholder="Tuliskan instruksi atau pengumuman resmi..."
+                                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:border-indigo-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">URL Lampiran (Opsional)</label>
+                        <input type="url" id="inputLampiranUrl" placeholder="https://... atau /uploads/dokumen.pdf"
+                               class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:border-indigo-500 focus:outline-none">
+                    </div>
+
+                    <button type="submit" id="btnSubmit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <span>🚀 Siarkan Pengumuman</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Daftar Pengumuman & Statistik Respon -->
+            <div class="glass-card p-6 lg:col-span-2">
+                <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-700/80">
+                    <h3 class="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+                        <span>📋 Riwayat Siaran &amp; Konfirmasi Respon</span>
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="loadAnnouncements()" class="text-xs text-indigo-400 hover:underline cursor-pointer">🔄 Refresh</button>
+                    </div>
+                </div>
+
+                <div id="announcementList" class="space-y-3 max-h-[700px] overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-500 text-center py-6">Memuat data siaran pengumuman...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const token = localStorage.getItem('token') || '';
+
+        async function loadClasses() {
+            try {
+                const res = await fetch('/api/kelas', { headers: { 'Authorization': 'Bearer ' + token } });
+                const d = await res.json();
+                const list = d.classes || d || [];
+                const sel = document.getElementById('inputTargetKelas');
+                if (sel) {
+                    sel.innerHTML = '<option value="">-- Pilih Rombel --</option>';
+                    list.forEach(k => {
+                        const name = k.name || k.nama || k;
+                        if (name) sel.innerHTML += `<option value="${name}">Kelas ${name}</option>`;
+                    });
+                }
+            } catch(e) {}
+        }
+
+        function onTargetLevelChange() {
+            const level = document.getElementById('inputTargetLevel').value;
+            document.getElementById('wrapperTargetTingkat').classList.toggle('hidden', level !== 'TINGKAT');
+            document.getElementById('wrapperTargetKelas').classList.toggle('hidden', level !== 'KELAS');
+            document.getElementById('wrapperTargetRole').classList.toggle('hidden', level !== 'ROLE');
+            previewAudience();
+        }
+
+        async function previewAudience() {
+            const targetLevel = document.getElementById('inputTargetLevel').value;
+            let targetId = null;
+            let targetRole = null;
+
+            if (targetLevel === 'TINGKAT') targetId = document.getElementById('inputTargetTingkat').value;
+            else if (targetLevel === 'KELAS') targetId = document.getElementById('inputTargetKelas').value;
+            else if (targetLevel === 'ROLE') {
+                targetRole = document.getElementById('inputTargetRole').value;
+                targetId = targetRole;
+            }
+
+            try {
+                const res = await fetch('/api/broadcast/preview-audience', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ targetLevel, targetId, targetRole })
+                });
+                const d = await res.json();
+                if (d.preview) {
+                    document.getElementById('previewAudienceBox').innerText = d.preview.summaryMessage;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function submitAnnouncement(e) {
+            e.preventDefault();
+            const judul = document.getElementById('inputJudul').value;
+            const prioritas = document.getElementById('inputPrioritas').value;
+            const targetLevel = document.getElementById('inputTargetLevel').value;
+            const isi = document.getElementById('inputIsi').value;
+            const lampiranUrl = document.getElementById('inputLampiranUrl').value || null;
+
+            let targetId = null;
+            if (targetLevel === 'TINGKAT') targetId = document.getElementById('inputTargetTingkat').value;
+            else if (targetLevel === 'KELAS') targetId = document.getElementById('inputTargetKelas').value;
+            else if (targetLevel === 'ROLE') targetId = document.getElementById('inputTargetRole').value;
+
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.innerText = 'Menyiarkan...';
+
+            try {
+                const res = await fetch('/api/broadcast/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ judul, prioritas, targetLevel, targetId, isi, lampiranUrl })
+                });
+                const d = await res.json();
+                if (res.ok && d.success) {
+                    alert('✅ ' + (d.message || 'Pengumuman broadcast berhasil disiarkan!'));
+                    document.getElementById('formAnnouncement').reset();
+                    onTargetLevelChange();
+                    loadAnnouncements();
+                } else {
+                    alert('Gagal menyiarkan: ' + (d.message || 'Kesalahan server'));
+                }
+            } catch (err) {
+                alert('Gagal menyiarkan: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>🚀 Siarkan Pengumuman</span>';
+            }
+        }
+
+        async function loadAnnouncements() {
+            const container = document.getElementById('announcementList');
+            if (!container) return;
+
+            try {
+                const res = await fetch('/api/broadcast/list', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (!res.ok) throw new Error('Gagal memuat list broadcast');
+                const d = await res.json();
+                const list = d.data || [];
+
+                if (list.length === 0) {
+                    container.innerHTML = '<p class="text-xs text-slate-500 text-center py-10">Belum ada siaran pengumuman aktif.</p>';
+                    return;
+                }
+
+                container.innerHTML = list.map(a => {
+                    const prio = a.prioritas || 'BIASA';
+                    let prioBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950 text-blue-300 border border-blue-800">📢 BIASA</span>';
+                    let borderClass = 'border-slate-700/60';
+
+                    if (prio === 'MENDESAK') {
+                        prioBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-950 text-rose-300 border border-rose-800 animate-pulse">🚨 MENDESAK</span>';
+                        borderClass = 'border-rose-500/50 bg-rose-950/20';
+                    } else if (prio === 'PENTING') {
+                        prioBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-800">⚠️ PENTING</span>';
+                        borderClass = 'border-amber-500/40 bg-amber-950/15';
+                    }
+
+                    let targetBadge = '<span class="text-[10px] font-semibold text-slate-400">🏛️ Sekolah</span>';
+                    if (a.targetLevel === 'TINGKAT') targetBadge = `<span class="text-[10px] font-semibold text-purple-300">🎓 Tingkat ${a.targetId || ''}</span>`;
+                    else if (a.targetLevel === 'KELAS') targetBadge = `<span class="text-[10px] font-semibold text-emerald-300">🏢 Kelas ${a.targetId || ''}</span>`;
+                    else if (a.targetLevel === 'ROLE') targetBadge = `<span class="text-[10px] font-semibold text-sky-300">👤 Role ${a.targetId || ''}</span>`;
+
+                    const stats = a.stats || { readCount: 0, yesCount: 0, noCount: 0 };
+                    const dateStr = new Date(a.createdAt).toLocaleString('id-ID', {
+                        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }) + ' WIB';
+
+                    return `
+                        <div class="p-4 bg-slate-900/80 rounded-2xl border ${borderClass} shadow-md space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    ${prioBadge}
+                                    ${targetBadge}
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[11px] text-slate-400 font-mono">${dateStr}</span>
+                                    <button onclick="deleteBroadcast('${a.id}')" class="text-xs text-rose-400 hover:text-rose-300 font-bold ml-2 cursor-pointer">Hapus</button>
+                                </div>
+                            </div>
+                            <h4 class="font-extrabold text-sm text-white">${a.judul}</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">${a.isi}</p>
+                            
+                            ${a.lampiranUrl ? `
+                                <div>
+                                    <a href="${a.lampiranUrl}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 underline">📎 Lampiran Berkas ↗</a>
+                                </div>
+                            ` : ''}
+
+                            <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+                                <span>Oleh: <strong class="text-slate-300">${a.dibuatOlehId || 'Admin'}</strong></span>
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-slate-800 px-2 py-0.5 rounded-full text-slate-300">👁️ ${stats.readCount} Dibaca</span>
+                                    ${(stats.yesCount > 0 || stats.noCount > 0) ? `
+                                        <span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded-full">✅ ${stats.yesCount} Ya</span>
+                                        <span class="bg-rose-950 text-rose-300 border border-rose-800 px-2 py-0.5 rounded-full">❌ ${stats.noCount} Tidak</span>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (e) {
+                container.innerHTML = '<p class="text-xs text-rose-400 text-center py-6">Gagal memuat siaran pengumuman.</p>';
+            }
+        }
+
+        async function deleteBroadcast(id) {
+            if (!confirm('Hapus siaran pengumuman ini?')) return;
+            try {
+                const res = await fetch('/api/broadcast/' + id, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (res.ok) {
+                    loadAnnouncements();
+                } else {
+                    alert('Gagal menghapus siaran.');
+                }
+            } catch(e) {
+                alert('Terjadi kesalahan jaringan.');
+            }
+        }
+
+        loadClasses();
+        onTargetLevelChange();
+        loadAnnouncements();
+    </script>
+</body>
+</html>

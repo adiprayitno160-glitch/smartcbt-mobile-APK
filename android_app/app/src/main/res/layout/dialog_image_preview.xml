@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#16213E"
+    android:padding="16dp">
+
+    <!-- Title & Subtitle Header -->
+    <TextView
+        android:id="@+id/tvPreviewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="IMG_2026.jpg"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:ellipsize="middle"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/tvPreviewSub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2.4 MB • IMAGE"
+        android:textColor="#AAAAAA"
+        android:textSize="11sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Image Preview Container -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="#0F172A">
+
+        <ImageView
+            android:id="@+id/ivFullPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:contentDescription="Image Preview" />
+
+        <ProgressBar
+            android:id="@+id/pbPreviewLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="💡 Thumbnail instan dari HP siswa. Tekan 'Unduh Berkas Asli' untuk menarik resolusi penuh ke server."
+        android:textColor="#888888"
+        android:textSize="10sp"
+        android:layout_marginTop="10dp" />
+</LinearLayout>

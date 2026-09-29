@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="160dp"
+    android:viewportWidth="120"
+    android:viewportHeight="160">
+    <!-- Book Background -->
+    <path
+        android:fillColor="#1E293B"
+        android:pathData="M12,8h96a8,8 0 0,1 8,8v128a8,8 0 0,1 -8,8H12a8,8 0 0,1 -8,-8V16a8,8 0 0,1 8,-8z" />
+    <!-- Spine Line -->
+    <path
+        android:fillColor="#0F172A"
+        android:pathData="M4,16h16v128H4z" />
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M60,50m-20,0a20,20 0 1,1 40,0a20,20 0 1,1 -40,0" />
+    <!-- Book Icon Outline -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,40c-6,0 -12,2 -14,6v18c2,-4 8,-6 14,-6s12,2 14,6V46c-2,-4 -8,-6 -14,-6z" />
+    <path
+        android:fillColor="#94A3B8"
+        android:pathData="M36,92h48v6H36z" />
+    <path
+        android:fillColor="#64748B"
+        android:pathData="M42,106h36v5H42z" />
+</vector>

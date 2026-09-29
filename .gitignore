@@ -1,0 +1,45 @@
+# Dependency directories
+node_modules/
+backend/node_modules/
+
+# Build artifacts & caches
+.gradle/
+android_app/.gradle/
+android_app/build/
+android_app/app/build/
+dist/
+backend/dist/
+*.log
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+
+# Local database files
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+backend/prisma/dev.db*
+
+# Environment secrets
+.env
+backend/.env
+
+# Media & Loose binaries in root
+*.apk
+*.mp4
+emulator_screenshot*.png
+test_*.png
+test_*.jpg
+
+# User uploaded media & device transfers
+backend/uploads/device-files/
+backend/uploads/avatars/
+
+# Keep release APK for backend serving
+!backend/uploads/SmartCBT_v2.8.90.apk
+!backend/uploads/smartcbt-latest.apk
+
+

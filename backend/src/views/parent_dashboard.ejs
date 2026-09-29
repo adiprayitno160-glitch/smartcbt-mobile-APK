@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Orang Tua Siswa - Grafik & Analitik Perkembangan Anak</title>
+    <script src="/js/tailwind.js"></script>
+    <script src="/js/chart.js"></script>
+    <style>
+        .bg-unbk-navy { background-color: #0A2E5C; }
+        .bg-unbk-blue { background-color: #1565C0; }
+        .gradient-card-growth {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+        .progress-pill { transition: all 0.2s ease; }
+        .progress-pill:hover { transform: translateY(-2px); }
+        .gradient-header-biodata {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #7C3AED 100%);
+        }
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(59, 130, 246, 0.6), 0 0 30px rgba(124, 58, 237, 0.4);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(59, 130, 246, 0.9), 0 0 45px rgba(124, 58, 237, 0.7);
+                transform: scale(1.01);
+            }
+        }
+        .btn-glowing-submit {
+            background: linear-gradient(135deg, #2563EB 0%, #7C3AED 50%, #EC4899 100%);
+            animation: glowPulse 2.5s infinite ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .btn-glowing-submit:hover {
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen pb-16">
+    <!-- Top Header Navigation -->
+    <header class="bg-[#0e1d40] text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-bold text-2xl shadow">
+                    👨‍👩‍👧
+                </div>
+                <div>
+                    <h1 class="font-black text-lg leading-tight" id="parentHeaderWelcome">Portal Orang Tua / Wali Siswa</h1>
+                    <p class="text-xs text-blue-200" id="parentHeaderSub">Monitoring Realtime Grafik Perkembangan Akademik & Karakter Anak</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs bg-blue-800/80 px-3.5 py-1.5 rounded-full font-bold border border-blue-600/50" id="parentUserBadge">Wali Murid</span>
+                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow transition-colors">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-6">
+        <!-- 1. IDENTITAS PROFIL ANAK & HIGHLIGHT PRESTASI -->
+        <div class="bg-white rounded-3xl shadow-sm border p-6 flex flex-col md:flex-row items-center gap-6">
+            <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-700 text-white flex items-center justify-center font-black text-4xl shadow-xl border-4 border-white" id="childAvatar">
+                S
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <div class="flex flex-wrap items-center justify-center md:justify-start gap-2.5 mb-1.5">
+                    <h2 class="text-2xl font-black text-gray-900" id="childName">Nama Siswa</h2>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold">🟢 Siswa Aktif CBT</span>
+                    <span class="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full font-bold" id="badgeRank">🏆 Peringkat 3 di Kelas</span>
+                </div>
+                <p class="text-sm font-bold text-blue-800 mb-2">Tingkat & Rombel: <span id="childClass" class="bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">Kelas VII-A</span></p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 text-xs text-gray-500 font-mono">
+                    <span>NISN: <b class="text-gray-800" id="childNisn">-</b></span>
+                    <span>NIS: <b class="text-gray-800" id="childNis">-</b></span>
+                    <span>Wali / Orang Tua: <b class="text-gray-800" id="childParentName">-</b></span>
+                </div>
+            </div>
+            <div class="flex flex-col items-center md:items-end gap-2">
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-4 rounded-2xl shadow-lg text-center min-w-[160px]">
+                    <p class="text-[11px] uppercase tracking-wider font-bold opacity-90">Rata-rata Nilai</p>
+                    <p class="text-3xl font-black" id="scoreOverall">88.6</p>
+                    <p class="text-[10px] font-semibold mt-0.5">Predikat A (Sangat Baik)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📋 BANNER FORMULIR BIODATA & BUKU INDUK SISWA (SIAKAD) -->
+        <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-3xl p-6 text-white shadow-xl border border-blue-700/50 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-start gap-4 z-10">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center text-3xl shadow-lg border border-white/20 shrink-0">
+                    📋
+                </div>
+                <div>
+                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                        <h3 class="text-lg font-black tracking-tight text-white">Formulir Biodata & Buku Induk Siswa (SIAKAD)</h3>
+                        <span id="badgeBiodataTop" class="text-xs px-3 py-0.5 rounded-full font-bold bg-amber-400 text-amber-950">Memuat status...</span>
+                    </div>
+                    <p class="text-xs text-blue-200 max-w-2xl leading-relaxed">
+                        Pengisian data pokok siswa, identitas orang tua (ayah & ibu), status penghasilan terpisah, data afirmasi/kesejahteraan sosial, serta unggah berkas resmi Kartu Keluarga & Akta Kelahiran langsung ke Staf Tata Usaha (TU).
+                    </p>
+                    <div id="biodataRejectionNotice" class="hidden mt-3 p-3 bg-red-950/80 border border-red-500/50 rounded-xl text-xs text-red-200">
+                        <span class="font-bold">⚠️ Catatan Revisi dari Petugas TU:</span> <span id="biodataRejectionText"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="z-10 shrink-0 w-full md:w-auto flex flex-col sm:flex-row gap-3">
+                <button type="button" onclick="openBiodataModal()" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-lg flex items-center justify-center gap-2 transition-all transform hover:scale-105" style="background: linear-gradient(135deg, #2563EB 0%, #4F46E5 50%, #7C3AED 100%); box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);">
+                    <span>📝</span> <span id="btnOpenBiodataText">Isi / Perbarui Biodata</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 🕒 PRESENSI HARI INI & JADWAL TUGAS ANAK -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Kartu Presensi Hari Ini (Datang jam berapa & Pulang jam berapa) -->
+            <div class="bg-white rounded-3xl shadow-sm border p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-black text-sm text-gray-800 flex items-center gap-2">
+                            <span>🕒</span> Presensi Real-Time Hari Ini
+                        </h3>
+                        <span id="badgeTodayStatus" class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold">HADIR TEPAT WAKTU</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Datang Jam Berapa -->
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4">
+                            <p class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">🚪 Jam Datang (Masuk)</p>
+                            <p class="text-2xl font-black text-emerald-900 mt-1" id="webTodayGateIn">06:45 WIB</p>
+                            <p class="text-[11px] text-emerald-700 mt-1">Scan Gate Barcode Kelas</p>
+                        </div>
+                        <!-- Pulang Jam Berapa -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+                            <p class="text-[11px] font-bold text-blue-800 uppercase tracking-wider">🏠 Jam Pulang (Keluar)</p>
+                            <p class="text-2xl font-black text-blue-900 mt-1" id="webTodayGateOut">--:-- WIB</p>
+                            <p class="text-[11px] text-blue-700 mt-1" id="webTodayGateOutNote">Belum scan pulang</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifikasi Absensi Otomatis untuk Orang Tua -->
+                <div class="mt-4 p-3.5 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3">
+                    <span class="text-xl">🔔</span>
+                    <div class="text-xs text-amber-900 flex-1">
+                        <p class="font-bold" id="webNotifTitle">✅ Notifikasi Kehadiran Terverifikasi</p>
+                        <p class="mt-0.5 text-amber-800" id="webNotifMessage">Ananda telah melakukan scan barcode di ruang kelas tepat waktu pada pukul 06:45 WIB.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kartu Jadwal Tugas & PR Anak -->
+            <div class="bg-white rounded-3xl shadow-sm border p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-black text-sm text-gray-800 flex items-center gap-2">
+                            <span>📚</span> Jadwal Tugas &amp; PR Anak
+                        </h3>
+                        <span id="badgeHomeworkCount" class="bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full font-bold">0 Tugas</span>
+                    </div>
+                    <div id="webHomeworkContainer" class="space-y-2.5 max-h-52 overflow-y-auto pr-1 text-xs">
+                        <div class="p-3 bg-slate-50 border rounded-xl text-gray-500 text-center">Memuat jadwal tugas anak...</div>
+                    </div>
+                </div>
+                <p class="text-[11px] text-gray-400 mt-3 pt-3 border-t">Memantau batas waktu pengumpulan tugas agar ananda tidak terlambat mengumpulkan.</p>
+            </div>
+        </div>
+
+        <!-- 2. SECTION UTAMA: GRAFIK PERKEMBANGAN ANAK -->
+        <div class="bg-white rounded-3xl shadow-sm border p-6">
+            <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b gap-3">
+                <div>
+                    <h3 class="text-lg font-black text-gray-800 flex items-center gap-2">
+                        <span>📈</span> Grafik Perkembangan Belajar & Nilai Anak
+                    </h3>
+                    <p class="text-xs text-gray-500">Visualisasi kenaikan nilai ujian berkala dan perbandingan terhadap rata-rata kelas</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-xl font-bold flex items-center gap-1">
+                        <span>↗️</span> <span id="trendStatusText">Meningkat (+14.8%)</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Grid 2 Grafik Visual: Tren Line Chart & Bar Mapel Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Grafik 1: Tren Nilai Ujian dari Waktu ke Waktu -->
+                <div class="bg-slate-50 p-5 rounded-2xl border flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-gray-700 mb-1 flex items-center gap-1.5">
+                            <span>📊</span> Tren Nilai Ujian (UH 1 ➔ PTS ➔ UH 2 ➔ PAS)
+                        </h4>
+                        <p class="text-[11px] text-gray-500 mb-4">Garis biru menunjukkan nilai anak, garis abu-abu rata-rata kelas</p>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="chartTrendExam"></canvas>
+                    </div>
+                </div>
+
+                <!-- Grafik 2: Penguasaan per Mata Pelajaran -->
+                <div class="bg-slate-50 p-5 rounded-2xl border flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-gray-700 mb-1 flex items-center gap-1.5">
+                            <span>🎯</span> Penguasaan Nilai per Mata Pelajaran (Target KKM: 75)
+                        </h4>
+                        <p class="text-[11px] text-gray-500 mb-4">Seluruh mata pelajaran berada di atas standar KKM</p>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="chartSubjectPerformance"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rincian Nilai Mapel Interaktif & Progress Bar -->
+            <div class="mt-6 pt-6 border-t">
+                <h4 class="font-bold text-xs uppercase tracking-wider text-gray-700 mb-4 flex items-center gap-1.5">
+                    <span>📚</span> Rincian Penguasaan Materi Belajar di Sekolah
+                </h4>
+                <div id="subjectProgressList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. SECTION DISIPLIN, KEHADIRAN & RADAR KARAKTER -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Donut Kehadiran -->
+            <div class="bg-white rounded-3xl shadow-sm border p-6 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-black text-sm text-gray-800 flex items-center gap-2 mb-1">
+                        <span>🟢</span> Persentase Kehadiran Gerbang
+                    </h3>
+                    <p class="text-xs text-gray-400 mb-4">Presensi harian anak (Gate In & Gate Out)</p>
+                    <div class="h-52 relative flex items-center justify-center">
+                        <canvas id="chartAttendanceDonut"></canvas>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4 text-center text-xs">
+                    <div class="p-2.5 bg-emerald-50 text-emerald-800 rounded-xl font-bold border border-emerald-200">
+                        <div class="text-[10px] text-emerald-600 font-semibold">Hadir Tepat</div>
+                        <div class="text-sm font-black" id="attPresentCount">0</div>
+                        <div class="text-[10px] font-bold text-emerald-700" id="attPresentPercent">0.0%</div>
+                    </div>
+                    <div class="p-2.5 bg-amber-50 text-amber-800 rounded-xl font-bold border border-amber-200">
+                        <div class="text-[10px] text-amber-600 font-semibold">Terlambat</div>
+                        <div class="text-sm font-black" id="attLateCount">0</div>
+                        <div class="text-[10px] font-bold text-amber-700" id="attLatePercent">0.0%</div>
+                    </div>
+                    <div class="p-2.5 bg-sky-50 text-sky-800 rounded-xl font-bold border border-sky-200">
+                        <div class="text-[10px] text-sky-600 font-semibold">Sakit / Izin</div>
+                        <div class="text-sm font-black" id="attSickPermitCount">0</div>
+                        <div class="text-[10px] font-bold text-sky-700" id="attSickPermitPercent">0.0%</div>
+                    </div>
+                    <div class="p-2.5 bg-rose-50 text-rose-800 rounded-xl font-bold border border-rose-200">
+                        <div class="text-[10px] text-rose-600 font-semibold">Alpa</div>
+                        <div class="text-sm font-black" id="attAbsentCount">0</div>
+                        <div class="text-[10px] font-bold text-rose-700" id="attAbsentPercent">0.0%</div>
+                    </div>
+                </div>
+                <div class="mt-3 p-2 bg-blue-50/80 rounded-xl border border-blue-200 flex items-center justify-between text-xs font-bold text-blue-900">
+                    <span>Persentase Kehadiran Total:</span>
+                    <span class="text-sm font-black text-blue-700" id="attTotalPercent">96.7%</span>
+                </div>
+
+                <!-- 📈 GRAFIK TREN KEHADIRAN ANANDA -->
+                <div class="mt-4 pt-3 border-t border-slate-100">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-xs font-bold text-gray-700 uppercase flex items-center gap-1.5">
+                            <span>📈</span> Grafik Tren Kehadiran Ananda (%)
+                        </h4>
+                        <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">14 Hari Terakhir</span>
+                    </div>
+                    <div class="h-40 relative">
+                        <canvas id="chartParentAttendanceTrend"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips & Rekomendasi Belajar untuk Orang Tua -->
+            <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border p-6 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-black text-sm text-gray-800 flex items-center gap-2 mb-1">
+                        <span>💡</span> Catatan Evaluasi & Rekomendasi untuk Orang Tua
+                    </h3>
+                    <p class="text-xs text-gray-400 mb-4">Rekomendasi dari wali kelas dan guru bimbingan konseling</p>
+                    
+                    <div class="space-y-3" id="parentTipsContainer">
+                        <div class="p-3.5 bg-blue-50/80 rounded-2xl border border-blue-200 text-xs text-blue-900 flex items-start gap-2.5">
+                            <span class="text-lg">🌟</span>
+                            <div>
+                                <p class="font-bold">Keunggulan di Bidang Sains & Informatika</p>
+                                <p class="text-[11px] text-blue-700 mt-0.5">Ananda memiliki kemampuan penalaran logika yang sangat baik. Dukung minatnya dalam eksplorasi komputer dan teknologi.</p>
+                            </div>
+                        </div>
+                        <div class="p-3.5 bg-emerald-50/80 rounded-2xl border border-emerald-200 text-xs text-emerald-900 flex items-start gap-2.5">
+                            <span class="text-lg">⏰</span>
+                            <div>
+                                <p class="font-bold">Kedisiplinan Waktu Belajar Sangat Tertib</p>
+                                <p class="text-[11px] text-emerald-700 mt-0.5">Tingkat kehadiran tepat waktu mencapai 95%. Selalu hadir sebelum bel masuk sekolah berbunyi.</p>
+                            </div>
+                        </div>
+                        <div class="p-3.5 bg-purple-50/80 rounded-2xl border border-purple-200 text-xs text-purple-900 flex items-start gap-2.5">
+                            <span class="text-lg">📖</span>
+                            <div>
+                                <p class="font-bold">Pengembangan Bahasa Inggris</p>
+                                <p class="text-[11px] text-purple-700 mt-0.5">Disarankan menambah waktu membaca artikel atau mendengarkan audio edukasi berbahasa Inggris 15 menit per hari di rumah.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- 3.5. ⚠️ EVALUASI & STATISTIK KETERLAMBATAN ANANDA -->
+        <div class="bg-white rounded-3xl shadow-sm border p-6 border-amber-200/80 bg-gradient-to-br from-white via-amber-50/20 to-orange-50/30">
+            <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b border-amber-100 gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl font-black shadow-xs">
+                        ⚠️
+                    </div>
+                    <div>
+                        <h3 class="text-base font-black text-gray-900 flex items-center gap-2">
+                            Evaluasi &amp; Statistik Keterlambatan Ananda
+                        </h3>
+                        <p class="text-xs text-gray-500">Monitoring mendalam selisih waktu tiba vs batas gerbang sekolah (07:15 WIB), poin pelanggaran, dan pola hari</p>
+                    </div>
+                </div>
+                <span id="lateRiskBadge" class="bg-emerald-100 text-emerald-800 text-xs px-3.5 py-1.5 rounded-full font-bold border border-emerald-300">
+                    🟢 STATUS: TERTIB / AMAN
+                </span>
+            </div>
+
+            <!-- 4 Kartu Metrik Keterlambatan -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <!-- Metrik 1: Total Terlambat -->
+                <div class="bg-white p-4 rounded-2xl border border-amber-200 shadow-xs">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Frekuensi Terlambat</p>
+                    <p class="text-2xl font-black text-amber-600 mt-1" id="lateCountStat">0 <span class="text-xs font-bold text-gray-500">Kali</span></p>
+                    <p class="text-[11px] text-gray-400 mt-0.5">Selama 30 hari terakhir</p>
+                </div>
+                <!-- Metrik 2: Rata-rata Menit Keterlambatan -->
+                <div class="bg-white p-4 rounded-2xl border border-amber-200 shadow-xs">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Rata-rata Menit</p>
+                    <p class="text-2xl font-black text-orange-600 mt-1" id="lateAvgMinutesStat">0 <span class="text-xs font-bold text-gray-500">Menit</span></p>
+                    <p class="text-[11px] text-gray-400 mt-0.5">Dari batas 07:15 WIB</p>
+                </div>
+                <!-- Metrik 3: Rata-rata Jam Tiba Saat Terlambat -->
+                <div class="bg-white p-4 rounded-2xl border border-amber-200 shadow-xs">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Rata-rata Jam Tiba</p>
+                    <p class="text-2xl font-black text-blue-600 mt-1" id="lateAvgTimeStat">--:-- <span class="text-xs font-bold text-gray-500">WIB</span></p>
+                    <p class="text-[11px] text-gray-400 mt-0.5" id="lateFrequentDayStat">Hari sering terlambat: -</p>
+                </div>
+                <!-- Metrik 4: Akumulasi Poin Pelanggaran -->
+                <div class="bg-white p-4 rounded-2xl border border-amber-200 shadow-xs">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Poin Pelanggaran</p>
+                    <p class="text-2xl font-black text-red-600 mt-1" id="latePointsStat">0 <span class="text-xs font-bold text-gray-500">Poin</span></p>
+                    <p class="text-[11px] text-gray-400 mt-0.5">5 Poin / Keterlambatan</p>
+                </div>
+            </div>
+
+            <!-- Grid: Tabel Log Hari Terlambat & Kotak Rekomendasi Pendampingan -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Log Hari Terlambat -->
+                <div class="bg-white p-4 rounded-2xl border border-gray-200">
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-gray-700 mb-3 flex items-center justify-between">
+                        <span>🕒 Riwayat Tanggal &amp; Jam Terlambat</span>
+                        <span class="text-[10px] text-gray-400 font-normal">Batas: 07:15 WIB</span>
+                    </h4>
+                    <div class="overflow-y-auto max-h-52">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 border-b">
+                                    <th class="p-2">Hari &amp; Tanggal</th>
+                                    <th class="p-2">Jam Masuk</th>
+                                    <th class="p-2">Selisih Terlambat</th>
+                                    <th class="p-2">Poin</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lateHistoryTable" class="divide-y">
+                                <tr><td colspan="4" class="p-4 text-center text-gray-400">Tidak ada riwayat keterlambatan</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Arahan & Panduan Pendampingan Orang Tua -->
+                <div class="bg-white p-4 rounded-2xl border border-gray-200 flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-gray-700 mb-3 flex items-center gap-1.5">
+                            <span>🧭</span> Panduan &amp; Rekomendasi Pendampingan Rumah
+                        </h4>
+                        <div id="lateRecommendationsList" class="space-y-2.5 text-xs text-gray-700">
+                            <div class="p-3 bg-slate-50 rounded-xl border flex items-start gap-2.5">
+                                <span class="text-emerald-600 font-bold">✅</span>
+                                <p>Ananda tertib hadir sebelum bel masuk sekolah berbunyi pukul 07:15 WIB.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t text-[11px] text-gray-400 flex items-center justify-between">
+                        <span>Konsultasikan dengan Guru BK jika ananda memiliki kendala transportasi.</span>
+                        <button onclick="document.getElementById('inputBkQuestion').scrollIntoView({behavior: 'smooth'})" class="text-blue-600 font-bold hover:underline">Tanya Guru BK &rarr;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. RIWAYAT PRESENSI & TUGAS HARIAN -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Tabel Presensi -->
+            <div class="bg-white rounded-3xl shadow-sm border p-6">
+                <div class="flex justify-between items-center mb-4 border-b pb-3">
+                    <h3 class="font-bold text-xs uppercase tracking-wider text-gray-700 flex items-center gap-2">
+                        <span>📋</span> Log Presensi Gerbang Terakhir
+                    </h3>
+                    <span class="text-[10px] text-gray-400">30 Hari Terakhir</span>
+                </div>
+                <div class="overflow-x-auto overflow-y-auto max-h-[300px]">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-600 border-b">
+                                <th class="p-3">Tanggal & Jam</th>
+                                <th class="p-3">Pintu Gerbang</th>
+                                <th class="p-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="parentAttendanceTable" class="divide-y">
+                            <tr><td colspan="3" class="p-6 text-center text-gray-400">Memuat presensi anak...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tugas Kelas & PR -->
+            <div class="bg-white rounded-3xl shadow-sm border p-6">
+                <div class="flex justify-between items-center mb-4 border-b pb-3">
+                    <h3 class="font-bold text-xs uppercase tracking-wider text-gray-700 flex items-center gap-2">
+                        <span>📚</span> Tugas & PR Kelas Anak
+                    </h3>
+                </div>
+                <div id="parentHomeworkList" class="space-y-2.5 max-h-[300px] overflow-y-auto">
+                    <p class="text-center text-gray-400 py-6 text-xs">Tidak ada tugas kelas baru</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4.5. 📁 DOKUMEN & RAPOR DIGITAL ANAK -->
+        <div class="bg-white rounded-3xl shadow-sm border p-6 my-6">
+            <div class="flex flex-wrap justify-between items-center mb-4 pb-3 border-b gap-3">
+                <div>
+                    <h3 class="text-base font-black text-gray-800 flex items-center gap-2">
+                        <span>📄</span> Dokumen &amp; Rapor Digital Anak
+                    </h3>
+                    <p class="text-xs text-gray-500">Akses resmi rapor digital, kartu pelajar, sertifikat, dan surat edaran dari sekolah yang dibagikan secara remote</p>
+                </div>
+                <button onclick="loadParentEFiles()" class="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200 cursor-pointer shadow-xs">
+                    ⟳ Muat Berkas
+                </button>
+            </div>
+            <div id="parentEFilesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="col-span-full text-center py-6 text-gray-400 text-xs">Memuat daftar berkas digital anak...</div>
+            </div>
+        </div>
+    
+        <!-- 5. 💬 RUANG KONSULTASI LANGSUNG DENGAN GURU BK (SELAIN VIA WHATSAPP) -->
+        <div class="bg-white rounded-3xl shadow-sm border p-6">
+            <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b gap-3">
+                <div>
+                    <h3 class="text-lg font-black text-gray-800 flex items-center gap-2">
+                        <span>💬</span> Konsultasi Langsung dengan Guru BK (Bimbingan Konseling)
+                    </h3>
+                    <p class="text-xs text-gray-500">Kirim pesan dan konsultasikan perkembangan anak Anda secara langsung dengan Guru BK sekolah secara privat & aman</p>
+                </div>
+                <button onclick="openConsultationModal()" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white px-5 py-2.5 rounded-2xl font-bold text-xs shadow-md flex items-center gap-2 transition-all">
+                    <span>✍️</span> <span>Tulis Pesan Konsultasi Baru</span>
+                </button>
+            </div>
+
+            <!-- List Konsultasi -->
+            <div id="parentConsultationList" class="space-y-3.5">
+                <p class="text-center text-gray-400 py-6 text-xs">Memuat percakapan konsultasi dengan Guru BK...</p>
+            </div>
+        </div>
+
+        <!-- Modal Tulis Konsultasi Baru -->
+        <div id="modalConsultation" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+            <div class="bg-white p-6 rounded-3xl w-full max-w-lg shadow-2xl border">
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <h3 class="text-base font-bold text-gray-800 flex items-center gap-2">
+                        <span>✍️</span> Kirim Pesan Konsultasi ke Guru BK
+                    </h3>
+                    <button type="button" onclick="closeConsultationModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+                </div>
+                <form id="formConsultation" onsubmit="handleSendConsultation(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Kategori Konsultasi *</label>
+                        <select id="consultCategory" class="w-full border p-2.5 rounded-xl text-xs font-medium bg-gray-50 focus:bg-white" required>
+                            <option value="AKADEMIK">📚 Perkembangan Belajar & Nilai</option>
+                            <option value="KEDISIPLINAN">⏰ Kedisiplinan & Kehadiran di Sekolah</option>
+                            <option value="PERILAKU">🤝 Sikap, Karakter & Pergaulan Teman</option>
+                            <option value="MINAT_BAKAT">🎨 Minat Bakat & Kelanjutan Studi</option>
+                            <option value="LAINNYA">💬 Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Subjek / Topik Percakapan *</label>
+                        <input type="text" id="consultSubject" placeholder="Cth: Mohon info perkembangan belajar matematika Ananda..." class="w-full border p-2.5 rounded-xl text-xs" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Isi Pesan Konsultasi *</label>
+                        <textarea id="consultMessage" rows="4" placeholder="Tuliskan pertanyaan atau hal yang ingin dikonsultasikan dengan Guru BK secara lengkap..." class="w-full border p-2.5 rounded-xl text-xs" required></textarea>
+                    </div>
+
+                    <div class="flex justify-end space-x-2 pt-4 border-t">
+                        <button type="button" onclick="closeConsultationModal()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-xl text-xs font-bold">Batal</button>
+                        <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-xl text-xs font-bold shadow flex items-center gap-1.5">
+                            <span>🚀</span> <span>Kirim ke Guru BK</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- POPUP MODAL PENGISIAN BIODATA SISWA (SIAKAD) -->
+        <!-- ========================================== -->
+        <div id="modalBiodataParent" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+            <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+                <!-- Modal Radiant Header -->
+                <div class="gradient-header-biodata text-white px-6 py-4 flex items-center justify-between shadow-md">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-2xl border border-white/20">
+                            📋
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-black text-base md:text-lg tracking-tight">Formulir Biodata & Buku Induk Siswa</h3>
+                                <span id="modalBiodataHeaderBadge" class="bg-amber-400 text-amber-950 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-xs">DRAFT</span>
+                            </div>
+                            <p class="text-xs text-blue-100">Data tersinkronisasi langsung ke Sistem Verifikasi Staf Tata Usaha (TU)</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeBiodataModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-lg font-bold transition-all">
+                        ✕
+                    </button>
+                </div>
+
+                <!-- Stepper Navigation Indicators -->
+                <div class="bg-slate-50 px-6 py-3 border-b flex items-center justify-between overflow-x-auto gap-2">
+                    <button type="button" onclick="goToBiodataStep(1)" id="stepTabIndicator1" class="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-600 text-white shrink-0 shadow-xs">
+                        <span>1</span> <span>Data Siswa</span>
+                    </button>
+                    <div class="h-0.5 w-4 bg-slate-200 shrink-0"></div>
+                    <button type="button" onclick="goToBiodataStep(2)" id="stepTabIndicator2" class="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-200 text-slate-600 shrink-0">
+                        <span>2</span> <span>Domisili</span>
+                    </button>
+                    <div class="h-0.5 w-4 bg-slate-200 shrink-0"></div>
+                    <button type="button" onclick="goToBiodataStep(3)" id="stepTabIndicator3" class="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-200 text-slate-600 shrink-0">
+                        <span>3</span> <span>Orang Tua</span>
+                    </button>
+                    <div class="h-0.5 w-4 bg-slate-200 shrink-0"></div>
+                    <button type="button" onclick="goToBiodataStep(4)" id="stepTabIndicator4" class="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-200 text-slate-600 shrink-0">
+                        <span>4</span> <span>Kesejahteraan</span>
+                    </button>
+                    <div class="h-0.5 w-4 bg-slate-200 shrink-0"></div>
+                    <button type="button" onclick="goToBiodataStep(5)" id="stepTabIndicator5" class="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-200 text-slate-600 shrink-0">
+                        <span>5</span> <span>Unggah Berkas</span>
+                    </button>
+                </div>
+
+                <!-- Form Content Scroll Area -->
+                <div class="p-6 overflow-y-auto flex-1 text-xs text-gray-800">
+                    <div id="modalBiodataAlert" class="hidden mb-4 p-3 rounded-2xl text-xs font-semibold"></div>
+
+                    <form id="formBiodataWizard" onsubmit="handleBiodataSubmit(event)" enctype="multipart/form-data">
+                        <!-- Hidden inputs for file uploads via modern buttons -->
+                        <input type="file" id="portalFileInputKk" name="kk" accept="image/*,application/pdf" class="hidden" onchange="handlePortalFilePicked('kk', this)">
+                        <input type="file" id="portalCameraInputKk" accept="image/*" capture="environment" class="hidden" onchange="handlePortalFilePicked('kk', this)">
+
+                        <input type="file" id="portalFileInputAkta" name="akta" accept="image/*,application/pdf" class="hidden" onchange="handlePortalFilePicked('akta', this)">
+                        <input type="file" id="portalCameraInputAkta" accept="image/*" capture="environment" class="hidden" onchange="handlePortalFilePicked('akta', this)">
+
+                        <input type="file" id="portalFileInputBantuan" name="bantuan" accept="image/*,application/pdf" class="hidden" onchange="handlePortalFilePicked('bantuan', this)">
+                        <input type="file" id="portalCameraInputBantuan" accept="image/*" capture="environment" class="hidden" onchange="handlePortalFilePicked('bantuan', this)">
+
+                        <!-- STEP 1: DATA SISWA -->
+                        <div id="portalStep1" class="space-y-4">
+                            <h4 class="font-black text-sm text-blue-900 border-b pb-2 flex items-center gap-2">
+                                <span>👤</span> Langkah 1: Identitas Pokok Siswa
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Nama Lengkap Siswa *</label>
+                                    <input type="text" id="w_studentName" class="w-full border p-2.5 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">NISN (10 Digit) *</label>
+                                    <input type="text" id="w_nisn" maxlength="10" class="w-full border p-2.5 rounded-xl text-xs font-mono font-bold focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">NIK Siswa (16 Digit Sesuai KK) *</label>
+                                    <input type="text" id="w_nik" maxlength="16" class="w-full border p-2.5 rounded-xl text-xs font-mono font-bold focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin *</label>
+                                    <select id="w_gender" class="w-full border p-2.5 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-500" required>
+                                        <option value="L">Laki-laki</option>
+                                        <option value="P">Perempuan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Tempat Lahir *</label>
+                                    <input type="text" id="w_pob" class="w-full border p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Tanggal Lahir *</label>
+                                    <input type="date" id="w_dob" class="w-full border p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Agama *</label>
+                                    <select id="w_religion" class="w-full border p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-blue-500" required>
+                                        <option value="ISLAM">Islam</option>
+                                        <option value="KRISTEN">Kristen Protestan</option>
+                                        <option value="KATOLIK">Katolik</option>
+                                        <option value="HINDU">Hindu</option>
+                                        <option value="BUDDHA">Buddha</option>
+                                        <option value="KONGHUCU">Konghucu</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Anak Ke-</label>
+                                        <input type="number" id="w_siblingOrder" min="1" max="20" value="1" class="w-full border p-2.5 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Jml Saudara</label>
+                                        <input type="number" id="w_siblingsCount" min="0" max="20" value="0" class="w-full border p-2.5 rounded-xl text-xs">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Tinggi Badan (cm)</label>
+                                        <input type="number" id="w_height" placeholder="150" class="w-full border p-2.5 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Berat Badan (kg)</label>
+                                        <input type="number" id="w_weight" placeholder="45" class="w-full border p-2.5 rounded-xl text-xs">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2: ALAMAT & DOMISILI -->
+                        <div id="portalStep2" class="space-y-4 hidden">
+                            <h4 class="font-black text-sm text-blue-900 border-b pb-2 flex items-center gap-2">
+                                <span>🏠</span> Langkah 2: Alamat Tinggal & Domisili
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label class="block font-bold text-gray-700 mb-1">Alamat Jalan / Dusun *</label>
+                                    <input type="text" id="w_street" placeholder="Jl. Raya No. 123 / Dusun Sukamaju" class="w-full border p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">RT *</label>
+                                        <input type="text" id="w_rt" placeholder="001" class="w-full border p-2.5 rounded-xl text-xs" required>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">RW *</label>
+                                        <input type="text" id="w_rw" placeholder="002" class="w-full border p-2.5 rounded-xl text-xs" required>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Desa / Kelurahan *</label>
+                                    <input type="text" id="w_village" class="w-full border p-2.5 rounded-xl text-xs" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Kecamatan *</label>
+                                    <input type="text" id="w_district" class="w-full border p-2.5 rounded-xl text-xs" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Kabupaten / Kota *</label>
+                                    <input type="text" id="w_city" class="w-full border p-2.5 rounded-xl text-xs" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Provinsi *</label>
+                                    <input type="text" id="w_province" class="w-full border p-2.5 rounded-xl text-xs" required>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Kode Pos</label>
+                                    <input type="text" id="w_postalCode" placeholder="12345" class="w-full border p-2.5 rounded-xl text-xs">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Tempat Tinggal *</label>
+                                    <select id="w_liveWith" class="w-full border p-2.5 rounded-xl text-xs">
+                                        <option value="Bersama Orang Tua">Bersama Orang Tua</option>
+                                        <option value="Bersama Wali">Bersama Wali</option>
+                                        <option value="Asrama / Pondok Pesantren">Asrama / Pondok Pesantren</option>
+                                        <option value="Kost">Kost</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Moda Transportasi ke Sekolah</label>
+                                    <select id="w_transportation" class="w-full border p-2.5 rounded-xl text-xs">
+                                        <option value="Sepeda Motor">Sepeda Motor</option>
+                                        <option value="Jalan Kaki">Jalan Kaki</option>
+                                        <option value="Sepeda">Sepeda</option>
+                                        <option value="Angkutan Umum">Angkutan Umum</option>
+                                        <option value="Mobil Pribadi / Antar Jemput">Mobil Pribadi / Antar Jemput</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Jarak ke Sekolah (km)</label>
+                                        <input type="number" step="0.1" id="w_distance" placeholder="2.5" class="w-full border p-2.5 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Waktu Tempuh (menit)</label>
+                                        <input type="number" id="w_travelTime" placeholder="15" class="w-full border p-2.5 rounded-xl text-xs">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3: DATA ORANG TUA (AYAH & IBU TERPISAH) -->
+                        <div id="portalStep3" class="space-y-5 hidden">
+                            <h4 class="font-black text-sm text-blue-900 border-b pb-2 flex items-center gap-2">
+                                <span>👨‍👩‍👧</span> Langkah 3: Identitas Orang Tua & Penghasilan Terpisah
+                            </h4>
+
+                            <!-- Data Ayah Kandung -->
+                            <div class="bg-blue-50/60 p-4 rounded-2xl border border-blue-200 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h5 class="font-black text-xs text-blue-900 flex items-center gap-1.5">
+                                        <span>👨</span> Data Ayah Kandung
+                                    </h5>
+                                    <span class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-md">Wajib</span>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Nama Ayah Kandung *</label>
+                                        <input type="text" id="w_fatherName" class="w-full border p-2 rounded-xl text-xs bg-white" required>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">NIK Ayah (16 Digit)</label>
+                                        <input type="text" id="w_fatherNik" maxlength="16" class="w-full border p-2 rounded-xl text-xs font-mono bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Status Keberadaan Ayah *</label>
+                                        <select id="w_fatherStatus" class="w-full border p-2 rounded-xl text-xs bg-white font-bold" required>
+                                            <option value="Masih Hidup">🟢 Masih Hidup</option>
+                                            <option value="Sudah Meninggal">⚫ Sudah Meninggal</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Pekerjaan Ayah *</label>
+                                        <select id="w_fatherJob" class="w-full border p-2 rounded-xl text-xs bg-white" required>
+                                            <option value="Wiraswasta / Pedagang">Wiraswasta / Pedagang</option>
+                                            <option value="Karyawan Swasta">Karyawan Swasta</option>
+                                            <option value="PNS / TNI / POLRI">PNS / TNI / POLRI</option>
+                                            <option value="Petani / Peternak">Petani / Peternak</option>
+                                            <option value="Buruh / Pekerja Lepas">Buruh / Pekerja Lepas</option>
+                                            <option value="Tenaga Pengajar / Dosen">Tenaga Pengajar / Dosen</option>
+                                            <option value="Pensiunan">Pensiunan</option>
+                                            <option value="Tidak Bekerja">Tidak Bekerja</option>
+                                        </select>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block font-bold text-blue-900 mb-1">💰 Penghasilan Ayah Kandung (Terpisah) *</label>
+                                        <select id="w_fatherIncome" class="w-full border-2 border-blue-300 p-2.5 rounded-xl text-xs bg-white font-bold text-blue-950 focus:ring-2 focus:ring-blue-500" required>
+                                            <option value="Kurang dari Rp 1.000.000">&lt; Rp 1.000.000</option>
+                                            <option value="Rp 1.000.000 - Rp 2.000.000">Rp 1.000.000 - Rp 2.000.000</option>
+                                            <option value="Rp 2.000.000 - Rp 5.000.000" selected>Rp 2.000.000 - Rp 5.000.000</option>
+                                            <option value="Rp 5.000.000 - Rp 10.000.000">Rp 5.000.000 - Rp 10.000.000</option>
+                                            <option value="Lebih dari Rp 10.000.000">&gt; Rp 10.000.000</option>
+                                            <option value="Tidak Berpenghasilan">Tidak Berpenghasilan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Data Ibu Kandung -->
+                            <div class="bg-rose-50/60 p-4 rounded-2xl border border-rose-200 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h5 class="font-black text-xs text-rose-900 flex items-center gap-1.5">
+                                        <span>👩</span> Data Ibu Kandung
+                                    </h5>
+                                    <span class="text-[10px] font-bold bg-rose-100 text-rose-800 px-2 py-0.5 rounded-md">Wajib</span>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Nama Ibu Kandung *</label>
+                                        <input type="text" id="w_motherName" class="w-full border p-2 rounded-xl text-xs bg-white" required>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">NIK Ibu (16 Digit)</label>
+                                        <input type="text" id="w_motherNik" maxlength="16" class="w-full border p-2 rounded-xl text-xs font-mono bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Status Keberadaan Ibu *</label>
+                                        <select id="w_motherStatus" class="w-full border p-2 rounded-xl text-xs bg-white font-bold" required>
+                                            <option value="Masih Hidup">🟢 Masih Hidup</option>
+                                            <option value="Sudah Meninggal">⚫ Sudah Meninggal</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Pekerjaan Ibu *</label>
+                                        <select id="w_motherJob" class="w-full border p-2 rounded-xl text-xs bg-white" required>
+                                            <option value="Ibu Rumah Tangga (IRT)" selected>Ibu Rumah Tangga (IRT)</option>
+                                            <option value="Wiraswasta / Pedagang">Wiraswasta / Pedagang</option>
+                                            <option value="Karyawan Swasta">Karyawan Swasta</option>
+                                            <option value="PNS / TNI / POLRI">PNS / TNI / POLRI</option>
+                                            <option value="Petani / Peternak">Petani / Peternak</option>
+                                            <option value="Buruh / Pekerja Lepas">Buruh / Pekerja Lepas</option>
+                                            <option value="Tenaga Pengajar / Dosen">Tenaga Pengajar / Dosen</option>
+                                            <option value="Pensiunan">Pensiunan</option>
+                                        </select>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block font-bold text-rose-900 mb-1">💰 Penghasilan Ibu Kandung (Terpisah) *</label>
+                                        <select id="w_motherIncome" class="w-full border-2 border-rose-300 p-2.5 rounded-xl text-xs bg-white font-bold text-rose-950 focus:ring-2 focus:ring-rose-500" required>
+                                            <option value="Tidak Berpenghasilan" selected>Tidak Berpenghasilan / IRT</option>
+                                            <option value="Kurang dari Rp 1.000.000">&lt; Rp 1.000.000</option>
+                                            <option value="Rp 1.000.000 - Rp 2.000.000">Rp 1.000.000 - Rp 2.000.000</option>
+                                            <option value="Rp 2.000.000 - Rp 5.000.000">Rp 2.000.000 - Rp 5.000.000</option>
+                                            <option value="Rp 5.000.000 - Rp 10.000.000">Rp 5.000.000 - Rp 10.000.000</option>
+                                            <option value="Lebih dari Rp 10.000.000">&gt; Rp 10.000.000</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kontak Orang Tua -->
+                            <div>
+                                <label class="block font-bold text-gray-700 mb-1">No. WhatsApp Aktif Orang Tua / Wali *</label>
+                                <input type="tel" id="w_parentPhone" placeholder="081234567890" class="w-full border p-2.5 rounded-xl text-xs font-mono font-bold bg-white" required>
+                                <p class="text-[10px] text-gray-400 mt-1">Nomor ini digunakan untuk pengiriman notifikasi kehadiran dan nilai rapor berkala.</p>
+                            </div>
+                        </div>
+
+                        <!-- STEP 4: KESEJAHTERAAN SOSIAL (AFIRMASI) -->
+                        <div id="portalStep4" class="space-y-4 hidden">
+                            <h4 class="font-black text-sm text-blue-900 border-b pb-2 flex items-center gap-2">
+                                <span>💳</span> Langkah 4: Program Kesejahteraan Sosial (Afirmasi)
+                            </h4>
+                            <p class="text-xs text-gray-500">
+                                Bagian ini bersifat opsional. Jika keluarga menerima bantuan pemerintah (KIP, PKH, KKS, SKTM, atau DTKS), pilih "Punya" untuk memasukkan data dan berkas pendukung.
+                            </p>
+
+                            <div class="p-4 bg-slate-50 rounded-2xl border space-y-3">
+                                <label class="block font-bold text-gray-800">Kepemilikan Kartu Kesejahteraan / Pra Sejahtera:</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <label class="flex items-center gap-3 p-3 bg-white rounded-xl border cursor-pointer hover:border-blue-500">
+                                        <input type="radio" name="portalHasKesejahteraan" id="rbKesejahteraanNo" value="0" checked onchange="togglePortalKesejahteraan(false)" class="text-blue-600">
+                                        <div>
+                                            <p class="font-bold text-xs text-gray-800">⚪ Tidak Punya (Default)</p>
+                                            <p class="text-[10px] text-gray-400">Tidak menerima bantuan kartu sosial</p>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center gap-3 p-3 bg-white rounded-xl border cursor-pointer hover:border-blue-500">
+                                        <input type="radio" name="portalHasKesejahteraan" id="rbKesejahteraanYes" value="1" onchange="togglePortalKesejahteraan(true)" class="text-blue-600">
+                                        <div>
+                                            <p class="font-bold text-xs text-indigo-700">🟢 Punya Kartu Bantuan</p>
+                                            <p class="text-[10px] text-gray-400">KIP, PKH, KKS, SKTM, atau DTKS</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Expandable Form Kartu Bantuan -->
+                            <div id="boxPortalKesejahteraan" class="hidden p-4 bg-indigo-50/60 rounded-2xl border border-indigo-200 space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block font-bold text-indigo-900 mb-1">Jenis Kartu Bantuan *</label>
+                                        <select id="w_bantuanType" class="w-full border p-2.5 rounded-xl text-xs bg-white font-bold">
+                                            <option value="KIP">Kartu Indonesia Pintar (KIP)</option>
+                                            <option value="PKH">Program Keluarga Harapan (PKH)</option>
+                                            <option value="KKS">Kartu Keluarga Sejahtera (KKS)</option>
+                                            <option value="SKTM">Surat Keterangan Tidak Mampu (SKTM)</option>
+                                            <option value="DTKS">Data Terpadu Kesejahteraan Sosial (DTKS)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-indigo-900 mb-1">Nomor Kartu / ID Bantuan *</label>
+                                        <input type="text" id="w_bantuanNumber" placeholder="Contoh: KIP-88991234" class="w-full border p-2.5 rounded-xl text-xs bg-white font-mono font-bold">
+                                    </div>
+                                </div>
+
+                                <!-- Unggah Berkas Kartu Bantuan -->
+                                <div class="bg-white p-4 rounded-xl border border-indigo-100 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-bold text-xs text-gray-800">Scan / Foto Kartu Bantuan</span>
+                                        <span id="badgePortalBantuanStatus" class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">Belum Dipilih</span>
+                                    </div>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <button type="button" onclick="document.getElementById('portalCameraInputBantuan').click()" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs">
+                                            <span>📸</span> <span>Ambil Foto</span>
+                                        </button>
+                                        <button type="button" onclick="document.getElementById('portalFileInputBantuan').click()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 border">
+                                            <span>📁</span> <span>Pilih Berkas</span>
+                                        </button>
+                                    </div>
+                                    <p id="portalBantuanFileName" class="text-[11px] text-gray-500 font-mono italic">Belum ada file terpilih (Format: JPG, PNG, PDF)</p>
+                                    <div id="portalBantuanPreviewContainer" class="hidden mt-2">
+                                        <img id="portalBantuanImgPreview" class="max-h-36 rounded-lg border shadow-xs" src="" alt="Preview Kartu Bantuan">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 5: UNGGAH BERKAS KK & AKTA (MODERN CARDS) -->
+                        <div id="portalStep5" class="space-y-5 hidden">
+                            <h4 class="font-black text-sm text-blue-900 border-b pb-2 flex items-center gap-2">
+                                <span>📁</span> Langkah 5: Unggah Dokumen Kartu Keluarga & Akta Kelahiran
+                            </h4>
+                            <p class="text-xs text-gray-500">
+                                Pastikan foto atau dokumen scan terbaca jelas, tidak terpotong, dan tulisan NIK / Nomor Dokumen terlihat tajam.
+                            </p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Card KK -->
+                                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-3">
+                                    <div>
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h5 class="font-black text-xs text-blue-900 flex items-center gap-1.5">
+                                                <span>👨‍👩‍👧‍👦</span> Kartu Keluarga (KK) *
+                                            </h5>
+                                            <span id="badgePortalKkStatus" class="text-[10px] font-bold text-slate-500 bg-slate-200 px-2 py-0.5 rounded-md">Wajib</span>
+                                        </div>
+                                        <p class="text-[11px] text-gray-500">Unggah foto atau scan PDF Kartu Keluarga resmi.</p>
+                                    </div>
+
+                                    <div id="portalKkPreviewBox" class="h-32 bg-white rounded-xl border border-dashed flex items-center justify-center overflow-hidden">
+                                        <img id="portalKkImgPreview" class="hidden max-h-full object-contain" src="" alt="Preview KK">
+                                        <p id="portalKkPlaceholder" class="text-[11px] text-gray-400">Belum ada foto/berkas KK</p>
+                                    </div>
+
+                                    <div>
+                                        <div class="flex gap-2">
+                                            <button type="button" onclick="document.getElementById('portalCameraInputKk').click()" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs">
+                                                <span>📸</span> <span>Ambil Foto</span>
+                                            </button>
+                                            <button type="button" onclick="document.getElementById('portalFileInputKk').click()" class="flex-1 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5">
+                                                <span>📁</span> <span>Pilih Berkas</span>
+                                            </button>
+                                        </div>
+                                        <p id="portalKkFileName" class="text-[10px] text-gray-500 font-mono mt-1.5 truncate">Format: JPG / PNG / PDF (Maks 10MB)</p>
+                                    </div>
+                                </div>
+
+                                <!-- Card Akta Kelahiran -->
+                                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-3">
+                                    <div>
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h5 class="font-black text-xs text-blue-900 flex items-center gap-1.5">
+                                                <span>📜</span> Akta Kelahiran *
+                                            </h5>
+                                            <span id="badgePortalAktaStatus" class="text-[10px] font-bold text-slate-500 bg-slate-200 px-2 py-0.5 rounded-md">Wajib</span>
+                                        </div>
+                                        <p class="text-[11px] text-gray-500">Unggah foto atau scan PDF Akta Kelahiran anak.</p>
+                                    </div>
+
+                                    <div id="portalAktaPreviewBox" class="h-32 bg-white rounded-xl border border-dashed flex items-center justify-center overflow-hidden">
+                                        <img id="portalAktaImgPreview" class="hidden max-h-full object-contain" src="" alt="Preview Akta">
+                                        <p id="portalAktaPlaceholder" class="text-[11px] text-gray-400">Belum ada foto/berkas Akta</p>
+                                    </div>
+
+                                    <div>
+                                        <div class="flex gap-2">
+                                            <button type="button" onclick="document.getElementById('portalCameraInputAkta').click()" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs">
+                                                <span>📸</span> <span>Ambil Foto</span>
+                                            </button>
+                                            <button type="button" onclick="document.getElementById('portalFileInputAkta').click()" class="flex-1 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5">
+                                                <span>📁</span> <span>Pilih Berkas</span>
+                                            </button>
+                                        </div>
+                                        <p id="portalAktaFileName" class="text-[10px] text-gray-500 font-mono mt-1.5 truncate">Format: JPG / PNG / PDF (Maks 10MB)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Preview Kartu Bantuan jika ada -->
+                            <div id="portalStep5BantuanSummary" class="hidden p-3 bg-indigo-50 border border-indigo-200 rounded-xl flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xl">💳</span>
+                                    <div>
+                                        <p class="font-bold text-xs text-indigo-900" id="portalSummaryBantuanTitle">Kartu Bantuan Sosial Dilampirkan</p>
+                                        <p class="text-[10px] text-indigo-700" id="portalSummaryBantuanSub">Telah siap dikirim bersama berkas lainnya.</p>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-bold bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded-full">Siap Dikirim</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Precision Navigation Footer -->
+                <div class="bg-slate-100 px-6 py-3.5 border-t flex items-center justify-between gap-3">
+                    <button type="button" id="btnPortalStepPrev" onclick="navigatePortalStep(-1)" class="h-12 px-6 rounded-2xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-40" disabled>
+                        <span>⬅️</span> <span>Kembali</span>
+                    </button>
+
+                    <div class="text-[11px] font-bold text-slate-500 hidden sm:block">
+                        Langkah <span id="portalCurrentStepIndicator">1</span> dari 5
+                    </div>
+
+                    <button type="button" id="btnPortalStepNext" onclick="navigatePortalStep(1)" class="h-12 px-7 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md">
+                        <span>Selanjutnya</span> <span>➡️</span>
+                    </button>
+
+                    <!-- Glowing Submit Button (Hidden until Step 5) -->
+                    <button type="button" id="btnPortalGlowingSubmit" onclick="handleBiodataSubmit(event)" class="hidden h-12 px-8 rounded-2xl btn-glowing-submit text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all">
+                        <span>🚀</span> <span>KIRIM KE TU SEKARANG</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if(!token) window.location.href = '/';
+
+        let chartTrendInstance = null;
+        let chartSubjectInstance = null;
+        let chartDonutInstance = null;
+
+        loadChildData();
+        loadParentConsultations();
+        loadParentEFiles();
+        loadBiodataStatus();
+
+        function openConsultationModal() {
+            document.getElementById('modalConsultation').classList.remove('hidden');
+        }
+
+        function closeConsultationModal() {
+            document.getElementById('modalConsultation').classList.add('hidden');
+        }
+
+        async function loadParentConsultations() {
+            try {
+                const res = await fetch('/api/parent/bk-consultations', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const list = await res.json();
+                const container = document.getElementById('parentConsultationList');
+
+                if (!Array.isArray(list) || list.length === 0) {
+                    container.innerHTML = `
+                        <div class="p-8 text-center bg-slate-50 rounded-2xl border border-dashed">
+                            <span class="text-4xl mb-2 block">💬</span>
+                            <p class="font-bold text-xs text-gray-700">Belum ada percakapan konsultasi dengan Guru BK</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Klik tombol "Tulis Pesan Konsultasi Baru" di atas untuk bertanya langsung kepada Guru BK.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = list.map(item => {
+                    const isReplied = !!item.replyMessage;
+                    const d = new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    const replyDate = item.replyDate ? new Date(item.replyDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+
+                    return `
+                        <div class="p-4 bg-slate-50 rounded-2xl border hover:border-teal-400 transition-all">
+                            <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-xs text-gray-800">${item.subject}</span>
+                                    <span class="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">${item.category}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] text-gray-400">${d}</span>
+                                    ${isReplied 
+                                        ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-bold">🟢 Dibalas Guru BK</span>' 
+                                        : '<span class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-full font-bold">🟡 Menunggu Tanggapan</span>'}
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-700 bg-white p-3 rounded-xl border mb-2">${item.message}</p>
+                            
+                            ${isReplied ? `
+                                <div class="p-3 bg-teal-50 rounded-xl border border-teal-200 text-xs text-teal-900 mt-2">
+                                    <div class="flex items-center justify-between mb-1 font-bold text-[11px] text-teal-800">
+                                        <span>👩‍🏫 Tanggapan Guru BK (${item.counselor ? item.counselor.name : 'Guru BK'}):</span>
+                                        <span class="text-[10px] font-normal text-teal-600">${replyDate}</span>
+                                    </div>
+                                    <p class="text-xs leading-relaxed">${item.replyMessage}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        async function loadParentEFiles() {
+            const container = document.getElementById('parentEFilesList');
+            if (!container) return;
+            try {
+                const res = await fetch('/api/parent/e-files', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                const files = (data && data.files) ? data.files : (Array.isArray(data) ? data : []);
+                if (files.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center py-6 text-gray-400 text-xs">Belum ada dokumen digital (rapor/kartu/sertifikat) yang dibagikan untuk siswa ini.</div>';
+                    return;
+                }
+                container.innerHTML = files.map(f => {
+                    let catIcon = '📄';
+                    let catColor = 'border-blue-200 text-blue-700 bg-blue-50';
+                    if (f.category === 'RAPOR') { catIcon = '📊'; catColor = 'border-indigo-200 text-indigo-700 bg-indigo-50'; }
+                    else if (f.category === 'KARTU_PELAJAR') { catIcon = '💳'; catColor = 'border-teal-200 text-teal-700 bg-teal-50'; }
+                    else if (f.category === 'SERTIFIKAT') { catIcon = '🏆'; catColor = 'border-purple-200 text-purple-700 bg-purple-50'; }
+                    else if (f.category === 'SURAT') { catIcon = '📜'; catColor = 'border-amber-200 text-amber-700 bg-amber-50'; }
+
+                    const fileUrl = f.fileUrl || '#';
+                    return `
+                        <div class="p-4 rounded-2xl border ${catColor} bg-white shadow-xs flex flex-col justify-between hover:shadow-md transition-all">
+                            <div class="flex items-start gap-3">
+                                <span class="text-3xl">${catIcon}</span>
+                                <div class="overflow-hidden">
+                                    <h4 class="font-bold text-xs text-gray-800 truncate" title="${f.title}">${f.title}</h4>
+                                    <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${catColor}">${f.category || 'DOKUMEN'}</span>
+                                    <p class="text-[10px] text-gray-400 mt-1">${f.fileSize || 'PDF Resmi'}</p>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-gray-100 flex justify-end gap-2">
+                                <a href="${fileUrl}" target="_blank" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs flex items-center gap-1.5 transition-all">
+                                    <span>⬇️</span> <span>Buka / Unduh</span>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                container.innerHTML = '<div class="col-span-full text-center py-4 text-gray-400 text-xs">Gagal memuat dokumen digital.</div>';
+            }
+        }
+
+        async function handleSendConsultation(e) {
+            e.preventDefault();
+            const category = document.getElementById('consultCategory').value;
+            const subject = document.getElementById('consultSubject').value;
+            const message = document.getElementById('consultMessage').value;
+
+            try {
+                const res = await fetch('/api/parent/bk-consultation', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ category, subject, message })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alert('✅ Pesan konsultasi Anda berhasil dikirim ke Guru BK!');
+                    closeConsultationModal();
+                    document.getElementById('formConsultation').reset();
+                    loadParentConsultations();
+                } else {
+                    alert('❌ ' + (data.message || 'Gagal mengirim pesan'));
+                }
+            } catch(e) {
+                alert('❌ Terjadi kesalahan saat mengirim konsultasi');
+            }
+        }
+
+
+        async function loadChildData() {
+            try {
+                const res = await fetch('/api/parent/my-child', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+
+                if(res.ok && data.child) {
+                    const c = data.child;
+                    document.getElementById('childName').innerText = c.name;
+                    document.getElementById('childClass').innerText = 'Kelas ' + (c.className || 'VII-A');
+                    document.getElementById('childNisn').innerText = c.nisn || '-';
+                    const cleanMother = (c.motherName && c.motherName !== 'Ibu Siswa') ? c.motherName.trim() : '';
+                    const pName = cleanMother ? ('Ibu ' + cleanMother) : (c.fatherName ? ('Bapak ' + c.fatherName.trim()) : 'Ibu Wali Murid');
+                    document.getElementById('childParentName').innerText = pName;
+                    document.getElementById('parentHeaderWelcome').innerText = `Selamat Datang, ${pName}! 👋`;
+                    document.getElementById('parentHeaderSub').innerText = `Orang Tua / Wali dari ${c.name} • Kelas ${c.className || '-'}`;
+                    document.getElementById('childAvatar').innerText = c.name.charAt(0).toUpperCase();
+
+                    const growth = data.academicGrowth || {};
+                    document.getElementById('scoreOverall').innerText = (growth.overallAverage != null) ? growth.overallAverage : '-';
+                    document.getElementById('badgeRank').innerText = growth.rankInClass ? ('🏆 ' + growth.rankInClass) : '🏆 Siswa Aktif';
+                    document.getElementById('trendStatusText').innerText = growth.trendStatus || 'Data Nilai Terkini';
+
+                    // 1. Render Line Chart (Tren Nilai Ujian)
+                    renderTrendChart(growth.timelineLabels || ['UH 1', 'PTS', 'UH 2', 'PAS'], growth.studentScores || [0, 0, 0, 0], growth.classAverages || [0, 0, 0, 0]);
+
+                    // 2. Render Bar Chart (Performa Mapel)
+                    renderSubjectChart(growth.subjectPerformance || []);
+
+                    // 3. Render Subject Progress Bars
+                    renderSubjectList(growth.subjectPerformance || []);
+
+                    // 4. Render Donut Kehadiran
+                    const att = data.attendanceSummary || {};
+                    const presCount = att.present != null ? att.present : 0;
+                    const lateCount = att.late != null ? att.late : 0;
+                    const sickCount = att.sick != null ? att.sick : 0;
+                    const permCount = att.permission != null ? att.permission : 0;
+                    const totalAtt = (att.totalScans || (presCount + lateCount + sickCount + permCount + alpaCount)) || 1;
+                    document.getElementById('attPresentCount').innerText = presCount;
+                    document.getElementById('attLateCount').innerText = lateCount;
+                    if (document.getElementById('attSickPermitCount')) document.getElementById('attSickPermitCount').innerText = sickCount + permCount;
+                    if (document.getElementById('attAbsentCount')) document.getElementById('attAbsentCount').innerText = alpaCount;
+
+                    if (document.getElementById('attPresentPercent')) document.getElementById('attPresentPercent').innerText = att.percentPresent || `${((presCount / totalAtt) * 100).toFixed(1)}%`;
+                    if (document.getElementById('attLatePercent')) document.getElementById('attLatePercent').innerText = att.percentLate || `${((lateCount / totalAtt) * 100).toFixed(1)}%`;
+                    if (document.getElementById('attSickPermitPercent')) document.getElementById('attSickPermitPercent').innerText = `${(((sickCount + permCount) / totalAtt) * 100).toFixed(1)}%`;
+                    if (document.getElementById('attAbsentPercent')) document.getElementById('attAbsentPercent').innerText = att.percentAbsent || `${((alpaCount / totalAtt) * 100).toFixed(1)}%`;
+                    if (document.getElementById('attTotalPercent')) document.getElementById('attTotalPercent').innerText = att.percentTotalKehadiran || `${(((presCount + lateCount) / totalAtt) * 100).toFixed(1)}%`;
+
+                    renderAttendanceDonut(presCount, lateCount, sickCount, permCount, alpaCount);
+                    renderParentAttendanceTrend(data.attendanceTrend || (data.attendanceSummary && data.attendanceSummary.trend) || data.recentAttendances);
+
+                    // 4b. Render Statistik Keterlambatan Ananda
+                    const lateData = data.lateAnalytics || {};
+                    const totalLate = lateData.totalLate || 0;
+                    document.getElementById('lateCountStat').innerHTML = `${totalLate} <span class="text-xs font-bold text-gray-500">Kali</span>`;
+                    document.getElementById('lateAvgMinutesStat').innerHTML = `${lateData.averageLateMinutes || 0} <span class="text-xs font-bold text-gray-500">Menit</span>`;
+                    document.getElementById('lateAvgTimeStat').innerHTML = `${lateData.averageArrivalTime || '--:--'} <span class="text-xs font-bold text-gray-500">WIB</span>`;
+                    document.getElementById('lateFrequentDayStat').innerText = `Hari sering terlambat: ${lateData.mostFrequentLateDay || '-'}`;
+                    document.getElementById('latePointsStat').innerHTML = `${lateData.totalDisciplinePoints || 0} <span class="text-xs font-bold text-gray-500">Poin</span>`;
+
+                    const riskBadge = document.getElementById('lateRiskBadge');
+                    if (totalLate >= 5) {
+                        riskBadge.className = 'bg-red-100 text-red-800 text-xs px-3.5 py-1.5 rounded-full font-bold border border-red-300 animate-pulse';
+                        riskBadge.innerText = '🚨 STATUS: KRITIS / PERLU PEMANGGILAN';
+                    } else if (totalLate >= 2) {
+                        riskBadge.className = 'bg-amber-100 text-amber-800 text-xs px-3.5 py-1.5 rounded-full font-bold border border-amber-300';
+                        riskBadge.innerText = '⚠️ STATUS: PERINGATAN DINI / WASPADA';
+                    } else {
+                        riskBadge.className = 'bg-emerald-100 text-emerald-800 text-xs px-3.5 py-1.5 rounded-full font-bold border border-emerald-300';
+                        riskBadge.innerText = '🟢 STATUS: TERTIB / AMAN';
+                    }
+
+                    const lateTbody = document.getElementById('lateHistoryTable');
+                    lateTbody.innerHTML = '';
+                    const lateList = lateData.lateHistory || [];
+                    if (lateList.length > 0) {
+                        lateList.forEach(l => {
+                            lateTbody.innerHTML += `
+                                <tr class="hover:bg-amber-50/50">
+                                    <td class="p-2 font-medium text-gray-800">${l.date}</td>
+                                    <td class="p-2 font-mono font-bold text-amber-800">${l.scanTime}</td>
+                                    <td class="p-2 font-bold text-red-600">+${l.minutesLate} Menit</td>
+                                    <td class="p-2"><span class="bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold text-[10px]">+${l.points} Poin</span></td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        lateTbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-emerald-600 font-bold">✅ Alhamdulillah, tidak ada riwayat keterlambatan siswa.</td></tr>';
+                    }
+
+                    const recContainer = document.getElementById('lateRecommendationsList');
+                    const recList = lateData.recommendations || [];
+                    if (recList.length > 0) {
+                        recContainer.innerHTML = recList.map(r => `
+                            <div class="p-3 bg-amber-50/60 border border-amber-200 rounded-xl flex items-start gap-2.5">
+                                <span class="text-amber-600 font-bold">💡</span>
+                                <p class="text-xs text-amber-950">${r}</p>
+                            </div>
+                        `).join('');
+                    }
+
+                    // 5. Presensi Table
+                    const tbody = document.getElementById('parentAttendanceTable');
+                    tbody.innerHTML = '';
+                    if(data.recentAttendances && data.recentAttendances.length > 0) {
+                        data.recentAttendances.forEach(a => {
+                            let badge = '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold text-[10px]">🟢 Hadir Tepat</span>';
+                            if(a.status === 'LATE') badge = '<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold text-[10px]">🟡 Terlambat</span>';
+                            if(a.status === 'SICK') badge = '<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-bold text-[10px]">🔵 Sakit</span>';
+                            if(a.status === 'PERMISSION') badge = '<span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-bold text-[10px]">🟣 Izin</span>';
+                            if(a.status === 'ABSENT') badge = '<span class="bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold text-[10px]">🔴 Alpa</span>';
+
+                            const d = new Date(a.scanTime);
+                            const dStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+                            tbody.innerHTML += `
+                                <tr class="hover:bg-blue-50/50">
+                                    <td class="p-3 font-medium text-gray-800">${dStr}</td>
+                                    <td class="p-3 text-gray-600">${a.method || 'Gerbang Utama (Gate In)'}</td>
+                                    <td class="p-3">${badge}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="3" class="p-6 text-center text-gray-400">Belum ada rekaman presensi</td></tr>';
+                    }
+
+                    // 6. Homework List
+                    const hwContainer = document.getElementById('parentHomeworkList');
+                    hwContainer.innerHTML = '';
+                    if(data.homeworks && data.homeworks.length > 0) {
+                        data.homeworks.forEach(hw => {
+                            const d = new Date(hw.deadline);
+                            const dStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+                            hwContainer.innerHTML += `
+                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl border">
+                                    <div>
+                                        <p class="font-bold text-gray-800 text-xs">${hw.title}</p>
+                                        <p class="text-[11px] text-gray-500">${hw.subject ? hw.subject.name : 'Tugas Sekolah'}</p>
+                                    </div>
+                                    <span class="text-[10px] bg-amber-100 text-amber-800 px-2.5 py-1 rounded-xl font-bold">Tenggat: ${dStr}</span>
+                                </div>
+                            `;
+                        });
+                    // 7. Render Presensi Hari Ini (Datang & Pulang) & Notifikasi
+                    const today = data.todayAttendance || {};
+                    document.getElementById('webTodayGateIn').innerText = today.gateInTime || '06:45 WIB';
+                    document.getElementById('webTodayGateOut').innerText = today.gateOutTime || '--:-- WIB';
+                    const badgeToday = document.getElementById('badgeTodayStatus');
+                    const stUpper = (today.status || 'HADIR TEPAT WAKTU').toUpperCase();
+                    badgeToday.innerText = stUpper;
+                    if (stUpper.includes('ALPA') || stUpper.includes('ABSENT')) {
+                        badgeToday.className = 'bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full font-bold animate-pulse';
+                    } else if (today.isLate || stUpper.includes('TERLAMBAT')) {
+                        badgeToday.className = 'bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold';
+                    } else if (stUpper.includes('BELUM')) {
+                        badgeToday.className = 'bg-slate-100 text-slate-700 text-xs px-3 py-1 rounded-full font-bold';
+                    } else {
+                        badgeToday.className = 'bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold';
+                    }
+                    if (today.gateOutTime && today.gateOutTime !== '--:-- WIB') {
+                        document.getElementById('webTodayGateOutNote').innerText = 'Telah scan kepulangan';
+                        document.getElementById('webTodayGateOutNote').className = 'text-[11px] text-blue-700 mt-1 font-bold';
+                    } else if (stUpper.includes('ALPA')) {
+                        document.getElementById('webTodayGateOutNote').innerText = '⚠️ Pelanggaran Alpa';
+                        document.getElementById('webTodayGateOutNote').className = 'text-[11px] text-red-600 mt-1 font-bold';
+                    }
+
+                    if (data.parentNotifications && data.parentNotifications.length > 0) {
+                        const n0 = data.parentNotifications[0];
+                        document.getElementById('webNotifTitle').innerText = n0.title || 'Pemberitahuan Presensi';
+                        document.getElementById('webNotifMessage').innerText = n0.message || '';
+                    }
+
+                    // 8. Render Jadwal Tugas & PR Anak Modern Container
+                    const hwBox = document.getElementById('webHomeworkContainer');
+                    const hwList = data.homeworkSchedule || data.homeworks || [];
+                    document.getElementById('badgeHomeworkCount').innerText = `${hwList.length} Tugas`;
+                    if (hwList.length === 0) {
+                        hwBox.innerHTML = '<div class="p-4 bg-slate-50 border rounded-2xl text-center text-gray-400">✅ Belum ada tugas atau PR baru untuk kelas ananda.</div>';
+                    } else {
+                        hwBox.innerHTML = hwList.map(h => `
+                            <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-lg">${h.subject || 'Mata Pelajaran'}</span>
+                                    <p class="font-bold text-gray-800 text-xs mt-1">${h.title || 'Tugas'}</p>
+                                    <p class="text-[11px] text-gray-500 mt-0.5">${h.description || ''}</p>
+                                </div>
+                                <div class="text-right flex flex-col items-end gap-1">
+                                    <span class="text-[10px] ${h.isSubmitted ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-amber-100 text-amber-800 border-amber-200'} border px-2.5 py-0.5 rounded-full font-bold">
+                                        ${h.isSubmitted ? '✅ Selesai' : '⏳ Belum'}
+                                    </span>
+                                    <span class="text-[10px] font-bold text-red-600 font-mono">⏰ ${h.deadline || '-'}</span>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        function renderTrendChart(labels, studentScores, classAverages) {
+            const ctx = document.getElementById('chartTrendExam').getContext('2d');
+            if (chartTrendInstance) chartTrendInstance.destroy();
+
+            chartTrendInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Nilai Siswa (Anak)',
+                            data: studentScores,
+                            borderColor: '#2563EB',
+                            backgroundColor: 'rgba(37, 99, 235, 0.12)',
+                            fill: true,
+                            tension: 0.35,
+                            pointBackgroundColor: '#1D4ED8',
+                            pointBorderColor: '#FFFFFF',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Rata-rata Kelas',
+                            data: classAverages,
+                            borderColor: '#94A3B8',
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.2,
+                            pointRadius: 3,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 50,
+                            max: 100,
+                            ticks: { stepSize: 10, font: { size: 10 } }
+                        },
+                        x: {
+                            ticks: { font: { size: 10, weight: 'bold' } }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+
+        function renderSubjectChart(subjects) {
+            const ctx = document.getElementById('chartSubjectPerformance').getContext('2d');
+            if (chartSubjectInstance) chartSubjectInstance.destroy();
+
+            const labels = subjects.map(s => s.subject);
+            const scores = subjects.map(s => s.score);
+            const colors = subjects.map(s => s.color || '#3B82F6');
+
+            chartSubjectInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nilai Akhir',
+                        data: scores,
+                        backgroundColor: colors,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 50,
+                            max: 100,
+                            ticks: { stepSize: 10, font: { size: 10 } }
+                        },
+                        x: {
+                            ticks: { font: { size: 9, weight: 'bold' } }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function renderSubjectList(subjects) {
+            const container = document.getElementById('subjectProgressList');
+            container.innerHTML = subjects.map(s => `
+                <div class="progress-pill p-3.5 bg-white rounded-2xl border shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-xs text-gray-800">${s.subject}</span>
+                        <span class="font-black text-xs" style="color: ${s.color || '#2563EB'}">${s.score} / 100</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden mb-1.5">
+                        <div class="h-2 rounded-full" style="width: ${s.score}%; background-color: ${s.color || '#2563EB'}"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-gray-400">
+                        <span>KKM: ${s.kkm || 75}</span>
+                        <span class="font-bold text-emerald-600">${s.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAttendanceDonut(present, late, sick, permission, absent) {
+            const ctx = document.getElementById('chartAttendanceDonut').getContext('2d');
+            if (chartDonutInstance) chartDonutInstance.destroy();
+
+            chartDonutInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hadir Tepat', 'Terlambat', 'Sakit', 'Izin', 'Alpa'],
+                    datasets: [{
+                        data: [present, late, sick, permission, absent],
+                        backgroundColor: ['#10B981', '#F59E0B', '#3B82F6', '#8B5CF6', '#EF4444'],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        let chartParentTrendInstance = null;
+        function renderParentAttendanceTrend(trendList) {
+            const canvas = document.getElementById('chartParentAttendanceTrend');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (chartParentTrendInstance) chartParentTrendInstance.destroy();
+
+            let labels = [];
+            let scores = [];
+            let pointColors = [];
+
+            if (trendList && trendList.length > 0) {
+                labels = trendList.map(t => t.label || (t.scanTime ? new Date(t.scanTime).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : 'Hari'));
+                scores = trendList.map(t => {
+                    if (t.score !== undefined) return t.score;
+                    const st = (t.status || '').toUpperCase();
+                    if (st === 'LATE' || st === 'TERLAMBAT') return 80;
+                    if (st === 'SICK' || st === 'PERMISSION' || st === 'SAKIT' || st === 'IZIN') return 50;
+                    if (st === 'ABSENT' || st === 'ALPA') return 0;
+                    return 100;
+                });
+                pointColors = scores.map(s => s >= 100 ? '#10B981' : (s >= 80 ? '#F59E0B' : (s >= 50 ? '#3B82F6' : '#EF4444')));
+            } else {
+                labels = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sen', 'Sel'];
+                scores = [100, 100, 100, 80, 100, 100, 100];
+                pointColors = scores.map(s => s >= 100 ? '#10B981' : '#F59E0B');
+            }
+
+            chartParentTrendInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tingkat Kehadiran (%)',
+                        data: scores,
+                        borderColor: '#059669',
+                        backgroundColor: 'rgba(5, 150, 105, 0.08)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: pointColors,
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 105,
+                            ticks: {
+                                stepSize: 25,
+                                callback: function(val) { return val + '%'; },
+                                font: { size: 9, weight: 'bold' }
+                            },
+                            grid: { color: '#F1F5F9' }
+                        },
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const score = context.parsed.y;
+                                    let statusText = 'Hadir Tepat (100%)';
+                                    if (score === 80) statusText = 'Terlambat (80%)';
+                                    else if (score === 50) statusText = 'Izin/Sakit (50%)';
+                                    else if (score === 0) statusText = 'Alpa (0%)';
+                                    return `Status: ${statusText}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ========================================================
+        // MODUL POPUP FORMULIR BIODATA & BUKU INDUK SISWA (SIAKAD)
+        // ========================================================
+        let currentBiodataStep = 1;
+        let portalBiodataSubmission = null;
+        let portalFiles = { kk: null, akta: null, bantuan: null };
+        let existingFileUrls = { kk: null, akta: null, bantuan: null };
+        let isBiodataLocked = false;
+
+        function openBiodataModal() {
+            document.getElementById('modalBiodataParent').classList.remove('hidden');
+            goToBiodataStep(1);
+        }
+
+        function closeBiodataModal() {
+            document.getElementById('modalBiodataParent').classList.add('hidden');
+        }
+
+        function togglePortalKesejahteraan(show) {
+            const box = document.getElementById('boxPortalKesejahteraan');
+            const summary = document.getElementById('portalStep5BantuanSummary');
+            if (show) {
+                box.classList.remove('hidden');
+                summary.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
+                summary.classList.add('hidden');
+            }
+        }
+
+        function handlePortalFilePicked(type, input) {
+            if (!input.files || input.files.length === 0) return;
+            const file = input.files[0];
+            portalFiles[type] = file;
+
+            const isImg = file.type.startsWith('image/');
+            const fileName = file.name;
+
+            if (type === 'kk') {
+                document.getElementById('portalKkFileName').innerText = '📄 ' + fileName;
+                document.getElementById('badgePortalKkStatus').innerText = '✅ Siap Dikirim';
+                document.getElementById('badgePortalKkStatus').className = 'text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md';
+                if (isImg) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.getElementById('portalKkImgPreview');
+                        img.src = e.target.result;
+                        img.classList.remove('hidden');
+                        document.getElementById('portalKkPlaceholder').classList.add('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    document.getElementById('portalKkPlaceholder').innerText = '📄 Berkas PDF: ' + fileName;
+                    document.getElementById('portalKkPlaceholder').classList.remove('hidden');
+                    document.getElementById('portalKkImgPreview').classList.add('hidden');
+                }
+            } else if (type === 'akta') {
+                document.getElementById('portalAktaFileName').innerText = '📄 ' + fileName;
+                document.getElementById('badgePortalAktaStatus').innerText = '✅ Siap Dikirim';
+                document.getElementById('badgePortalAktaStatus').className = 'text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md';
+                if (isImg) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.getElementById('portalAktaImgPreview');
+                        img.src = e.target.result;
+                        img.classList.remove('hidden');
+                        document.getElementById('portalAktaPlaceholder').classList.add('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    document.getElementById('portalAktaPlaceholder').innerText = '📄 Berkas PDF: ' + fileName;
+                    document.getElementById('portalAktaPlaceholder').classList.remove('hidden');
+                    document.getElementById('portalAktaImgPreview').classList.add('hidden');
+                }
+            } else if (type === 'bantuan') {
+                document.getElementById('portalBantuanFileName').innerText = '📄 ' + fileName;
+                document.getElementById('badgePortalBantuanStatus').innerText = '✅ Siap Dikirim';
+                document.getElementById('badgePortalBantuanStatus').className = 'text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md';
+                if (isImg) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.getElementById('portalBantuanImgPreview');
+                        img.src = e.target.result;
+                        document.getElementById('portalBantuanPreviewContainer').classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    document.getElementById('portalBantuanPreviewContainer').classList.add('hidden');
+                }
+            }
+        }
+
+        function validatePortalStep(step) {
+            if (step === 1) {
+                const name = document.getElementById('w_studentName').value.trim();
+                const nisn = document.getElementById('w_nisn').value.trim();
+                const nik = document.getElementById('w_nik').value.trim();
+                const pob = document.getElementById('w_pob').value.trim();
+                const dob = document.getElementById('w_dob').value.trim();
+                if (!name) { alert('Nama Lengkap Siswa wajib diisi.'); return false; }
+                if (nisn.length < 10) { alert('NISN wajib 10 digit.'); return false; }
+                if (nik.length < 16) { alert('NIK Siswa wajib 16 digit sesuai KK.'); return false; }
+                if (!pob || !dob) { alert('Tempat dan Tanggal Lahir siswa wajib diisi.'); return false; }
+            } else if (step === 2) {
+                const street = document.getElementById('w_street').value.trim();
+                const rt = document.getElementById('w_rt').value.trim();
+                const rw = document.getElementById('w_rw').value.trim();
+                const village = document.getElementById('w_village').value.trim();
+                const district = document.getElementById('w_district').value.trim();
+                const city = document.getElementById('w_city').value.trim();
+                const province = document.getElementById('w_province').value.trim();
+                if (!street || !rt || !rw || !village || !district || !city || !province) {
+                    alert('Harap lengkapi alamat domisili (Jalan, RT, RW, Kelurahan, Kecamatan, Kota, Provinsi).');
+                    return false;
+                }
+            } else if (step === 3) {
+                const fName = document.getElementById('w_fatherName').value.trim();
+                const mName = document.getElementById('w_motherName').value.trim();
+                const phone = document.getElementById('w_parentPhone').value.trim();
+                if (!fName) { alert('Nama Ayah Kandung wajib diisi.'); return false; }
+                if (!mName) { alert('Nama Ibu Kandung wajib diisi.'); return false; }
+                if (!phone || phone.length < 9) { alert('Nomor WhatsApp aktif Orang Tua wajib diisi.'); return false; }
+            } else if (step === 4) {
+                const hasKesejahteraan = document.getElementById('rbKesejahteraanYes').checked;
+                if (hasKesejahteraan) {
+                    const bNumber = document.getElementById('w_bantuanNumber').value.trim();
+                    if (!bNumber) { alert('Nomor Kartu Bantuan wajib diisi.'); return false; }
+                    if (!portalFiles.bantuan && !existingFileUrls.bantuan) {
+                        alert('Harap lampirkan foto/scan Kartu Bantuan Anda.');
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function goToBiodataStep(step) {
+            if (step > currentBiodataStep) {
+                for (let i = currentBiodataStep; i < step; i++) {
+                    if (!validatePortalStep(i)) return;
+                }
+            }
+            currentBiodataStep = step;
+
+            for (let i = 1; i <= 5; i++) {
+                const stepEl = document.getElementById('portalStep' + i);
+                const indEl = document.getElementById('stepTabIndicator' + i);
+                if (stepEl) {
+                    if (i === step) stepEl.classList.remove('hidden');
+                    else stepEl.classList.add('hidden');
+                }
+                if (indEl) {
+                    if (i === step) {
+                        indEl.className = 'flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-600 text-white shrink-0 shadow-xs';
+                    } else if (i < step) {
+                        indEl.className = 'flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 shrink-0';
+                    } else {
+                        indEl.className = 'flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-200 text-slate-600 shrink-0';
+                    }
+                }
+            }
+
+            document.getElementById('portalCurrentStepIndicator').innerText = step;
+            const btnPrev = document.getElementById('btnPortalStepPrev');
+            const btnNext = document.getElementById('btnPortalStepNext');
+            const btnSubmit = document.getElementById('btnPortalGlowingSubmit');
+
+            btnPrev.disabled = (step === 1);
+
+            if (step === 5) {
+                btnNext.classList.add('hidden');
+                if (!isBiodataLocked) {
+                    btnSubmit.classList.remove('hidden');
+                } else {
+                    btnSubmit.classList.add('hidden');
+                }
+            } else {
+                btnNext.classList.remove('hidden');
+                btnSubmit.classList.add('hidden');
+            }
+        }
+
+        function navigatePortalStep(delta) {
+            goToBiodataStep(currentBiodataStep + delta);
+        }
+
+        async function loadBiodataStatus() {
+            try {
+                const res = await fetch('/api/v1/mobile/biodata/my-submission', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                if (!data.success) return;
+
+                const status = data.status || 'NOT_SUBMITTED';
+                const submission = data.submission;
+                const student = data.student;
+                const topBadge = document.getElementById('badgeBiodataTop');
+                const btnText = document.getElementById('btnOpenBiodataText');
+                const headerBadge = document.getElementById('modalBiodataHeaderBadge');
+                const rejNotice = document.getElementById('biodataRejectionNotice');
+                const rejText = document.getElementById('biodataRejectionText');
+
+                isBiodataLocked = data.isLocked || (status === 'APPROVED');
+                headerBadge.innerText = status;
+
+                if (status === 'APPROVED') {
+                    topBadge.innerText = '🟢 TERVERIFIKASI & DISETUJUI TU';
+                    topBadge.className = 'text-xs px-3 py-0.5 rounded-full font-bold bg-emerald-400 text-emerald-950';
+                    btnText.innerText = 'Lihat Biodata Terverifikasi';
+                    headerBadge.className = 'bg-emerald-400 text-emerald-950 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-xs';
+                    rejNotice.classList.add('hidden');
+                } else if (status === 'PENDING') {
+                    topBadge.innerText = '🟡 MENUNGGU VERIFIKASI TU';
+                    topBadge.className = 'text-xs px-3 py-0.5 rounded-full font-bold bg-amber-400 text-amber-950';
+                    btnText.innerText = 'Periksa / Edit Pengajuan';
+                    headerBadge.className = 'bg-amber-400 text-amber-950 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-xs';
+                    rejNotice.classList.add('hidden');
+                } else if (status === 'REJECTED') {
+                    topBadge.innerText = '🔴 PERLU PERBAIKAN';
+                    topBadge.className = 'text-xs px-3 py-0.5 rounded-full font-bold bg-rose-500 text-white';
+                    btnText.innerText = 'Perbaiki Biodata Sekarang';
+                    headerBadge.className = 'bg-rose-500 text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-xs';
+                    if (data.rejectionReason) {
+                        rejText.innerText = data.rejectionReason;
+                        rejNotice.classList.remove('hidden');
+                    }
+                } else {
+                    topBadge.innerText = '⚪ BELUM MENGISI';
+                    topBadge.className = 'text-xs px-3 py-0.5 rounded-full font-bold bg-blue-300 text-blue-950';
+                    btnText.innerText = 'Isi Biodata Sekarang';
+                    headerBadge.className = 'bg-slate-300 text-slate-900 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-xs';
+                    rejNotice.classList.add('hidden');
+                }
+
+                // Pre-populate student data
+                if (student) {
+                    if (student.name) document.getElementById('w_studentName').value = student.name;
+                    if (student.nisn) document.getElementById('w_nisn').value = student.nisn;
+                    if (student.nik) document.getElementById('w_nik').value = student.nik;
+                    if (student.pob) document.getElementById('w_pob').value = student.pob;
+                    if (student.dob) {
+                        const dobStr = new Date(student.dob).toISOString().split('T')[0];
+                        document.getElementById('w_dob').value = dobStr;
+                    }
+                    if (student.gender) document.getElementById('w_gender').value = student.gender;
+                    if (student.religion) document.getElementById('w_religion').value = student.religion;
+                    if (student.address) document.getElementById('w_street').value = student.address;
+                    if (student.fatherName) document.getElementById('w_fatherName').value = student.fatherName;
+                    if (student.motherName) document.getElementById('w_motherName').value = student.motherName;
+                    if (student.parentPhone) document.getElementById('w_parentPhone').value = student.parentPhone;
+                }
+
+                // Pre-populate submission data
+                if (submission) {
+                    try {
+                        const s1 = typeof submission.step1Data === 'string' ? JSON.parse(submission.step1Data || '{}') : (submission.step1Data || {});
+                        if (s1.siblingOrder) document.getElementById('w_siblingOrder').value = s1.siblingOrder;
+                        if (s1.siblingsCount) document.getElementById('w_siblingsCount').value = s1.siblingsCount;
+                        if (s1.height) document.getElementById('w_height').value = s1.height;
+                        if (s1.weight) document.getElementById('w_weight').value = s1.weight;
+
+                        const s2 = typeof submission.step2Data === 'string' ? JSON.parse(submission.step2Data || '{}') : (submission.step2Data || {});
+                        if (s2.address) document.getElementById('w_street').value = s2.address;
+                        if (s2.rt) document.getElementById('w_rt').value = s2.rt;
+                        if (s2.rw) document.getElementById('w_rw').value = s2.rw;
+                        if (s2.village) document.getElementById('w_village').value = s2.village;
+                        if (s2.district) document.getElementById('w_district').value = s2.district;
+                        if (s2.city) document.getElementById('w_city').value = s2.city;
+                        if (s2.province) document.getElementById('w_province').value = s2.province;
+                        if (s2.postalCode) document.getElementById('w_postalCode').value = s2.postalCode;
+                        if (s2.liveWith) document.getElementById('w_liveWith').value = s2.liveWith;
+                        if (s2.transportation) document.getElementById('w_transportation').value = s2.transportation;
+                        if (s2.distance) document.getElementById('w_distance').value = s2.distance;
+                        if (s2.travelTime) document.getElementById('w_travelTime').value = s2.travelTime;
+
+                        const s3 = typeof submission.step3Data === 'string' ? JSON.parse(submission.step3Data || '{}') : (submission.step3Data || {});
+                        if (s3.fatherName) document.getElementById('w_fatherName').value = s3.fatherName;
+                        if (s3.fatherNik) document.getElementById('w_fatherNik').value = s3.fatherNik;
+                        if (s3.fatherStatus) document.getElementById('w_fatherStatus').value = s3.fatherStatus;
+                        if (s3.fatherJob) document.getElementById('w_fatherJob').value = s3.fatherJob;
+                        if (s3.fatherIncome) document.getElementById('w_fatherIncome').value = s3.fatherIncome;
+
+                        if (s3.motherName) document.getElementById('w_motherName').value = s3.motherName;
+                        if (s3.motherNik) document.getElementById('w_motherNik').value = s3.motherNik;
+                        if (s3.motherStatus) document.getElementById('w_motherStatus').value = s3.motherStatus;
+                        if (s3.motherJob) document.getElementById('w_motherJob').value = s3.motherJob;
+                        if (s3.motherIncome) document.getElementById('w_motherIncome').value = s3.motherIncome;
+
+                        if (s3.parentPhone) document.getElementById('w_parentPhone').value = s3.parentPhone;
+
+                        const s4 = typeof submission.step4Data === 'string' ? JSON.parse(submission.step4Data || '{}') : (submission.step4Data || {});
+                        if (s4.hasKesejahteraan === true || s4.hasKesejahteraan === '1' || s4.hasKesejahteraan === 'true') {
+                            document.getElementById('rbKesejahteraanYes').checked = true;
+                            togglePortalKesejahteraan(true);
+                            if (s4.bantuanType) document.getElementById('w_bantuanType').value = s4.bantuanType;
+                            if (s4.bantuanNumber) document.getElementById('w_bantuanNumber').value = s4.bantuanNumber;
+                        }
+
+                        // Preserved Files
+                        if (submission.kkFileUrl) {
+                            existingFileUrls.kk = submission.kkFileUrl;
+                            document.getElementById('badgePortalKkStatus').innerText = '✅ Tersimpan';
+                            document.getElementById('badgePortalKkStatus').className = 'text-[10px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-md';
+                            document.getElementById('portalKkFileName').innerText = '📄 ' + submission.kkFileUrl.split('/').pop();
+                            const img = document.getElementById('portalKkImgPreview');
+                            img.src = submission.kkFileUrl;
+                            img.classList.remove('hidden');
+                            document.getElementById('portalKkPlaceholder').classList.add('hidden');
+                        }
+
+                        if (submission.aktaFileUrl) {
+                            existingFileUrls.akta = submission.aktaFileUrl;
+                            document.getElementById('badgePortalAktaStatus').innerText = '✅ Tersimpan';
+                            document.getElementById('badgePortalAktaStatus').className = 'text-[10px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-md';
+                            document.getElementById('portalAktaFileName').innerText = '📄 ' + submission.aktaFileUrl.split('/').pop();
+                            const img = document.getElementById('portalAktaImgPreview');
+                            img.src = submission.aktaFileUrl;
+                            img.classList.remove('hidden');
+                            document.getElementById('portalAktaPlaceholder').classList.add('hidden');
+                        }
+
+                        const s4BantuanUrl = s4.bantuanFileUrl || (submission.payloadJson ? JSON.parse(submission.payloadJson).bantuanFileUrl : null);
+                        if (s4BantuanUrl) {
+                            existingFileUrls.bantuan = s4BantuanUrl;
+                            document.getElementById('badgePortalBantuanStatus').innerText = '✅ Tersimpan';
+                            document.getElementById('badgePortalBantuanStatus').className = 'text-[10px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-md';
+                            document.getElementById('portalBantuanFileName').innerText = '📄 ' + s4BantuanUrl.split('/').pop();
+                            const img = document.getElementById('portalBantuanImgPreview');
+                            img.src = s4BantuanUrl;
+                            document.getElementById('portalBantuanPreviewContainer').classList.remove('hidden');
+                        }
+                    } catch (e) {
+                        console.error('Error parsing submission:', e);
+                    }
+                }
+            } catch (err) {
+                console.error('Error loadBiodataStatus:', err);
+            }
+        }
+
+        async function handleBiodataSubmit(e) {
+            if (e && e.preventDefault) e.preventDefault();
+
+            // Validate all 5 steps
+            for (let step = 1; step <= 4; step++) {
+                if (!validatePortalStep(step)) {
+                    goToBiodataStep(step);
+                    return;
+                }
+            }
+
+            // Step 5 validation: KK & Akta
+            if (!portalFiles.kk && !existingFileUrls.kk) {
+                alert('⚠️ Foto Kartu Keluarga (KK) wajib diunggah!');
+                goToBiodataStep(5);
+                return;
+            }
+            if (!portalFiles.akta && !existingFileUrls.akta) {
+                alert('⚠️ Foto Akta Kelahiran wajib diunggah!');
+                goToBiodataStep(5);
+                return;
+            }
+
+            const btnSubmit = document.getElementById('btnPortalGlowingSubmit');
+            const origHtml = btnSubmit.innerHTML;
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<span>⏳</span> <span>Mengirim ke Staf TU...</span>';
+
+            try {
+                const formData = new FormData();
+
+                // Step 1 Payload
+                const step1Obj = {
+                    name: document.getElementById('w_studentName').value.trim(),
+                    nisn: document.getElementById('w_nisn').value.trim(),
+                    nik: document.getElementById('w_nik').value.trim(),
+                    gender: document.getElementById('w_gender').value,
+                    pob: document.getElementById('w_pob').value.trim(),
+                    dob: document.getElementById('w_dob').value,
+                    religion: document.getElementById('w_religion').value,
+                    siblingOrder: document.getElementById('w_siblingOrder').value,
+                    siblingsCount: document.getElementById('w_siblingsCount').value,
+                    height: document.getElementById('w_height').value,
+                    weight: document.getElementById('w_weight').value
+                };
+                formData.append('step1Data', JSON.stringify(step1Obj));
+
+                // Step 2 Payload
+                const step2Obj = {
+                    address: document.getElementById('w_street').value.trim(),
+                    rt: document.getElementById('w_rt').value.trim(),
+                    rw: document.getElementById('w_rw').value.trim(),
+                    village: document.getElementById('w_village').value.trim(),
+                    district: document.getElementById('w_district').value.trim(),
+                    city: document.getElementById('w_city').value.trim(),
+                    province: document.getElementById('w_province').value.trim(),
+                    postalCode: document.getElementById('w_postalCode').value.trim(),
+                    liveWith: document.getElementById('w_liveWith').value,
+                    transportation: document.getElementById('w_transportation').value,
+                    distance: document.getElementById('w_distance').value,
+                    travelTime: document.getElementById('w_travelTime').value
+                };
+                formData.append('step2Data', JSON.stringify(step2Obj));
+
+                // Step 3 Payload (Ayah & Ibu separated)
+                const step3Obj = {
+                    fatherName: document.getElementById('w_fatherName').value.trim(),
+                    fatherNik: document.getElementById('w_fatherNik').value.trim(),
+                    fatherStatus: document.getElementById('w_fatherStatus').value,
+                    fatherJob: document.getElementById('w_fatherJob').value,
+                    fatherIncome: document.getElementById('w_fatherIncome').value,
+
+                    motherName: document.getElementById('w_motherName').value.trim(),
+                    motherNik: document.getElementById('w_motherNik').value.trim(),
+                    motherStatus: document.getElementById('w_motherStatus').value,
+                    motherJob: document.getElementById('w_motherJob').value,
+                    motherIncome: document.getElementById('w_motherIncome').value,
+
+                    parentPhone: document.getElementById('w_parentPhone').value.trim()
+                };
+                formData.append('step3Data', JSON.stringify(step3Obj));
+
+                // Step 4 Payload (Kesejahteraan)
+                const hasKesejahteraan = document.getElementById('rbKesejahteraanYes').checked;
+                const step4Obj = {
+                    hasKesejahteraan,
+                    bantuanType: hasKesejahteraan ? document.getElementById('w_bantuanType').value : null,
+                    bantuanNumber: hasKesejahteraan ? document.getElementById('w_bantuanNumber').value.trim() : null
+                };
+                formData.append('step4Data', JSON.stringify(step4Obj));
+
+                // Step 5 Payload
+                formData.append('step5Data', JSON.stringify({ isComplete: true }));
+
+                // Append Files
+                if (portalFiles.kk) formData.append('kk', portalFiles.kk);
+                if (portalFiles.akta) formData.append('akta', portalFiles.akta);
+                if (hasKesejahteraan && portalFiles.bantuan) formData.append('bantuan', portalFiles.bantuan);
+
+                const res = await fetch('/api/v1/mobile/biodata/submit', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    body: formData
+                });
+                const result = await res.json();
+
+                if (res.ok && result.success) {
+                    alert('🎉 Formulir Biodata & Buku Induk Siswa berhasil dikirimkan ke antrean verifikasi Petugas TU!');
+                    closeBiodataModal();
+                    loadBiodataStatus();
+                } else {
+                    alert('❌ ' + (result.message || 'Gagal mengirimkan formulir biodata'));
+                }
+            } catch (err) {
+                alert('❌ Terjadi kesalahan jaringan saat mengirim biodata.');
+                console.error(err);
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = origHtml;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            sessionStorage.clear();
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

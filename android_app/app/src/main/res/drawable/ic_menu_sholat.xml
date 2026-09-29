@@ -1,0 +1,29 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Crescent Moon & Star Gold -->
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M24,4c-1.5,0 -2.9,0.4 -4.1,1.1 1.6,1.4 2.6,3.4 2.6,5.7 0,4.2 -3.4,7.6 -7.6,7.6 -0.8,0 -1.5,-0.1 -2.2,-0.4 1.4,3.6 4.9,6.1 9,6.1 5.4,0 9.7,-4.4 9.7,-9.8C31.4,8.9 28.1,4.6 24,4z" />
+    <!-- Mosque Dome Teal -->
+    <path
+        android:fillColor="#0D9488"
+        android:pathData="M24,14c-8,0 -13,7 -13,15h26C37,21 32,14 24,14z" />
+    <!-- Mosque Base Structure -->
+    <path
+        android:fillColor="#14B8A6"
+        android:pathData="M9,29h30v13H9z" />
+    <!-- Islamic Arch Doorway -->
+    <path
+        android:fillColor="#042F2E"
+        android:pathData="M21,34c0,-2.5 1.5,-4 3,-4s3,1.5 3,4v8h-6z" />
+    <!-- Minaret Accents -->
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M7,24h3v18H7z" />
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M38,24h3v18h-3z" />
+</vector>

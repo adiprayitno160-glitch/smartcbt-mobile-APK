@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Book Backing -->
+    <path
+        android:fillColor="#1E40AF"
+        android:pathData="M11,8h24c2.2,0 4,1.8 4,4v28c0,2.2 -1.8,4 -4,4H11c-2.2,0 -4,-1.8 -4,-4V12c0,-2.2 1.8,-4 4,-4z" />
+    <!-- Book Front Cover Sapphire Blue -->
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M14,8h21c2.2,0 4,1.8 4,4v28c0,2.2 -1.8,4 -4,4H14V8z" />
+    <!-- Book Spine Ribs -->
+    <path
+        android:fillColor="#1D4ED8"
+        android:pathData="M10,8h4v36h-4z" />
+    <!-- Gold Ribbon Bookmark -->
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M26,8h5v16l-2.5,-2.5 -2.5,2.5z" />
+    <!-- Official Emblem / Label -->
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M18,18h14v2h-14z" />
+    <path
+        android:fillColor="#93C5FD"
+        android:pathData="M18,22h10v2h-10z" />
+    <path
+        android:fillColor="#93C5FD"
+        android:pathData="M18,26h12v2h-12z" />
+</vector>

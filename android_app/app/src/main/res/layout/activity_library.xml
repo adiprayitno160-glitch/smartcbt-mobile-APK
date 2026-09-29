@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    android:orientation="vertical">
+
+    <!-- 1. Header Ringkas & Modern -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#0F2F57"
+        android:elevation="3dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageView
+            android:id="@+id/btnBackLibrary"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="Kembali"
+            android:padding="4dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Perpustakaan Digital"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLibraryGreeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SMP Negeri 1 Boyolangu"
+                android:textColor="#93C5FD"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnRefreshLibrary"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="Muat Ulang"
+            android:padding="4dp"
+            android:src="@drawable/ic_refresh"
+            app:tint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- 2. Kotak Pengingat Pinjaman Aktif (Multi-Color Gradient Banner) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardLoanReminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="#FFFBEB"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tvReminderIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_icon_indigo"
+                android:backgroundTint="#F59E0B"
+                android:gravity="center"
+                android:text="⏰"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvReminderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pemberitahuan Peminjaman Buku"
+                    android:textColor="#92400E"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvReminderText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="1 Buku sedang dipinjam (Jatuh tempo: 3 hari lagi)"
+                    android:textColor="#B45309"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btnReminderAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FEF3C7"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:text="Cek ›"
+                android:textColor="#B45309"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- 3. Tombol Aksi Utama: Scan Barcode & Tab Navigasi -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="14dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="8dp">
+
+        <!-- Tombol Scan Barcode Serbaguna -->
+        <Button
+            android:id="@+id/btnScanBookBarcode"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:backgroundTint="#059669"
+            android:text="📷 Scan Barcode Buku &amp; Cek Buku Tertukar"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
+
+        <!-- 4 Tab Bar Multi-Color -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="#F1F5F9"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <TextView
+                    android:id="@+id/tabPackageBooks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#1E40AF"
+                    android:gravity="center"
+                    android:paddingHorizontal="12dp"
+                    android:text="📦 Buku Paket Fisik"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tabELibrary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:paddingHorizontal="12dp"
+                    android:text="📖 E-Library &amp; Literasi"
+                    android:textColor="#64748B"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tabMyLoans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:paddingHorizontal="12dp"
+                    android:text="📑 Peminjaman Saya"
+                    android:textColor="#64748B"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tabRules"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:paddingHorizontal="12dp"
+                    android:text="⚖️ Tata Tertib"
+                    android:textColor="#64748B"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <!-- 4. Konten Scrollable -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <!-- TAB 1: RAK BUKU PAKET FISIK (Virtual Bookshelf Bergaya Rak Kayu Estetik) -->
+            <LinearLayout
+                android:id="@+id/layoutPackageBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <!-- Header Informasi Rombel & Progres Klaim Buku -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#0F172A"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvPackageHeaderTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="📚 Rak Buku Paket Siswa"
+                                android:textColor="#FFFFFF"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvPackageGradeBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#1E293B"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="3dp"
+                                android:text="KELAS VII"
+                                android:textColor="#38BDF8"
+                                android:textSize="10.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="Pindai barcode pada cover buku fisik Anda untuk memverifikasi hak pinjam tahunan."
+                            android:textColor="#94A3B8"
+                            android:textSize="10.5sp" />
+
+                        <ProgressBar
+                            android:id="@+id/pbPackageProgress"
+                            style="@android:style/Widget.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_marginTop="12dp"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressTint="#10B981" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvPackageProgressText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Memuat status rak buku..."
+                                android:textColor="#E2E8F0"
+                                android:textSize="10.5sp" />
+
+                            <TextView
+                                android:id="@+id/tvPackageProgressPct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="#10B981"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Keterangan Status Visual Legend -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#E2E8F0"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="2dp"
+                        android:text="Abu-abu: Belum Scan"
+                        android:textColor="#475569"
+                        android:textSize="9.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:background="#FEF3C7"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="2dp"
+                        android:text="Kuning: Pending Approval"
+                        android:textColor="#B45309"
+                        android:textSize="9.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:background="#D1FAE5"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="2dp"
+                        android:text="Hijau: Sah Terverifikasi"
+                        android:textColor="#065F46"
+                        android:textSize="9.5sp" />
+                </LinearLayout>
+
+                <!-- Virtual Bookshelf Container (Rak Kayu Estetik) -->
+                <LinearLayout
+                    android:id="@+id/containerPackageBooks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB 2: E-LIBRARY & LITERASI DIGITAL -->
+            <LinearLayout
+                android:id="@+id/layoutELibrary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Search Bar E-Book -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_search_input"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="#64748B" />
+
+                    <EditText
+                        android:id="@+id/etSearchEbook"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="Cari judul e-book, pengarang, mapel..."
+                        android:paddingStart="8dp"
+                        android:paddingEnd="4dp"
+                        android:textColor="#0F172A"
+                        android:textColorHint="#94A3B8"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- Section Buku Terpopuler / Rekomendasi Minggu Ini -->
+                <LinearLayout
+                    android:id="@+id/layoutPopularSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔥 Terpopuler &amp; Rekomendasi Minggu Ini"
+                        android:textColor="#0F172A"
+                        android:textSize="13.5sp"
+                        android:textStyle="bold" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:id="@+id/containerPopularBooks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
+                </LinearLayout>
+
+                <!-- Section Koleksi E-Book & Modul Ajar Digital -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="📖 Semua Koleksi E-Book &amp; Modul Ajar"
+                    android:textColor="#0F172A"
+                    android:textSize="13.5sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/containerDigitalBooks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB 3: PEMINJAMAN SAYA (Sedang Berjalan, Riwayat, Denda) -->
+            <LinearLayout
+                android:id="@+id/layoutMyLoans"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Sub-Tabs: Sedang Berjalan / Riwayat / Denda -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:background="#F1F5F9"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/subTabActiveLoans"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#059669"
+                        android:gravity="center"
+                        android:text="Sedang Berjalan"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/subTabHistoryLoans"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:text="Riwayat Selesai"
+                        android:textColor="#64748B"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/subTabFineLoans"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:text="Tunggakan Denda"
+                        android:textColor="#64748B"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/containerMyLoans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- TAB 4: TATA TERTIB -->
+            <LinearLayout
+                android:id="@+id/layoutRules"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📋 Ketentuan Buku Paket &amp; Perpustakaan"
+                            android:textColor="#0F172A"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:lineSpacingExtra="4dp"
+                            android:text="1. Buku paket wajib dipindai barcode-nya di awal tahun ajaran.\n2. Siswa bertanggung jawab menjaga keutuhan buku fisik.\n3. Jangan mencoret atau merusak stiker barcode eksemplar.\n4. Buku paket wajib dikembalikan lengkap di akhir tahun ajaran sebagai syarat Bebas Pustaka penerbitan rapor.\n5. Peminjaman koleksi umum perpustakaan berjangka waktu 7 hari kerja dan dapat diperpanjang 1 kali."
+                            android:textColor="#334155"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

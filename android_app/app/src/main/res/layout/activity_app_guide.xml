@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8FAFC">
+
+    <!-- Top Blue Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_curved_blue_header"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="36dp"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnBackGuide"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_revert"
+                app:tint="#FFFFFF"
+                android:contentDescription="Kembali" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Panduan Aplikasi"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvGuideSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Cara Pemakaian &amp; Fungsi Menu Smart CBT"
+                    android:textColor="#BAE6FD"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Role Badge -->
+        <LinearLayout
+            android:id="@+id/layoutCurrentRoleBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="#26FFFFFF"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="6dp">
+
+            <TextView
+                android:id="@+id/tvRoleBadgeIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎓"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvRoleBadgeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Menampilkan Panduan untuk: SISWA"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Role Filter Horizontal Tabs -->
+    <HorizontalScrollView
+        android:id="@+id/scrollRoleTabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        android:background="#FFFFFF">
+
+        <LinearLayout
+            android:id="@+id/layoutRoleTabs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/tabStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_btn_clean_action"
+                android:text="🎓 Siswa"
+                android:textColor="#1E3A8A"
+                android:textSize="12sp"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/tabParent"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_btn_clean_action"
+                android:text="👨‍👩‍👧 Orang Tua"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/tabTeacher"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_btn_clean_action"
+                android:text="👨‍🏫 Guru Mapel"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/tabBk"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_btn_clean_action"
+                android:text="🛡️ Guru BK"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/tabOperator"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_btn_clean_action"
+                android:text="⚙️ Operator/Admin"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Guide Content ScrollView -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/containerGuideItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

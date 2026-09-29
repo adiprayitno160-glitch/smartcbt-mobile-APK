@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Pinkish Red Soft Ring -->
+    <path
+        android:fillColor="#FEE2E2"
+        android:pathData="M24,24m-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0" />
+    <!-- Vibrant Red Badge -->
+    <path
+        android:fillColor="#EF4444"
+        android:pathData="M24,24m-14,0a14,14 0 1,0 28,0a14,14 0 1,0 -28,0" />
+    <!-- White Exclamation Mark -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M22,16h4v10h-4z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,30a2,2 0 1,0 0.001,0z" />
+    <!-- Corner Shield Accent -->
+    <path
+        android:fillColor="#B91C1C"
+        android:pathData="M31,9l4,3 -1,5 -5,-2z" />
+</vector>

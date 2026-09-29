@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎛️ Panel Kontrol Fitur &amp; GPS Geofence - Smart CBT S1BOY</title>
+    <script src="/js/tailwind.js"></script>
+    <link rel="stylesheet" href="/css/portal-theme.css">
+</head>
+<body class="bg-slate-100 flex min-h-screen text-slate-800">
+    <!-- Sidebar (Dapat digunakan oleh Admin maupun Operator) -->
+    <%- include('partials/sidebar_admin') %>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-5 md:p-8 ml-64 overflow-y-auto h-screen bg-slate-50/70 transition-all duration-300 ease-in-out">
+        <!-- Header -->
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-200">
+            <div class="flex items-center gap-3">
+                <button onclick="togglePortalSidebar()" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition shadow-sm cursor-pointer" title="Toggle Sidebar (Ctrl+B)">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-black text-slate-800 flex items-center gap-2.5">
+                        <span class="p-2 bg-sky-100 text-sky-700 rounded-xl text-lg md:text-xl">🎛️</span>
+                        <span>Panel Kontrol Fitur Terpadu &amp; GPS Geofence</span>
+                    </h1>
+                    <p class="text-slate-500 text-xs mt-1">Kelola aktif/nonaktif fitur APK, layanan sekolah, koordinat toleransi GPS, dan jam server secara realtime.</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <div class="bg-white border border-slate-200 px-3.5 py-1.5 rounded-xl shadow-sm flex items-center gap-2.5 text-xs font-bold text-slate-700">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>WAKTU SERVER: <span id="clockWibHeader" class="text-sky-600 font-mono">--:--</span> WIB</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MASTER SWITCH HERO CARD: SCANNER GEOLOCATION VS QR-ONLY -->
+        <div class="bg-gradient-to-br from-slate-900 via-sky-950 to-indigo-950 text-white rounded-3xl p-6 mb-8 shadow-xl border border-sky-800/40 relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative z-10">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black tracking-wide bg-sky-500/20 text-sky-300 border border-sky-400/30 uppercase">
+                            Kontrol Cepat Presensi APK
+                        </span>
+                        <span id="geoModeBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                            Memuat Status...
+                        </span>
+                    </div>
+                    <h2 class="text-xl md:text-2xl font-black text-white">Mode Validasi Lokasi (Geolocation Scanner)</h2>
+                    <p class="text-slate-300 text-xs md:text-sm leading-relaxed">
+                        Jika <strong>AKTIF</strong>: Scanner APK menggunakan GPS satelit presisi tinggi dengan toleransi kampus dan fallback QR kelas. <br>
+                        Jika <strong>NONAKTIF</strong>: Scanner beralih ke <strong>Mode QR-Only Murni (Zero GPS)</strong>. HP siswa tidak akan menyalakan modul GPS sama sekali, sangat menghemat baterai, dan siswa cukup memindai QR code kelas.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+                    <button id="btnToggleGeolocation" onclick="toggleMainGeolocation()" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-3 transition shadow-lg cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white">
+                        <span class="text-lg">🛰️</span>
+                        <span id="btnToggleGeolocationText">Beralih ke QR-Only</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABS NAVIGASI -->
+        <div class="flex items-center gap-2 mb-6 border-b border-slate-200 pb-2 overflow-x-auto text-xs font-bold">
+            <button onclick="switchTab('tab-apk')" id="btn-tab-apk" class="tab-btn px-4 py-2.5 rounded-xl bg-sky-600 text-white shadow-sm flex items-center gap-2">
+                <span>📱</span> <span>Fitur APK &amp; Keamanan</span>
+            </button>
+            <button onclick="switchTab('tab-school')" id="btn-tab-school" class="tab-btn px-4 py-2.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-2">
+                <span>🏫</span> <span>Modul Layanan Sekolah</span>
+            </button>
+            <button onclick="switchTab('tab-gps')" id="btn-tab-gps" class="tab-btn px-4 py-2.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-2">
+                <span>📍</span> <span>Koordinat &amp; Toleransi GPS</span>
+            </button>
+            <button onclick="switchTab('tab-logs')" id="btn-tab-logs" class="tab-btn px-4 py-2.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-2">
+                <span>📜</span> <span>Riwayat Perubahan (Audit Log)</span>
+            </button>
+        </div>
+
+        <!-- TAB 1: FITUR APK & KEAMANAN -->
+        <div id="tab-apk" class="tab-content space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="apkFeaturesContainer">
+                <div class="p-6 text-center text-slate-400 col-span-full">Memuat fitur APK...</div>
+            </div>
+        </div>
+
+        <!-- TAB 2: MODUL LAYANAN SEKOLAH -->
+        <div id="tab-school" class="tab-content hidden space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="schoolModulesContainer">
+                <div class="p-6 text-center text-slate-400 col-span-full">Memuat modul sekolah...</div>
+            </div>
+        </div>
+
+        <!-- TAB 3: KOORDINAT & TOLERANSI GPS SEKOLAH -->
+        <div id="tab-gps" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 max-w-4xl space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div>
+                        <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
+                            <span>📍</span> <span>Pengaturan Titik Pusat Sekolah &amp; Toleransi Geofence</span>
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Konfigurasi koordinat resmi kampus SMPN 1 Boyolangu untuk perhitungan jarak presensi satelit.</p>
+                    </div>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+                        Sistem Geodesik
+                    </span>
+                </div>
+
+                <form onsubmit="handleSaveGpsConfig(event)" class="space-y-5 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Latitude Pusat Sekolah *</label>
+                            <input type="text" id="gpsSchoolLat" class="w-full border rounded-xl p-3 font-mono font-semibold bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 outline-none" required placeholder="-8.125506">
+                            <p class="text-[11px] text-slate-400 mt-1">Titik garis lintang pusat kampus sekolah (Default: -8.125506)</p>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Longitude Pusat Sekolah *</label>
+                            <input type="text" id="gpsSchoolLng" class="w-full border rounded-xl p-3 font-mono font-semibold bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 outline-none" required placeholder="111.893526">
+                            <p class="text-[11px] text-slate-400 mt-1">Titik garis bujur pusat kampus sekolah (Default: 111.893526)</p>
+                        </div>
+                    </div>
+
+                    <!-- Slider Radius Global Geofence -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label class="font-bold text-slate-700">Radius Toleransi Geofence Global (Meter)</label>
+                            <span id="radiusGlobalDisplay" class="font-black text-sm text-sky-600 bg-sky-100 px-3 py-1 rounded-xl font-mono">150 m</span>
+                        </div>
+                        <input type="range" id="gpsRadiusGlobal" min="50" max="500" step="10" oninput="document.getElementById('radiusGlobalDisplay').innerText = this.value + ' m'" class="w-full accent-sky-600 cursor-pointer">
+                        <p class="text-[11px] text-slate-500">
+                            Jarak maksimum dari titik sekolah yang masih dianggap berada di lingkungan sekolah. Rekomendasi: 150m untuk area kampus SMPN 1 Boyolangu.
+                        </p>
+                    </div>
+
+                    <!-- Zona Akurasi Satelit -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-2xl">
+                            <label class="block font-bold text-emerald-900 mb-1">Zona Presisi Baik (≤ meter)</label>
+                            <input type="number" id="gpsZoneGood" class="w-full border border-emerald-300 rounded-xl p-2.5 font-bold text-emerald-800 bg-white" min="10" max="100">
+                            <p class="text-[10.5px] text-emerald-700 mt-1">Akurasi GPS ≤ nilai ini langsung diterima sah tanpa catatan.</p>
+                        </div>
+                        <div class="p-3.5 bg-amber-50/70 border border-amber-200 rounded-2xl">
+                            <label class="block font-bold text-amber-900 mb-1">Zona Terdegradasi (≤ meter)</label>
+                            <input type="number" id="gpsZoneDegraded" class="w-full border border-amber-300 rounded-xl p-2.5 font-bold text-amber-800 bg-white" min="50" max="200">
+                            <p class="text-[10.5px] text-amber-700 mt-1">Akurasi 51m - 100m tetap sah namun dicatat di log anomali.</p>
+                        </div>
+                        <div class="p-3.5 bg-sky-50/70 border border-sky-200 rounded-2xl">
+                            <label class="block font-bold text-sky-900 mb-1">Waktu Tunggu Satelit (Detik)</label>
+                            <input type="number" id="gpsCountdownSeconds" class="w-full border border-sky-300 rounded-xl p-2.5 font-bold text-sky-800 bg-white" min="15" max="120">
+                            <p class="text-[10.5px] text-sky-700 mt-1">Waktu sebelum tombol "Scan QR Kelas" muncul otomatis.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" class="bg-sky-600 hover:bg-sky-700 text-white font-black px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 cursor-pointer">
+                            <span>💾</span> <span>Simpan Pengaturan GPS &amp; Geofence</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB 4: AUDIT LOG RIWAYAT PERUBAHAN -->
+        <div id="tab-logs" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between border-b pb-4 mb-4">
+                    <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
+                        <span>📜</span> <span>Riwayat Perubahan Fitur Terakhir</span>
+                    </h2>
+                    <span class="text-xs text-slate-500">Mencatat seluruh aksi admin &amp; operator</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                                <th class="p-3">Waktu</th>
+                                <th class="p-3">Pengguna / Peran</th>
+                                <th class="p-3">Fitur</th>
+                                <th class="p-3">Nilai Baru / Rincian</th>
+                                <th class="p-3">Alamat IP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditLogsBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr><td colspan="5" class="p-4 text-center text-slate-400">Memuat log aktivitas...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- NOTIFIKASI TOAST -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 text-xs font-bold flex items-center gap-3">
+        <span id="toastIcon">✅</span>
+        <span id="toastMessage">Pesan notifikasi</span>
+    </div>
+
+    <script>
+        let currentGeolocationStatus = true;
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            toastMsg.innerText = msg;
+            toastIcon.innerText = isError ? '❌' : '✅';
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-2";
+            });
+            document.getElementById('btn-' + tabId).className = "tab-btn px-4 py-2.5 rounded-xl bg-sky-600 text-white shadow-sm flex items-center gap-2";
+        }
+
+        async function loadFeatureData() {
+            try {
+                const res = await fetch('/api/admin/feature-panel', {
+                    headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('token') || '') }
+                });
+                const data = await res.json();
+                if (!data.success) {
+                    showToast(data.message, true);
+                    return;
+                }
+
+                // Update Jam Server
+                if (data.serverTime) {
+                    document.getElementById('clockWibHeader').innerText = data.serverTime.wibTime;
+                }
+
+                // Render APK Features
+                renderFeatureCards('apkFeaturesContainer', data.apkFeatures);
+
+                // Render School Modules
+                renderFeatureCards('schoolModulesContainer', data.schoolModules);
+
+                // Master Switch Geolocation
+                const geoItem = data.apkFeatures.find(f => f.key === 'feature.scanner.geolocation');
+                if (geoItem) {
+                    currentGeolocationStatus = geoItem.value;
+                    updateGeoHeroBadge(currentGeolocationStatus);
+                }
+
+                // GPS Settings
+                if (data.gpsSettings) {
+                    data.gpsSettings.forEach(s => {
+                        if (s.key === 'gps.school.lat') document.getElementById('gpsSchoolLat').value = s.value;
+                        if (s.key === 'gps.school.lng') document.getElementById('gpsSchoolLng').value = s.value;
+                        if (s.key === 'gps.radius.global') {
+                            document.getElementById('gpsRadiusGlobal').value = s.value;
+                            document.getElementById('radiusGlobalDisplay').innerText = s.value + ' m';
+                        }
+                        if (s.key === 'gps.accuracy.zone_good') document.getElementById('gpsZoneGood').value = s.value;
+                        if (s.key === 'gps.accuracy.zone_degraded') document.getElementById('gpsZoneDegraded').value = s.value;
+                        if (s.key === 'gps.countdown_seconds') document.getElementById('gpsCountdownSeconds').value = s.value;
+                    });
+                }
+
+                // Audit Logs
+                renderAuditLogs(data.recentLogs);
+
+            } catch (err) {
+                console.error(err);
+                showToast('Gagal memuat data pengaturan fitur.', true);
+            }
+        }
+
+        function updateGeoHeroBadge(isActive) {
+            const badge = document.getElementById('geoModeBadge');
+            const btn = document.getElementById('btnToggleGeolocation');
+            const btnText = document.getElementById('btnToggleGeolocationText');
+
+            if (isActive) {
+                badge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+                badge.innerHTML = "🛰️ GPS SATELIT AKTIF";
+                btn.className = "w-full sm:w-auto px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-3 transition shadow-lg cursor-pointer bg-amber-500 hover:bg-amber-600 text-slate-900";
+                btnText.innerText = "Beralih ke QR-Only Murni";
+            } else {
+                badge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30";
+                badge.innerHTML = "📷 MODE QR-ONLY MURNI (ZERO GPS)";
+                btn.className = "w-full sm:w-auto px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-3 transition shadow-lg cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white";
+                btnText.innerText = "Aktifkan Kembali GPS Satelit";
+            }
+        }
+
+        async function toggleMainGeolocation() {
+            const nextState = !currentGeolocationStatus;
+            const confirmMsg = nextState 
+                ? "Aktifkan kembali validasi GPS Satelit untuk pemindaian presensi di HP siswa?" 
+                : "Beralih ke Mode QR-Only Murni?\n\nHP siswa tidak akan mengaktifkan GPS sama sekali (sangat hemat baterai). Presensi cukup dilakukan dengan memindai QR code kelas.";
+
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                const res = await fetch('/api/admin/feature-panel/feature.scanner.geolocation', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
+                    },
+                    body: JSON.stringify({ value: nextState, reason: "Diubah via Tombol Cepat Geolocation Mode" })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    currentGeolocationStatus = nextState;
+                    updateGeoHeroBadge(currentGeolocationStatus);
+                    showToast(result.message);
+                    loadFeatureData();
+                } else {
+                    showToast(result.message, true);
+                }
+            } catch (err) {
+                showToast('Gagal mengubah mode geolocation', true);
+            }
+        }
+
+        function renderFeatureCards(containerId, list) {
+            const container = document.getElementById(containerId);
+            if (!list || list.length === 0) {
+                container.innerHTML = '<div class="p-6 text-center text-slate-400 col-span-full">Tidak ada fitur yang cocok.</div>';
+                return;
+            }
+
+            container.innerHTML = list.map(item => {
+                const isBool = item.type === 'boolean';
+                const isChecked = item.value === true || item.value === 'true';
+                
+                return `
+                    <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-2.5">
+                                <h3 class="font-bold text-xs text-slate-800 leading-snug font-mono">${item.key}</h3>
+                                ${isBool ? `
+                                    <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="handleFeatureToggle('${item.key}', this.checked)" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    </label>
+                                ` : ''}
+                            </div>
+                            <p class="text-[11.5px] text-slate-500 leading-relaxed mb-4">${item.description || '-'}</p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold">
+                            <span class="text-slate-400">Status Saat Ini:</span>
+                            <span class="px-2.5 py-0.5 rounded-lg ${isChecked ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">
+                                ${isBool ? (isChecked ? 'AKTIF (ON)' : 'NONAKTIF (OFF)') : item.value}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function handleFeatureToggle(key, isChecked) {
+            try {
+                const res = await fetch('/api/admin/feature-panel/' + encodeURIComponent(key), {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
+                    },
+                    body: JSON.stringify({ value: isChecked })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast(result.message);
+                    if (key === 'feature.scanner.geolocation') {
+                        currentGeolocationStatus = isChecked;
+                        updateGeoHeroBadge(currentGeolocationStatus);
+                    }
+                    loadFeatureData();
+                } else {
+                    showToast(result.message, true);
+                    loadFeatureData();
+                }
+            } catch (err) {
+                showToast('Gagal menyimpan perubahan fitur', true);
+                loadFeatureData();
+            }
+        }
+
+        async function handleSaveGpsConfig(e) {
+            e.preventDefault();
+            const lat = document.getElementById('gpsSchoolLat').value.trim();
+            const lng = document.getElementById('gpsSchoolLng').value.trim();
+            const radiusGlobal = parseInt(document.getElementById('gpsRadiusGlobal').value);
+            const zoneGood = parseInt(document.getElementById('gpsZoneGood').value);
+            const zoneDegraded = parseInt(document.getElementById('gpsZoneDegraded').value);
+            const countdownSeconds = parseInt(document.getElementById('gpsCountdownSeconds').value);
+
+            try {
+                const res = await fetch('/api/attendance/gps-config', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
+                    },
+                    body: JSON.stringify({ lat, lng, radiusGlobal, zoneGood, zoneDegraded, countdownSeconds })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast(result.message);
+                    loadFeatureData();
+                } else {
+                    showToast(result.message, true);
+                }
+            } catch (err) {
+                showToast('Gagal menyimpan konfigurasi GPS', true);
+            }
+        }
+
+        function renderAuditLogs(logs) {
+            const tbody = document.getElementById('auditLogsBody');
+            if (!logs || logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada riwayat perubahan fitur.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = logs.map(l => {
+                const dateStr = new Date(l.createdAt).toLocaleString('id-ID');
+                let detailObj = {};
+                try { detailObj = JSON.parse(l.details || '{}'); } catch(e) {}
+
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3 text-slate-500 font-mono">${dateStr}</td>
+                        <td class="p-3 font-bold text-slate-800">${l.userName || 'Admin'} <span class="text-[10px] text-sky-600 font-normal">(${l.role || 'OP'})</span></td>
+                        <td class="p-3 font-mono text-sky-700 font-semibold">${l.target || l.action}</td>
+                        <td class="p-3 text-slate-600">${detailObj.newValue ? 'Diubah menjadi: ' + detailObj.newValue : (l.details || '-')}</td>
+                        <td class="p-3 font-mono text-slate-400">${l.ipAddress || '127.0.0.1'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFeatureData();
+        });
+    </script>
+</body>
+</html>

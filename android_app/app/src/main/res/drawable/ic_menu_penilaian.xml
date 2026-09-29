@@ -1,0 +1,43 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Blue Paper Background -->
+    <path
+        android:fillColor="#0284C7"
+        android:pathData="M11,8h22l8,8v24c0,2.2 -1.8,4 -4,4H11c-2.2,0 -4,-1.8 -4,-4V12c0,-2.2 1.8,-4 4,-4z" />
+    <!-- Folded Corner -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M33,8v8h8z" />
+    <!-- White Inner Board -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M11,12h18v28H11z" />
+    <!-- Score A+ Gold Badge -->
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M30,26a7,7 0 1,0 0.001,0z" />
+    <!-- A+ Character -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,27h4v2h-4z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M29,23h2v7h-2z" />
+    <!-- Score Sheet Checkmarks -->
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M14,18l2,2 4,-4 1.2,1.2 -5.2,5.2 -3.2,-3.2z" />
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M14,25l2,2 4,-4 1.2,1.2 -5.2,5.2 -3.2,-3.2z" />
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M14,32l2,2 4,-4 1.2,1.2 -5.2,5.2 -3.2,-3.2z" />
+    <!-- Orange Pen -->
+    <path
+        android:fillColor="#EA580C"
+        android:pathData="M36,36l5,-5 2,2 -5,5z" />
+</vector>

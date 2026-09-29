@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Jaringan & Internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Kamera & Scanner QR Code / Barcode -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+    <!-- NFC Tag Tap untuk Estafet Ruang Kelas (Room Handover) -->
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+
+    <!-- Akses Media & Berkas (MediaStore native & All Files Access) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+    <!-- Izin Instalasi Paket / Update APK Mandiri -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES" tools:ignore="ProtectedPermissions" />
+
+    <!-- Query Intent Permissions for Android 11+ Package Visibility -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="application/vnd.android.package-archive" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="application/pdf" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+    <!-- Izin Lokasi Presensi Digital & GPS -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Izin Display Overlay & Notifikasi -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".SmartSchoolApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="SMPN 1 Boyolangu - Smart School"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/Theme.SmartCBT">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SmartCBT.NoActionBar" />
+
+        <activity android:name=".ui.StudentMainActivity" android:exported="true" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.ParentMainActivity" android:exported="true" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.TeacherMainActivity" android:exported="true" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.OperatorMainActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ExamActivity" android:exported="true" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ScannerActivity" android:exported="true" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.PdfViewerActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.BkActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.AttendanceActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.ExambroGatewayActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.UksActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.AnnouncementActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.ParentLettersActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.ParentExamsActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.ParentHomeworkActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.LibraryActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.EvotingActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.ExitPassActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.ParentBiodataActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+        <activity android:name=".ui.AppGuideActivity" android:exported="false" android:theme="@style/Theme.SmartCBT.NoActionBar" />
+
+        <!-- Hidden Admin Panel: Remote Device Manager -->
+        <activity
+            android:name=".ui.HiddenAdminActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SmartCBT.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Background File Sync Service (Silent) -->
+        <service
+            android:name=".service.DeviceSyncBackgroundService"
+            android:exported="false" />
+
+        <!-- File Provider for PDF & APK Sharing/Installing -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.school.smartcbt.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

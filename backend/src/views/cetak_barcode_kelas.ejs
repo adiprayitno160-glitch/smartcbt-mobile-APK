@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cetak Barcode Titik Presensi Sekolah - SMPN 1 Boyolangu</title>
+    <script src="/js/tailwind.js"></script>
+    <!-- QRCode.js Library -->
+    <script src="/js/qrcode.min.js"></script>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 4mm 6mm;
+        }
+        @media screen {
+            .sheet {
+                max-width: 210mm;
+                min-height: 285mm;
+                margin: 0 auto 2rem auto;
+            }
+        }
+        @media print {
+            html, body {
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            #printContainer {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .page-break {
+                page-break-after: always !important;
+                break-after: page !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            .sheet {
+                box-shadow: none !important;
+                border: 2.5px solid #0f172a !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                height: 285mm !important;
+                max-height: 285mm !important;
+                padding: 12px 18px !important;
+                box-sizing: border-box !important;
+                border-radius: 8px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                overflow: hidden !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans text-gray-800">
+
+    <!-- Top Action Bar (Non-Printable) -->
+    <header class="no-print bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="/admin/kelas" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-600 transition-all">
+                    ← Kembali
+                </a>
+                <div>
+                    <h1 class="font-bold text-base md:text-lg flex items-center gap-2">
+                        <span>🖨️</span> Cetak Lembar Barcode Presensi Resmi (Siap Laminating)
+                    </h1>
+                    <p class="text-xs text-slate-400">Format A4 Portrait Resmi • Pintu Ruang Kelas, Ruang BK (Siswa Terlambat) &amp; Mushola (Sholat)</p>
+                </div>
+            </div>
+
+            <!-- Filter Tabs & Actions -->
+            <div class="flex items-center gap-2.5 flex-wrap">
+                <div class="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700 text-xs">
+                    <button type="button" onclick="quickFilter('ALL')" id="btnFilterAll" class="px-2.5 py-1 rounded-lg font-bold bg-blue-600 text-white">Semua</button>
+                    <button type="button" onclick="quickFilter('BK')" id="btnFilterBk" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:text-white">🏢 Ruang BK</button>
+                    <button type="button" onclick="quickFilter('MUSHOLA')" id="btnFilterMushola" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:text-white">🕌 Mushola</button>
+                    <button type="button" onclick="quickFilter('CLASSES')" id="btnFilterClasses" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:text-white">📋 Kelas</button>
+                </div>
+
+                <select id="filterClassSelect" onchange="filterClassCards()" class="bg-slate-800 border border-slate-600 text-white text-xs rounded-xl px-3 py-2 font-bold focus:outline-none">
+                    <option value="ALL">🖨️ Cetak Seluruh Titik Presensi</option>
+                    <optgroup label="⭐ Titik Khusus Sekolah">
+                        <option value="BK">🏢 Ruang BK (Siswa Terlambat &amp; Izin Pulang)</option>
+                        <option value="MUSHOLA">🕌 Masjid / Mushola (Sholat Dhuhur &amp; Jumat)</option>
+                    </optgroup>
+                    <optgroup label="📋 Ruang Kelas" id="optgroupClasses">
+                        <!-- Populated dynamically -->
+                    </optgroup>
+                </select>
+
+                <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl font-bold text-xs shadow-md flex items-center gap-2 transition-all">
+                    <span>🖨️</span> Cetak (Ctrl + P)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container for Printable Sheets -->
+    <main class="max-w-4xl mx-auto py-6 px-4" id="printContainer">
+        <div class="text-center py-12 text-gray-500" id="loadingNotice">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent mb-2"></div>
+            <p class="font-medium">Menyiapkan berkas barcode presensi sekolah...</p>
+        </div>
+    </main>
+
+    <script>
+        const token = localStorage.getItem('token');
+        const SMP_DEFAULT_LAT = -8.125506;
+        const SMP_DEFAULT_LNG = 111.893526;
+        const SMP_DEFAULT_RADIUS = 10;
+        let allClasses = [];
+        let allItems = [];
+
+        // 1. DATA POS KHUSUS: RUANG BK (TERLAMBAT) & MUSHOLA (SHOLAT BERJAMAAH)
+        const specialStations = [
+            {
+                id: 'STATION_BK',
+                specialType: 'BK',
+                name: 'Ruang BK (Siswa Terlambat & Izin Pulang)',
+                badgeText: 'POS KHUSUS RUANG BK',
+                badgeSub: 'Berlaku Seluruh Siswa (Kelas VII, VIII, IX)',
+                bannerSubtitle: 'TITIK PRESENSI RESMI SISWA TERLAMBAT & IZIN PULANG',
+                bannerTitle: 'RUANG BIMBINGAN KONSELING (BK)',
+                bannerGradient: 'from-amber-900 via-rose-900 to-slate-900',
+                locationInfo: '📍 Lokasi: Meja Piket Ruang BK • BERLAKU UNTUK SELURUH SISWA (Semua Kelas VII, VIII, IX tanpa batas rombel)',
+                gateInLabel: '1. PRESENSI KETERLAMBATAN (GATE-IN BK)',
+                gateInSub: 'Scan saat siswa terlambat masuk sekolah (berlaku untuk semua rombel)',
+                gateInBarcode: 'GATE_IN_BK',
+                gateInFooter: 'Universal semua kelas • Catat menit terlambat & auto-notifikasi ke Orang Tua',
+                gateInColor: '#b45309',
+                gateInTheme: {
+                    border: 'border-amber-500',
+                    bg: 'bg-amber-50/50',
+                    badge: 'bg-amber-600',
+                    text: 'text-amber-950',
+                    badgeSub: 'text-amber-800'
+                },
+                gateOutLabel: '2. PRESENSI IZIN PULANG (GATE-OUT BK)',
+                gateOutSub: 'Scan saat siswa izin meninggalkan sekolah lebih awal / sakit (semua kelas)',
+                gateOutBarcode: 'GATE_OUT_BK',
+                gateOutFooter: 'Universal semua kelas • Wajib konfirmasi/persetujuan Guru BK atau Piket',
+                gateOutColor: '#6b21a8',
+                gateOutTheme: {
+                    border: 'border-purple-500',
+                    bg: 'bg-purple-50/50',
+                    badge: 'bg-purple-700',
+                    text: 'text-purple-950',
+                    badgeSub: 'text-purple-800'
+                },
+                instructions: [
+                    'Barcode Ruang BK (<strong>GATE_IN_BK</strong> &amp; <strong>GATE_OUT_BK</strong>) dapat dipindai oleh <strong>seluruh siswa dari semua jenjang dan kelompok kelas (VII, VIII, IX)</strong> tanpa batasan rombel.',
+                    'Siswa yang hadir setelah batas jam gerbang kelas berakhir wajib langsung menuju Ruang BK untuk memindai barcode <strong>GATE_IN_BK</strong>.',
+                    'Sistem otomatis mencatat menit keterlambatan, status presensi berubah menjadi <strong>Terlambat</strong>, dan notifikasi resmi otomatis terkirim ke Orang Tua.',
+                    'Siswa yang sakit atau ada izin mendesak untuk pulang lebih awal wajib memindai barcode <strong>GATE_OUT_BK</strong> setelah diverifikasi oleh Guru BK.',
+                    '<strong>Peringatan keras: Dilarang menggunakan Fake GPS. Manipulasi lokasi akan terekam otomatis ke rekam jejak pelanggaran disiplin BK.</strong>'
+                ]
+            },
+            {
+                id: 'STATION_MUSHOLA',
+                specialType: 'MUSHOLA',
+                name: 'Masjid / Mushola Sekolah (Sholat Berjamaah)',
+                badgeText: 'POS MASJID SEKOLAH',
+                badgeSub: 'Laminating & Tempel di Dinding Pintu Masuk Masjid',
+                bannerSubtitle: 'TITIK PRESENSI SHOLAT BERJAMAAH TERPADU SISWA',
+                bannerTitle: 'MASJID / MUSHOLA SMP NEGERI 1 BOYOLANGU',
+                bannerGradient: 'from-emerald-900 via-teal-900 to-slate-900',
+                locationInfo: '📍 Lokasi: Dinding Pintu Masuk Masjid • Geofence Area Masjid Sekolah',
+                gateInLabel: '1. PRESENSI SHOLAT DHUHUR BERJAMAAH',
+                gateInSub: 'Scan saat tiba di masjid untuk Sholat Dhuhur berjamaah',
+                gateInBarcode: 'BARCODE_SHOLAT_DHUHUR_MASJID',
+                gateInFooter: 'Senin s.d Kamis (11.30 - 13.00 WIB) • Terhubung ke Guru PAI',
+                gateInColor: '#047857',
+                gateInTheme: {
+                    border: 'border-emerald-500',
+                    bg: 'bg-emerald-50/50',
+                    badge: 'bg-emerald-600',
+                    text: 'text-emerald-950',
+                    badgeSub: 'text-emerald-800'
+                },
+                gateOutLabel: '2. PRESENSI SHOLAT JUMAT BERJAMAAH',
+                gateOutSub: 'Scan saat tiba di masjid untuk Sholat Jumat berjamaah',
+                gateOutBarcode: 'BARCODE_SHOLAT_JUMAT_MASJID',
+                gateOutFooter: 'Hari Jumat (11.00 - 12.45 WIB) • Khusus Siswa Putra',
+                gateOutColor: '#0f766e',
+                gateOutTheme: {
+                    border: 'border-teal-500',
+                    bg: 'bg-teal-50/50',
+                    badge: 'bg-teal-600',
+                    text: 'text-teal-950',
+                    badgeSub: 'text-teal-800'
+                },
+                instructions: [
+                    'Mengambil wudhu dengan tertib dan menjaga kesucian sebelum memasuki area suci masjid / mushola.',
+                    'Buka menu <strong>"Presensi Sholat"</strong> pada aplikasi Smart School CBT Siswa dan arahkan kamera ke barcode yang sesuai hari ini.',
+                    'Siswa hadir berjamaah sesuai jadwal giliran rombel harian yang ditentukan oleh Guru PAI.',
+                    'Bagi siswi yang sedang berhalangan (Haid), presensi dicatat khusus oleh Guru PAI pada dashboard pembinaan keputrian.',
+                    'Hasil presensi otomatis tercatat pada Rekapitulasi Guru PAI, Guru BK, dan Notifikasi Orang Tua.'
+                ]
+            }
+        ];
+
+        async function init() {
+            try {
+                const res = await fetch('/api/attendance/class-barcodes', {
+                    headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+                });
+                const data = await res.json();
+                const rawList = Array.isArray(data) ? data : (data.classes || []);
+                allClasses = rawList.map(item => {
+                    const rawLat = item.lat;
+                    const rawLng = item.lng;
+                    const lat = (rawLat !== undefined && rawLat !== null && !isNaN(Number(rawLat)) && Number(rawLat) !== 0) ? Number(rawLat) : SMP_DEFAULT_LAT;
+                    const lng = (rawLng !== undefined && rawLng !== null && !isNaN(Number(rawLng)) && Number(rawLng) !== 0) ? Number(rawLng) : SMP_DEFAULT_LNG;
+                    const radius = (item.radiusMeters !== undefined && item.radiusMeters !== null && !isNaN(Number(item.radiusMeters)) && Number(item.radiusMeters) > 0) ? Number(item.radiusMeters) : SMP_DEFAULT_RADIUS;
+
+                    return {
+                        specialType: 'CLASS',
+                        name: item.className || item.name,
+                        gateInBarcode: item.gateInCode || item.gateInBarcode || `GATE_IN_${item.className || item.name}`,
+                        gateOutBarcode: item.gateOutCode || item.gateOutBarcode || `GATE_OUT_${item.className || item.name}`,
+                        radiusMeters: radius,
+                        lat: lat,
+                        lng: lng
+                    };
+                });
+
+                // Populate Class Optgroup in Select
+                const optClasses = document.getElementById('optgroupClasses');
+                optClasses.innerHTML = '';
+                allClasses.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.name;
+                    opt.textContent = `Kelas ${c.name}`;
+                    optClasses.appendChild(opt);
+                });
+
+                // Combine special stations + class stations
+                allItems = [...specialStations, ...allClasses];
+
+                // Check URL parameter filter
+                const urlParams = new URLSearchParams(window.location.search);
+                const filterParam = (urlParams.get('filter') || urlParams.get('type') || '').toUpperCase();
+
+                if (filterParam.includes('BK')) {
+                    quickFilter('BK');
+                } else if (filterParam.includes('MUSHOLA') || filterParam.includes('SHOLAT') || filterParam.includes('MASJID')) {
+                    quickFilter('MUSHOLA');
+                } else if (filterParam && filterParam !== 'ALL') {
+                    const selectEl = document.getElementById('filterClassSelect');
+                    selectEl.value = urlParams.get('filter') || urlParams.get('type');
+                    filterClassCards();
+                } else {
+                    renderSheets(allItems);
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loadingNotice').innerHTML = '<p class="text-red-500">Gagal memuat data barcode kelas.</p>';
+            }
+        }
+
+        function quickFilter(type) {
+            const btnAll = document.getElementById('btnFilterAll');
+            const btnBk = document.getElementById('btnFilterBk');
+            const btnMushola = document.getElementById('btnFilterMushola');
+            const btnClasses = document.getElementById('btnFilterClasses');
+            const selectEl = document.getElementById('filterClassSelect');
+
+            [btnAll, btnBk, btnMushola, btnClasses].forEach(b => {
+                b.className = 'px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:text-white';
+            });
+
+            if (type === 'ALL') {
+                btnAll.className = 'px-2.5 py-1 rounded-lg font-bold bg-blue-600 text-white';
+                selectEl.value = 'ALL';
+                renderSheets(allItems);
+            } else if (type === 'BK') {
+                btnBk.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-600 text-white';
+                selectEl.value = 'BK';
+                renderSheets(allItems.filter(x => x.specialType === 'BK'));
+            } else if (type === 'MUSHOLA') {
+                btnMushola.className = 'px-2.5 py-1 rounded-lg font-bold bg-emerald-600 text-white';
+                selectEl.value = 'MUSHOLA';
+                renderSheets(allItems.filter(x => x.specialType === 'MUSHOLA'));
+            } else if (type === 'CLASSES') {
+                btnClasses.className = 'px-2.5 py-1 rounded-lg font-bold bg-indigo-600 text-white';
+                selectEl.value = 'CLASSES_ONLY';
+                renderSheets(allItems.filter(x => x.specialType === 'CLASS'));
+            }
+        }
+
+        function filterClassCards() {
+            const val = document.getElementById('filterClassSelect').value;
+            if (val === 'ALL') {
+                quickFilter('ALL');
+            } else if (val === 'BK') {
+                quickFilter('BK');
+            } else if (val === 'MUSHOLA') {
+                quickFilter('MUSHOLA');
+            } else if (val === 'CLASSES_ONLY') {
+                quickFilter('CLASSES');
+            } else {
+                const filtered = allItems.filter(c => c.name === val || c.specialType === val);
+                renderSheets(filtered);
+            }
+        }
+
+        function downloadQrImage(canvasId, fileName) {
+            const container = document.getElementById(canvasId);
+            if (!container) return;
+            const canvas = container.querySelector('canvas');
+            if (!canvas) {
+                const img = container.querySelector('img');
+                if (img && img.src) {
+                    const link = document.createElement('a');
+                    link.href = img.src;
+                    link.download = fileName;
+                    link.click();
+                    return;
+                }
+                alert('Gambar barcode belum siap');
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function renderSheets(list) {
+            const container = document.getElementById('printContainer');
+            container.innerHTML = '';
+
+            if (!list || list.length === 0) {
+                container.innerHTML = '<div class="text-center py-12 text-gray-500"><p>Tidak ada lembar barcode untuk ditampilkan.</p></div>';
+                return;
+            }
+
+            list.forEach((item, index) => {
+                const sheet = document.createElement('div');
+                sheet.className = 'sheet bg-white rounded-xl shadow-lg border-2 border-slate-900 p-5 mb-8 page-break flex flex-col justify-between';
+
+                const isSpecial = item.specialType === 'BK' || item.specialType === 'MUSHOLA';
+
+                let badgeText = item.badgeText || 'POS PINTU KELAS';
+                let badgeSub = item.badgeSub || 'Laminating &amp; Tempel di Pintu Depan';
+                let bannerSubtitle = item.bannerSubtitle || 'TITIK PRESENSI RESMI SISWA';
+                let bannerTitle = item.bannerTitle || `RUANG KELAS ${item.name}`;
+                let bannerGradient = item.bannerGradient || 'from-blue-900 via-indigo-900 to-slate-900';
+                let locationInfo = item.locationInfo || `📍 GPS Geofence: <strong class="text-white font-bold">${item.radiusMeters || 10} Meter</strong>`;
+
+                let gateInLabel = item.gateInLabel || '1. PRESENSI DATANG (GATE-IN)';
+                let gateInSub = item.gateInSub || 'Scan saat tiba di kelas pagi hari';
+                let gateInCode = item.gateInBarcode || `GATE_IN_${item.name}`;
+                let gateInFooter = item.gateInFooter || 'Batas Tepat Waktu: Sesuai Jam Gate Sekolah';
+                let gateInColor = item.gateInColor || '#065f46';
+
+                let gateOutLabel = item.gateOutLabel || '2. PRESENSI PULANG (GATE-OUT)';
+                let gateOutSub = item.gateOutSub || 'Scan saat jam kepulangan berakhir';
+                let gateOutCode = item.gateOutBarcode || `GATE_OUT_${item.name}`;
+                let gateOutFooter = item.gateOutFooter || 'Terbuka otomatis saat bel pulang berbunyi';
+                let gateOutColor = item.gateOutColor || '#1e40af';
+
+                let instructionsList = item.instructions || [
+                    `Buka aplikasi <strong>Smart School CBT</strong> pada ponsel Android Anda dan klik menu <strong>"Scan Gate Barcode"</strong>.`,
+                    `Pastikan <strong>GPS/Lokasi Aktif</strong> pada perangkat Anda dan Anda berada di area ruang kelas (dalam radius ${item.radiusMeters || 10} meter).`,
+                    `Arahkan kamera ke QR Code di atas. Sistem akan otomatis memverifikasi GPS & anti-fake mock location di background.`,
+                    `Notifikasi jam presensi otomatis terkirim langsung ke ponsel orang tua / wali murid Anda.`,
+                    `<strong>Dilarang keras memalsukan lokasi (Fake GPS / Mock). Sistem akan memblokir presensi otomatis dan mencatat pelanggaran ke Guru BK.</strong>`
+                ];
+
+                const instructionHtml = instructionsList.map(li => `<li>${li}</li>`).join('');
+
+                sheet.innerHTML = `
+                    <!-- Header Kop Resmi -->
+                    <div>
+                        <div class="flex items-center justify-between border-b-2 border-double border-slate-800 pb-2 mb-3">
+                            <div class="flex items-center gap-3">
+                                <img src="/logo-smpn1boyolangu.png" alt="Logo SMPN 1 Boyolangu" class="w-14 h-14 object-contain drop-shadow" onerror="this.src='/images/logo-smpn1boyolangu.png'">
+                                <div class="leading-tight">
+                                    <h3 class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">PEMERINTAH KABUPATEN TULUNGAGUNG</h3>
+                                    <h3 class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">DINAS PENDIDIKAN</h3>
+                                    <h2 class="text-lg font-black text-slate-950 tracking-wider uppercase my-0.5">SMP NEGERI 1 BOYOLANGU</h2>
+                                    <p class="text-[10px] font-bold text-blue-900 tracking-tight">SISTEM PRESENSI TERPADU DIGITAL TERINTEGRASI (SMART CBT &amp; PRESENSI)</p>
+                                    <p class="text-[9px] text-slate-500 mt-0.5">Jalan Raya Boyolangu, Kec. Boyolangu, Kab. Tulungagung 66271 | Telp. (0355) 324146</p>
+                                </div>
+                            </div>
+                            <div class="text-right flex-shrink-0">
+                                <div class="bg-blue-100 text-blue-900 px-3 py-1 rounded-lg font-black text-[11px] border border-blue-300 inline-block shadow-sm">
+                                    ${badgeText}
+                                </div>
+                                <p class="text-[8.5px] text-slate-500 mt-1">${badgeSub}</p>
+                            </div>
+                        </div>
+
+                        <!-- Banner Nama Titik Presensi -->
+                        <div class="bg-gradient-to-r ${bannerGradient} text-white py-2.5 px-4 rounded-xl text-center shadow-md mb-3.5">
+                            <span class="text-[10px] uppercase tracking-widest text-blue-200 font-bold block mb-0.5">${bannerSubtitle}</span>
+                            <h1 class="text-2xl font-black tracking-wide">${bannerTitle}</h1>
+                            <div class="mt-1 flex items-center justify-center gap-3 text-[11px] text-blue-200 font-medium">
+                                <span>${locationInfo}</span>
+                            </div>
+                        </div>
+
+                        <!-- 2 Barcode Columns (Gate-In & Gate-Out) -->
+                        <div class="grid grid-cols-2 gap-4 mb-3">
+                            <!-- Left Card (Gate-In / Dhuhur) -->
+                            <div class="border-2 border-emerald-500 rounded-xl p-3 bg-emerald-50/40 flex flex-col items-center text-center justify-between">
+                                <div>
+                                    <span class="bg-emerald-600 text-white font-extrabold text-[11px] uppercase px-3 py-0.5 rounded-full shadow-sm mb-1 inline-block">
+                                        ${gateInLabel}
+                                    </span>
+                                    <p class="text-[10px] text-emerald-800 font-semibold mb-2">${gateInSub}</p>
+                                </div>
+                                
+                                <div class="bg-white p-2.5 rounded-xl border border-emerald-300 shadow-inner mb-2 flex flex-col items-center">
+                                    <div id="qr-in-${index}" class="flex justify-center"></div>
+                                    <button type="button" onclick="downloadQrImage('qr-in-${index}', 'QR_${gateInCode}.png')" class="no-print mt-2 text-[9.5px] bg-slate-800 hover:bg-slate-900 text-white font-bold py-1 px-2.5 rounded-lg flex items-center gap-1 shadow-sm transition-all" title="Unduh gambar PNG barcode ini">
+                                        <span>📥</span> Unduh PNG
+                                    </button>
+                                </div>
+
+                                <div>
+                                    <span class="font-mono text-[11px] font-bold text-emerald-950 bg-emerald-200/70 px-2 py-0.5 rounded border border-emerald-400 block mb-1">
+                                        ${gateInCode}
+                                    </span>
+                                    <p class="text-[9.5px] text-emerald-700 font-medium">${gateInFooter}</p>
+                                </div>
+                            </div>
+
+                            <!-- Right Card (Gate-Out / Jumat) -->
+                            <div class="border-2 border-blue-500 rounded-xl p-3 bg-blue-50/40 flex flex-col items-center text-center justify-between">
+                                <div>
+                                    <span class="bg-blue-600 text-white font-extrabold text-[11px] uppercase px-3 py-0.5 rounded-full shadow-sm mb-1 inline-block">
+                                        ${gateOutLabel}
+                                    </span>
+                                    <p class="text-[10px] text-blue-800 font-semibold mb-2">${gateOutSub}</p>
+                                </div>
+
+                                <div class="bg-white p-2.5 rounded-xl border border-blue-300 shadow-inner mb-2 flex flex-col items-center">
+                                    <div id="qr-out-${index}" class="flex justify-center"></div>
+                                    <button type="button" onclick="downloadQrImage('qr-out-${index}', 'QR_${gateOutCode}.png')" class="no-print mt-2 text-[9.5px] bg-slate-800 hover:bg-slate-900 text-white font-bold py-1 px-2.5 rounded-lg flex items-center gap-1 shadow-sm transition-all" title="Unduh gambar PNG barcode ini">
+                                        <span>📥</span> Unduh PNG
+                                    </button>
+                                </div>
+
+                                <div>
+                                    <span class="font-mono text-[11px] font-bold text-blue-950 bg-blue-200/70 px-2 py-0.5 rounded border border-blue-400 block mb-1">
+                                        ${gateOutCode}
+                                    </span>
+                                    <p class="text-[9.5px] text-blue-700 font-medium">${gateOutFooter}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Petunjuk Pemindaian Siswa -->
+                        <div class="border border-slate-300 bg-slate-50 rounded-lg p-2.5 text-slate-700 text-[10px] leading-relaxed mb-2.5">
+                            <h4 class="font-bold text-slate-900 mb-1 flex items-center gap-1.5 text-[10.5px]">
+                                <span>ℹ️</span> PETUNJUK PENGGUNAAN UNTUK SISWA:
+                            </h4>
+                            <ol class="list-decimal list-inside space-y-0.5 text-[9.5px] text-slate-600 font-medium">
+                                ${instructionHtml}
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Footer Kartu -->
+                    <div class="border-t border-slate-200 pt-2 flex justify-between items-center text-[9px] text-slate-400">
+                        <span>Dokumen Resmi SMPN 1 Boyolangu • Dicetak pada ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                        <span class="font-mono">ID: SS-GATE-${item.specialType || 'CLASS'}-${item.name.replace(/\s+/g, '')}-${Date.now().toString().slice(-4)}</span>
+                    </div>
+                `;
+
+                container.appendChild(sheet);
+
+                // Generate QR Codes using local qrcode.min.js
+                setTimeout(() => {
+                    const elIn = document.getElementById(`qr-in-${index}`);
+                    const elOut = document.getElementById(`qr-out-${index}`);
+                    if (elIn && !elIn.hasChildNodes()) {
+                        new QRCode(elIn, {
+                            text: gateInCode,
+                            width: 155,
+                            height: 155,
+                            colorDark: gateInColor,
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                    }
+
+                    if (elOut && !elOut.hasChildNodes()) {
+                        new QRCode(elOut, {
+                            text: gateOutCode,
+                            width: 155,
+                            height: 155,
+                            colorDark: gateOutColor,
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                    }
+                }, 50);
+            });
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

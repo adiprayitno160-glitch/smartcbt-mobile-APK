@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- ================= TOP HERO GRADIENT HEADER ================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0A2E5C"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="#1E3A8A"
+                    android:gravity="center"
+                    android:text="📋"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="REKAP PRESENSI KELAS"
+                        android:textColor="#93C5FD"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDialogRecapTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:text="Buku Absensi Manual Rombel"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvDialogOfficerBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FEF3C7"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="👑 Pengurus"
+                    android:textColor="#B45309"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Pemberitahuan resmi verifikasi izin/sakit untuk pengurus kelas aktif"
+                android:textColor="#CBD5E1"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- ================= BODY CONTENT ================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Student Info Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F8FAFC"
+                android:padding="14dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvDialogStudentIcon"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="#EFF6FF"
+                    android:gravity="center"
+                    android:text="🤒"
+                    android:textSize="22sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvDialogStudentName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama Siswa"
+                        android:textColor="#0F172A"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvDialogClassName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#E2E8F0"
+                            android:paddingHorizontal="6dp"
+                            android:paddingVertical="2dp"
+                            android:text="Kelas VII-A"
+                            android:textColor="#334155"
+                            android:textSize="10.5sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDialogLeaveStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:background="#DCFCE7"
+                            android:paddingHorizontal="6dp"
+                            android:paddingVertical="2dp"
+                            android:text="✅ Izin Sakit Disetujui"
+                            android:textColor="#15803D"
+                            android:textSize="10.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Detailed Message Box -->
+            <TextView
+                android:id="@+id/tvDialogRecapMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="#FFFFFF"
+                android:lineSpacingMultiplier="1.2"
+                android:text="Teman sekelas Anda telah resmi diverifikasi Sakit oleh Wali Kelas. Silakan catat pada buku presensi kelas."
+                android:textColor="#334155"
+                android:textSize="12sp" />
+
+            <!-- Action Advice Card for Officer -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="#FFFBEB"
+                android:padding="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📌"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tugas Pengurus Kelas:"
+                        android:textColor="#B45309"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Pastikan status kehadiran teman Anda telah tercatat di Buku Absensi Manual Kelas agar data presensi fisik sinkron dengan portal sekolah."
+                        android:textColor="#92400E"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ================= BUTTONS ================= -->
+            <Button
+                android:id="@+id/btnConfirmManualRecap"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="18dp"
+                android:backgroundTint="#0A2E5C"
+                android:text="✅ Sudah Dicatat di Buku Absensi"
+                android:textColor="#FFFFFF"
+                android:textSize="12.5sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnDismissManualRecap"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginTop="4dp"
+                android:text="Nanti Saja (Tutup)"
+                android:textColor="#64748B"
+                android:textSize="11.5sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

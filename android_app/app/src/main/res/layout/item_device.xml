@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="4dp"
+    android:background="#16213E"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <!-- Device Icon -->
+    <TextView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="📱"
+        android:textSize="24sp"
+        android:background="#0F3460"
+        android:layout_gravity="center_vertical" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp">
+
+        <TextView
+            android:id="@+id/tvDeviceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Device Name"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvDeviceModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Brand Model"
+            android:textColor="#AAAAAA"
+            android:textSize="11sp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/tvDeviceOwner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="👤 Owner"
+            android:textColor="#E94560"
+            android:textSize="11sp"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/tvDeviceStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="● ONLINE"
+                android:textColor="#4CAF50"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDeviceFileCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📁 0 files"
+                android:textColor="#888888"
+                android:textSize="11sp"
+                android:paddingStart="12dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvDeviceLastSeen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⏱️ Last seen"
+            android:textColor="#666666"
+            android:textSize="10sp"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+</LinearLayout>

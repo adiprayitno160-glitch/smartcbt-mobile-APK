@@ -1,0 +1,1386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    android:orientation="vertical">
+
+    <!-- Top Colorful Gradient Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_biodata_header_gradient"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="16dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnBackBiodata"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#FFFFFF"
+            android:contentDescription="Kembali" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📑 Formulir Biodata Siswa"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvBiodataSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Buku Induk &amp; Verifikasi Berkas TU SMPN 1 Boyolangu"
+                android:textColor="#BAE6FD"
+                android:textSize="11.5sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnRefreshBiodata"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_popup_sync"
+            app:tint="#FFFFFF"
+            android:contentDescription="Refresh" />
+    </LinearLayout>
+
+    <!-- Status Banner Container (Pending, Approved, Rejected) -->
+    <LinearLayout
+        android:id="@+id/layoutStatusNotice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        android:background="#FEF3C7"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvStatusNoticeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⏳"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvStatusNoticeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: Menunggu Verifikasi TU"
+                android:textColor="#B45309"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvStatusNoticeDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data tersimpan di antrean validasi TU. Formulir belum disinkronkan."
+                android:textColor="#92400E"
+                android:textSize="10.5sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Multi-Step Wizard Indicator (Step 1 s/d Step 5) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        android:gravity="center"
+        android:elevation="1dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/stepTab1"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/circle_white_alpha"
+            android:backgroundTint="#2563EB"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/stepLine1"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:background="#E2E8F0" />
+
+        <TextView
+            android:id="@+id/stepTab2"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/circle_white_alpha"
+            android:backgroundTint="#E2E8F0"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="#64748B"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/stepLine2"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:background="#E2E8F0" />
+
+        <TextView
+            android:id="@+id/stepTab3"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/circle_white_alpha"
+            android:backgroundTint="#E2E8F0"
+            android:gravity="center"
+            android:text="3"
+            android:textColor="#64748B"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/stepLine3"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:background="#E2E8F0" />
+
+        <TextView
+            android:id="@+id/stepTab4"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/circle_white_alpha"
+            android:backgroundTint="#E2E8F0"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="#64748B"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/stepLine4"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:background="#E2E8F0" />
+
+        <TextView
+            android:id="@+id/stepTab5"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/circle_white_alpha"
+            android:backgroundTint="#E2E8F0"
+            android:gravity="center"
+            android:text="5"
+            android:textColor="#64748B"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ================= STEP 1: IDENTITAS PRIBADI SISWA ================= -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layoutStep1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="👤 Step 1: Identitas Pribadi Siswa"
+                        android:textColor="#0F172A"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Isi data diri siswa sesuai Kartu Keluarga (KK) &amp; Akta Kelahiran."
+                        android:textColor="#64748B"
+                        android:textSize="11.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Nama Lengkap Siswa *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/etStudentName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="#F8FAFC"
+                        android:padding="11dp"
+                        android:hint="Nama Lengkap Siswa"
+                        android:textSize="12.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="NISN Siswa (10 Digit) *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/etStudentNisn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="#F8FAFC"
+                        android:padding="11dp"
+                        android:hint="Contoh: 0081234567"
+                        android:inputType="number"
+                        android:textSize="12.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="NIK Siswa (16 Digit Sesuai KK) *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/etStudentNik"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="#F8FAFC"
+                        android:padding="11dp"
+                        android:hint="3504xxxxxxxxxxxx"
+                        android:inputType="number"
+                        android:textSize="12.5sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tempat Lahir *"
+                                android:textColor="#1E293B"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/etStudentPob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="#F8FAFC"
+                                android:padding="11dp"
+                                android:hint="Tulungagung"
+                                android:textSize="12.5sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tanggal Lahir *"
+                                android:textColor="#1E293B"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/etStudentDob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="#F8FAFC"
+                                android:padding="11dp"
+                                android:focusable="false"
+                                android:clickable="true"
+                                android:hint="YYYY-MM-DD"
+                                android:textSize="12.5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Jenis Kelamin *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <RadioGroup
+                        android:id="@+id/rgGender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/rbMale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Laki-laki"
+                            android:textSize="12.5sp" />
+                        <RadioButton
+                            android:id="@+id/rbFemale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="Perempuan"
+                            android:textSize="12.5sp" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Agama *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spReligion"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="4dp"
+                        android:background="#F8FAFC" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ================= STEP 2: ALAMAT & TEMPAT TINGGAL ================= -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layoutStep2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🏡 Step 2: Alamat &amp; Tempat Tinggal"
+                        android:textColor="#0F172A"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Alamat domisili tempat tinggal siswa saat ini."
+                        android:textColor="#64748B"
+                        android:textSize="11.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Alamat Jalan / Dusun *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/etAddressStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="#F8FAFC"
+                        android:padding="11dp"
+                        android:hint="Cth: Jl. Raya Boyolangu No. 45"
+                        android:textSize="12.5sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="RT *"
+                                android:textColor="#1E293B"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/etAddressRt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="#F8FAFC"
+                                android:padding="11dp"
+                                android:hint="02"
+                                android:inputType="number"
+                                android:textSize="12.5sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="RW *"
+                                android:textColor="#1E293B"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/etAddressRw"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="#F8FAFC"
+                                android:padding="11dp"
+                                android:hint="03"
+                                android:inputType="number"
+                                android:textSize="12.5sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.5"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Kode Pos"
+                                android:textColor="#1E293B"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/etAddressPostalCode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="#F8FAFC"
+                                android:padding="11dp"
+                                android:hint="66233"
+                                android:inputType="number"
+                                android:textSize="12.5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Desa / Kelurahan *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/etAddressVillage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="#F8FAFC"
+                        android:padding="11dp"
+                        android:hint="Cth: Boyolangu"
+                        android:textSize="12.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Kecamatan *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/etAddressDistrict"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="#F8FAFC"
+                        android:padding="11dp"
+                        android:hint="Cth: Boyolangu"
+                        android:textSize="12.5sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ================= STEP 3: DATA ORANG TUA & WALI ================= -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layoutStep3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="👨‍👩‍👧 Step 3: Data Orang Tua &amp; Wali"
+                        android:textColor="#0F172A"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Data Ayah Kandung dan Ibu Kandung (Status, Pekerjaan, &amp; Penghasilan Terpisah)."
+                        android:textColor="#64748B"
+                        android:textSize="11.5sp" />
+
+                    <!-- Bagian Ayah Kandung -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:background="#F8FAFC"
+                        android:padding="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="👨 Data Ayah Kandung"
+                            android:textColor="#1E3A8A"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Nama Ayah Kandung *"
+                            android:textColor="#1E293B"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                        <EditText
+                            android:id="@+id/etFatherName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:background="#FFFFFF"
+                            android:padding="10dp"
+                            android:hint="Nama Lengkap Ayah"
+                            android:textSize="12.5sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Status Ayah *"
+                            android:textColor="#1E293B"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                        <RadioGroup
+                            android:id="@+id/rgFatherStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+                            <RadioButton
+                                android:id="@+id/rbFatherAlive"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="Masih Hidup"
+                                android:textSize="12sp" />
+                            <RadioButton
+                                android:id="@+id/rbFatherDeceased"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="Sudah Meninggal"
+                                android:textSize="12sp" />
+                        </RadioGroup>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Pekerjaan Ayah"
+                            android:textColor="#1E293B"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                        <EditText
+                            android:id="@+id/etFatherJob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:background="#FFFFFF"
+                            android:padding="10dp"
+                            android:hint="Cth: Wiraswasta / Petani / PNS"
+                            android:textSize="12.5sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Penghasilan Ayah (Per Bulan)"
+                            android:textColor="#1E293B"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                        <EditText
+                            android:id="@+id/etFatherIncome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:background="#FFFFFF"
+                            android:padding="10dp"
+                            android:hint="Cth: Rp 3.000.000 - Rp 5.000.000"
+                            android:textSize="12.5sp" />
+                    </LinearLayout>
+
+                    <!-- Bagian Ibu Kandung -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:background="#FDF2F8"
+                        android:padding="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="👩 Data Ibu Kandung"
+                            android:textColor="#9D174D"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Nama Ibu Kandung *"
+                            android:textColor="#1E293B"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                        <EditText
+                            android:id="@+id/etMotherName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:background="#FFFFFF"
+                            android:padding="10dp"
+                            android:hint="Nama Lengkap Ibu"
+                            android:textSize="12.5sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Status Ibu *"
+                            android:textColor="#1E293B"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                        <RadioGroup
+                            android:id="@+id/rgMotherStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+                            <RadioButton
+                                android:id="@+id/rbMotherAlive"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="Masih Hidup"
+                                android:textSize="12sp" />
+                            <RadioButton
+                                android:id="@+id/rbMotherDeceased"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="Sudah Meninggal"
+                                android:textSize="12sp" />
+                        </RadioGroup>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Pekerjaan Ibu"
+                            android:textColor="#1E293B"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                        <EditText
+                            android:id="@+id/etMotherJob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:background="#FFFFFF"
+                            android:padding="10dp"
+                            android:hint="Cth: Ibu Rumah Tangga / Karyawan Swasta"
+                            android:textSize="12.5sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Penghasilan Ibu (Per Bulan)"
+                            android:textColor="#1E293B"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                        <EditText
+                            android:id="@+id/etMotherIncome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:background="#FFFFFF"
+                            android:padding="10dp"
+                            android:hint="Cth: Rp 2.000.000 / bln atau Tidak Berpenghasilan"
+                            android:textSize="12.5sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Nomor WhatsApp Orang Tua *"
+                        android:textColor="#1E293B"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/etParentPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="#F8FAFC"
+                        android:padding="11dp"
+                        android:hint="08xxxxxxxxxx"
+                        android:inputType="phone"
+                        android:textSize="12.5sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ================= STEP 4: DATA KESEJAHTERAAN ================= -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layoutStep4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💳 Step 4: Data Kesejahteraan &amp; Bantuan"
+                        android:textColor="#0F172A"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Opsional: Default 'Tidak Punya'. Jika memiliki kartu bantuan, klik opsi di bawah."
+                        android:textColor="#64748B"
+                        android:textSize="11.5sp" />
+
+                    <RadioGroup
+                        android:id="@+id/rgAssistanceStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/rbNoAssistance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="❌ Tidak Memiliki Kartu Bantuan Sosial (Default)"
+                            android:textColor="#334155"
+                            android:textSize="12.5sp" />
+
+                        <RadioButton
+                            android:id="@+id/rbHasAssistance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="✅ Memiliki Kartu Bantuan Sosial / Prasejahtera"
+                            android:textColor="#0F766E"
+                            android:textSize="12.5sp"
+                            android:textStyle="bold" />
+                    </RadioGroup>
+
+                    <!-- Form Detail Bantuan (Muncul hanya jika rbHasAssistance dipilih) -->
+                    <LinearLayout
+                        android:id="@+id/layoutAssistanceDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="#F0FDF4"
+                        android:padding="14dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pilih Jenis Kartu / Bantuan Sosial *"
+                            android:textColor="#166534"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spAssistanceType"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="4dp"
+                            android:background="#FFFFFF" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Nomor Kartu Bantuan *"
+                            android:textColor="#166534"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/etAssistanceNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:background="#FFFFFF"
+                            android:padding="10dp"
+                            android:hint="Cth: Nomor KIP / PKH / KKS"
+                            android:textSize="12.5sp" />
+
+                        <!-- Upload Card Berkas Bantuan -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Unggah Scan / Foto Kartu Bantuan (PDF / Gambar) *"
+                            android:textColor="#166534"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:background="#FFFFFF"
+                            android:padding="12dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/ivBantuanPreview"
+                                    android:layout_width="52dp"
+                                    android:layout_height="52dp"
+                                    android:background="#DCFCE7"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_journal_book"
+                                    android:contentDescription="Preview Kartu Bantuan" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvBantuanFileName"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Belum ada berkas dipilih"
+                                        android:textColor="#475569"
+                                        android:textSize="11.5sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvBantuanStatusBadge"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:text="Wajib jika punya kartu"
+                                        android:textColor="#15803D"
+                                        android:textSize="10.5sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- 2 Tombol Aksi: Ambil Foto & Pilih Berkas -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnCameraBantuan"
+                                    android:layout_width="0dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_btn_camera_action"
+                                    android:text="📸 Ambil Foto"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="8dp"
+                                    android:layout_height="1dp" />
+
+                                <Button
+                                    android:id="@+id/btnUploadBantuan"
+                                    android:layout_width="0dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_btn_file_action"
+                                    android:text="📁 Pilih Berkas"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ================= STEP 5: UPLOAD BERKAS DOKUMEN ================= -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layoutStep5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📄 Step 5: Upload Berkas Dokumen"
+                        android:textColor="#0F172A"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Unggah Kartu Keluarga (KK), Akta Kelahiran, dan Kartu Prasejahtera (Ambil Foto langsung atau Pilih Berkas)."
+                        android:textColor="#64748B"
+                        android:textSize="11.5sp" />
+
+                    <!-- Berkas 1: Kartu Keluarga (KK) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="#F1F5F9"
+                        android:padding="14dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/ivKkPreview"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="#E2E8F0"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_journal_book"
+                                android:contentDescription="Preview KK" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Kartu Keluarga (KK) *"
+                                    android:textColor="#0F172A"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvKkFileName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Belum ada berkas dipilih"
+                                    android:textColor="#64748B"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvKkStatusBadge"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="Wajib diunggah"
+                                    android:textColor="#DC2626"
+                                    android:textSize="10.5sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Dua Tombol: Ambil Foto & Pilih Berkas -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btnCameraKk"
+                                android:layout_width="0dp"
+                                android:layout_height="38dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_btn_camera_action"
+                                android:text="📸 Ambil Foto"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/btnUploadKk"
+                                android:layout_width="0dp"
+                                android:layout_height="38dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_btn_file_action"
+                                android:text="📁 Pilih Berkas"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Berkas 2: Akta Kelahiran -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:background="#F1F5F9"
+                        android:padding="14dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/ivAktaPreview"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="#E2E8F0"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_journal_book"
+                                android:contentDescription="Preview Akta" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Akta Kelahiran Siswa *"
+                                    android:textColor="#0F172A"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvAktaFileName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Belum ada berkas dipilih"
+                                    android:textColor="#64748B"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvAktaStatusBadge"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="Wajib diunggah"
+                                    android:textColor="#DC2626"
+                                    android:textSize="10.5sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Dua Tombol: Ambil Foto & Pilih Berkas -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btnCameraAkta"
+                                android:layout_width="0dp"
+                                android:layout_height="38dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_btn_camera_action"
+                                android:text="📸 Ambil Foto"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/btnUploadAkta"
+                                android:layout_width="0dp"
+                                android:layout_height="38dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_btn_file_action"
+                                android:text="📁 Pilih Berkas"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Berkas 3: Kartu Prasejahtera / KIP (Opsional, Sinkron dari Step 4) -->
+                    <LinearLayout
+                        android:id="@+id/layoutStep5Bantuan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:background="#F0FDF4"
+                        android:padding="14dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/ivStep5BantuanPreview"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="#DCFCE7"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_journal_book"
+                                android:contentDescription="Preview Kartu Bantuan" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvStep5BantuanTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Kartu Bantuan Sosial (KIP / PKH)"
+                                    android:textColor="#166534"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvStep5BantuanFileName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Belum ada berkas dipilih"
+                                    android:textColor="#475569"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Dua Tombol: Ambil Foto & Pilih Berkas -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btnCameraStep5Bantuan"
+                                android:layout_width="0dp"
+                                android:layout_height="38dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_btn_camera_action"
+                                android:text="📸 Ambil Foto"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/btnUploadStep5Bantuan"
+                                android:layout_width="0dp"
+                                android:layout_height="38dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_btn_file_action"
+                                android:text="📁 Pilih Berkas"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Bottom Navigation Bar: Tombol Presisi Sebelumnya & Selanjutnya / Kirim ke TU -->
+            <LinearLayout
+                android:id="@+id/layoutBottomNav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnPrevStep"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#E2E8F0"
+                    android:text="‹ Sebelumnya"
+                    android:textColor="#334155"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/spaceNav"
+                    android:layout_width="12dp"
+                    android:layout_height="1dp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnNextStep"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#2563EB"
+                    android:text="Lanjut ke Step 2 ›"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#F8FAFC">
+
+    <!-- Modern Header Banner -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1E3A8A"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivDialogAdminIcon"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:src="@drawable/ic_helpdesk_admin"
+                app:tint="#93C5FD" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDialogAdminTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pusat Bantuan &amp; Pengaduan"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDialogAdminSub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Tiket pengaduan langsung diterima oleh Tim IT / Admin Sekolah."
+                    android:textColor="#BFDBFE"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Content Form -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <!-- Category Selector -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📌 Pilih Jenis Kendala / Topik:"
+            android:textColor="#334155"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_dialog_input"
+            android:paddingHorizontal="10dp">
+
+            <Spinner
+                android:id="@+id/spinnerDialogAdminCategory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:spinnerMode="dropdown" />
+        </FrameLayout>
+
+        <!-- Message Description -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="📝 Rincian Masalah / Pesan Pengaduan:"
+            android:textColor="#334155"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etDialogAdminDescription"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_dialog_input"
+            android:gravity="top|start"
+            android:hint="Tuliskan kendala Anda secara lengkap (soal tidak muncul, nilai belum sinkron, presensi gagal, dll)..."
+            android:padding="12dp"
+            android:textColor="#1E293B"
+            android:textColorHint="#94A3B8"
+            android:textSize="12sp" />
+
+        <!-- Info Box Tip -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="#EFF6FF"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💡"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Laporan Anda otomatis menyertakan identitas akun dan tipe perangkat agar admin dapat menangani lebih cepat."
+                android:textColor="#1E40AF"
+                android:textSize="10.5sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

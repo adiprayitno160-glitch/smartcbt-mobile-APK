@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F5F9"
+    android:orientation="vertical">
+
+    <!-- Modern Emerald Gradient Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_gatepass"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="20dp"
+        android:elevation="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnBackExitPass"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_header_button_circle"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="#FFFFFF"
+            android:contentDescription="Kembali" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Digital Gatepass BK"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="#26FFFFFF"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:text="SIAKAD RESMI"
+                    android:textColor="#A7F3D0"
+                    android:textSize="9.5sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Izin Meninggalkan Sekolah • Meja BK &amp; Pos Satpam"
+                android:textColor="#D1FAE5"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnRefreshExitPass"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_header_button_circle"
+            android:src="@drawable/ic_refresh"
+            app:tint="#FFFFFF"
+            android:contentDescription="Refresh" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ================= STATE 1: FORM PENGAJUAN IZIN ================= -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardFormApply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="#FFFFFF"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📝 Formulir Pengajuan Izin Meninggalkan Sekolah"
+                        android:textColor="#0F172A"
+                        android:textSize="14.5sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Pilih alasan izin secara jujur. Pengajuan akan langsung diteruskan ke Guru BK kelas Anda."
+                        android:textColor="#64748B"
+                        android:textSize="11.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Jenis Izin *"
+                        android:textColor="#1E293B"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/rgLeaveType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp">
+
+                        <RadioButton
+                            android:id="@+id/rbSakitPulang"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="🤒 Sakit Pulang (Perlu Istirahat / Berobat)"
+                            android:checked="true"
+                            android:textSize="12.5sp"
+                            android:textColor="#1E293B" />
+
+                        <RadioButton
+                            android:id="@+id/rbIzinMendesak"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="⚠️ Izin Pulang Mendesak (Kepentingan Keluarga)"
+                            android:textSize="12.5sp"
+                            android:textColor="#1E293B" />
+
+                        <RadioButton
+                            android:id="@+id/rbDispensasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="🏆 Dispensasi Lomba / Kegiatan Resmi Sekolah"
+                            android:textSize="12.5sp"
+                            android:textColor="#1E293B" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tvLabelEventName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Nama Lomba / Kegiatan (Opsional)"
+                        android:textColor="#1E293B"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/etEventName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_input_field"
+                        android:padding="12dp"
+                        android:hint="Cth: O2SN Tingkat Kabupaten / Jambore"
+                        android:textColor="#0F172A"
+                        android:textColorHint="#94A3B8"
+                        android:textSize="12.5sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Alasan / Deskripsi Lengkap *"
+                        android:textColor="#1E293B"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etReason"
+                        android:layout_width="match_parent"
+                        android:layout_height="86dp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="top|start"
+                        android:background="@drawable/bg_input_field"
+                        android:padding="12dp"
+                        android:hint="Jelaskan alasan izin Anda secara jelas..."
+                        android:textColor="#0F172A"
+                        android:textColorHint="#94A3B8"
+                        android:textSize="12.5sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Nama Penjemput / Keluarga (Jika Dijemput)"
+                        android:textColor="#1E293B"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etPickupPerson"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_input_field"
+                        android:padding="12dp"
+                        android:hint="Cth: Ibu Kandung / Ayah / Kakak (atau Mandiri)"
+                        android:textColor="#0F172A"
+                        android:textColorHint="#94A3B8"
+                        android:textSize="12.5sp" />
+
+                    <Button
+                        android:id="@+id/btnSubmitLeave"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="20dp"
+                        android:backgroundTint="#059669"
+                        android:text="📤 Ajukan Permohonan ke Guru BK"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="12dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ================= STATE 2: STATUS AKTIF & VERIFIKASI DUA LANGKAH ================= -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardActiveStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="#FFFFFF"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Status Header Banner -->
+                    <LinearLayout
+                        android:id="@+id/layoutStatusBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#FEF3C7"
+                        android:padding="16dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvStatusIcon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="#FFFFFF"
+                            android:gravity="center"
+                            android:text="⏳"
+                            android:textSize="20sp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvStatusTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Menunggu Persetujuan Guru BK"
+                                android:textColor="#92400E"
+                                android:textSize="13.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatusSubtitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pengajuan Anda sedang ditinjau. Tombol scan meja BK terkunci."
+                                android:textColor="#B45309"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Detail Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/tvActiveLeaveType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#EFF6FF"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:text="Tipe Izin: Sakit Pulang"
+                            android:textColor="#1D4ED8"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvActiveReason"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Alasan: Demam dan pusing tidak bisa mengikuti pelajaran"
+                            android:textColor="#334155"
+                            android:textSize="12.5sp" />
+
+                        <TextView
+                            android:id="@+id/tvActivePickup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Penjemput: Orang Tua"
+                            android:textColor="#64748B"
+                            android:textSize="11.5sp" />
+
+                        <TextView
+                            android:id="@+id/tvCounselorNotes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="#F0FDF4"
+                            android:padding="10dp"
+                            android:text="Catatan BK: Disetujui, silakan menuju ruang BK."
+                            android:textColor="#166534"
+                            android:textSize="11.5sp"
+                            android:visibility="gone" />
+
+                        <!-- Tombol Scan Meja BK (Locked vs Active State) -->
+                        <Button
+                            android:id="@+id/btnScanBkStation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:backgroundTint="#94A3B8"
+                            android:enabled="false"
+                            android:text="🔒 Pemindai QR Meja BK Terkunci (Menunggu Approve BK)"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12.5sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/btnCheckApprovalStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="🔄 Periksa Status Persetujuan BK"
+                            android:textColor="#334155"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ================= STATE 3: DIGITAL EXIT PASS (TIKET HIJAU SATPAM) ================= -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardDigitalExitPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#10B981"
+                android:visibility="gone"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:gravity="center_horizontal">
+
+                    <!-- Watermark Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🛡️ SMPN 1 BOYOLANGU"
+                            android:textColor="#D1FAE5"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#065F46"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
+                            android:text="SIAKAD BK RESMI"
+                            android:textColor="#A7F3D0"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DIGITAL GATEPASS"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Surat Izin Resmi Meninggalkan Lingkungan Sekolah"
+                        android:textColor="#D1FAE5"
+                        android:textSize="11.5sp" />
+
+                    <!-- Live Dynamic Clock & Countdown -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="#064E3B"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="6dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⏰ JAM SAH: "
+                            android:textColor="#A7F3D0"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvExitPassLiveClock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10:15:30 WIB"
+                            android:textColor="#FDE047"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="monospace" />
+                    </LinearLayout>
+
+                    <!-- 45-Minute Countdown Timer Box -->
+                    <LinearLayout
+                        android:id="@+id/layoutCountdownTimer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="#047857"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="8dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⏳ SISA WAKTU CHECKOUT GERBANG SATPAM:"
+                            android:textColor="#D1FAE5"
+                            android:textSize="10.5sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvExitPassCountdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="45:00 Menit Tersisa"
+                            android:textColor="#FEF08A"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:fontFamily="monospace" />
+                    </LinearLayout>
+
+                    <!-- Student Avatar / Photo -->
+                    <FrameLayout
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:layout_marginTop="16dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="84dp"
+                            android:layout_height="84dp"
+                            app:cardCornerRadius="42dp"
+                            app:cardElevation="4dp"
+                            app:cardBackgroundColor="#FFFFFF">
+
+                            <ImageView
+                                android:id="@+id/ivExitPassStudentPhoto"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_avatar_placeholder"
+                                android:contentDescription="Foto Siswa" />
+                        </androidx.cardview.widget.CardView>
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tvExitPassStudentName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Nama Siswa"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvExitPassStudentClass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kelas VII-A • NISN: 12345678"
+                        android:textColor="#D1FAE5"
+                        android:textSize="12sp" />
+
+                    <!-- Pass Verification Details -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="#FFFFFF"
+                        android:padding="14dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Jenis Izin"
+                                android:textColor="#64748B"
+                                android:textSize="11.5sp" />
+                            <TextView
+                                android:id="@+id/tvExitPassType"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sakit Pulang"
+                                android:textColor="#059669"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Alasan"
+                                android:textColor="#64748B"
+                                android:textSize="11.5sp" />
+                            <TextView
+                                android:id="@+id/tvExitPassReason"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Demam Tinggi"
+                                android:textColor="#0F172A"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Penjemput"
+                                android:textColor="#64748B"
+                                android:textSize="11.5sp" />
+                            <TextView
+                                android:id="@+id/tvExitPassPickup"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ibu Kandung"
+                                android:textColor="#0F172A"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Lokasi Checkout"
+                                android:textColor="#64748B"
+                                android:textSize="11.5sp" />
+                            <TextView
+                                android:id="@+id/tvExitPassStation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Meja Konseling BK 1"
+                                android:textColor="#0F172A"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Waktu Checkout"
+                                android:textColor="#64748B"
+                                android:textSize="11.5sp" />
+                            <TextView
+                                android:id="@+id/tvExitPassCheckoutTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10:14 WIB"
+                                android:textColor="#0F172A"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="8dp"
+                            android:background="#E2E8F0" />
+
+                        <!-- QR / Barcode for Satpam -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="200dp"
+                                android:layout_height="200dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="2dp"
+                                app:cardBackgroundColor="#FFFFFF"
+                                android:layout_marginVertical="8dp">
+
+                                <ImageView
+                                    android:id="@+id/ivExitPassQrBitmap"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:padding="8dp"
+                                    android:scaleType="fitCenter"
+                                    android:contentDescription="QR Code Checkout Satpam" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:id="@+id/tvExitPassQrPayload"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="*GP-CHK-TOKEN*"
+                                android:fontFamily="monospace"
+                                android:textColor="#059669"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Tunjukkan QR Token sekali pakai ini ke Petugas Satpam di Pintu Gerbang"
+                                android:textColor="#64748B"
+                                android:textSize="10.5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="✅ Jurnal KBM Jam Sisa Otomatis Ter-update &amp; Presensi GATE_OUT Tercatat"
+                        android:textColor="#D1FAE5"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

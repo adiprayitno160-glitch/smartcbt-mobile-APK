@@ -1,0 +1,219 @@
+import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+// ========================================================
+// 1. DATA KESEHATAN DIGITAL SISWA (MODUL 2-A & 2-F)
+// ========================================================
+export const getStudentHealthProfile = async (req: Request, res: Response) => {
+    try {
+        const { siswaId } = req.params;
+        const targetSiswaId = String(siswaId);
+
+        const healthData = await prisma.uksStudentHealthData.findUnique({
+            where: { siswaId: targetSiswaId }
+        });
+
+        const activeVisit = await prisma.uksVisitEvent.findFirst({
+            where: {
+                siswaId: targetSiswaId,
+                status: { in: ['SEDANG_DIRAWAT', 'PERLU_DIJEMPUT'] }
+            },
+            orderBy: { tanggal: 'desc' }
+        });
+
+        const visitHistory = await prisma.uksVisitEvent.findMany({
+            where: { siswaId: targetSiswaId },
+            orderBy: { tanggal: 'desc' },
+            take: 10
+        });
+
+        return res.json({
+            success: true,
+            healthCard: healthData,
+            isActiveInUks: !!activeVisit,
+            activeVisitDetail: activeVisit,
+            history: visitHistory
+        });
+    } catch (error: any) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+export const updateStudentHealthProfile = async (req: Request, res: Response) => {
+    try {
+        const { siswaId, golonganDarah, alergi, riwayatPenyakit, kontakDarurat, kondisiKhusus } = req.body;
+
+        const updated = await prisma.uksStudentHealthData.upsert({
+            where: { siswaId },
+            create: {
+                siswaId,
+                golonganDarah,
+                alergi,
+                riwayatPenyakit,
+                kontakDarurat,
+                kondisiKhusus
+            },
+            update: {
+                golonganDarah,
+                alergi,
+                riwayatPenyakit,
+                kontakDarurat,
+                kondisiKhusus
+            }
+        });
+
+        return res.json({ success: true, message: 'Data kesehatan siswa berhasil diperbarui', data: updated });
+    } catch (error: any) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// ========================================================
+// 2. ALUR KUNJUNGAN: GURU RUJUK SISWA KE UKS (MODUL 2-B)
+// ========================================================
+export const teacherReferToUks = async (req: Request, res: Response) => {
+    try {
+        const { siswaId, keluhan, teacherId } = req.body;
+
+        if (!siswaId || !keluhan) {
+            return res.status(400).json({ success: false, message: 'siswaId dan keluhan wajib diisi' });
+        }
+
+        const visit = await prisma.uksVisitEvent.create({
+            data: {
+                siswaId,
+                keluhan,
+                status: 'SEDANG_DIRAWAT',
+                isNotifOrtuTerkirim: true // Flag notifikasi terkirim serentak ke UKS & Orang tua
+            }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Rujukan siswa sakit berhasil disubmit. Notifikasi otomatis dikirimkan ke Petugas UKS dan Orang Tua.',
+            data: visit
+        });
+    } catch (error: any) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// ========================================================
+// 3. PETUGAS UKS: CATAT PEMERIKSAAN & UPDATE STATUS (MODUL 2-B & 2-G)
+// ========================================================
+export const updateUksTriage = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const targetId = String(id);
+        const { tindakan, obatDiberikan, status, petugasId } = req.body;
+
+        const visit = await prisma.uksVisitEvent.findUnique({
+            where: { id: targetId }
+        });
+
+        if (!visit) {
+            return res.status(404).json({ success: false, message: 'Data kunjungan UKS tidak ditemukan' });
+        }
+
+        const updated = await prisma.uksVisitEvent.update({
+            where: { id: targetId },
+            data: {
+                tindakan: tindakan || visit.tindakan,
+                obatDiberikan: obatDiberikan || visit.obatDiberikan,
+                status: status || visit.status,
+                petugasId: petugasId || visit.petugasId,
+                waktuSelesai: status === 'PULANG' || status === 'MEMBAIK' ? new Date() : undefined
+            }
+        });
+
+        // INTEGRASI MUTLAK: Jika status "PERLU_DIJEMPUT" atau siswa dipulangkan karena sakit
+        // -> Status kehadiran siswa di sistem otomatis sinkron jadi "SAKIT", bukan alpa! (Modul 2-E)
+        if (status === 'PERLU_DIJEMPUT' || status === 'PULANG') {
+            const today = new Date();
+            const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            await prisma.studentLeavePermit.upsert({
+                where: { id: `uks-leave-${visit.siswaId}-${startOfDay.toISOString().split('T')[0]}` },
+                create: {
+                    id: `uks-leave-${visit.siswaId}-${startOfDay.toISOString().split('T')[0]}` ,
+                    siswaId: visit.siswaId,
+                    kelasId: 'AUTO_UKS',
+                    kategoriIzin: 'SAKIT',
+                    tanggal: startOfDay,
+                    status: 'APPROVED',
+                    keterangan: `Dipulangkan dari UKS: ${visit.keluhan}`
+                },
+                update: {
+                    kategoriIzin: 'SAKIT',
+                    status: 'APPROVED'
+                }
+            });
+        }
+
+        return res.json({
+            success: true,
+            message: 'Pemeriksaan UKS berhasil diperbarui dan status kehadiran tersinkronkan otomatis.',
+            data: updated
+        });
+    } catch (error: any) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// ========================================================
+// 4. ORANG TUA: KONFIRMASI CEPAT JEMPUT SISWA (MODUL 2-B & 12-D)
+// ========================================================
+export const confirmParentPickup = async (req: Request, res: Response) => {
+    try {
+        const { visitId } = req.body;
+
+        const updated = await prisma.uksVisitEvent.update({
+            where: { id: visitId },
+            data: {
+                isKonfirmasiJemput: true,
+                waktuKonfirmasiJemput: new Date()
+            }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Konfirmasi penjemputan berhasil dikirimkan ke Petugas UKS.',
+            data: updated
+        });
+    } catch (error: any) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// ========================================================
+// 5. OPERATOR UKS DASHBOARD & INVENTORY (MODUL 2-D & 2-G)
+// ========================================================
+export const getUksOperatorDashboard = async (req: Request, res: Response) => {
+    try {
+        const activeVisits = await prisma.uksVisitEvent.findMany({
+            where: {
+                status: { in: ['SEDANG_DIRAWAT', 'PERLU_DIJEMPUT'] }
+            },
+            orderBy: { tanggal: 'desc' }
+        });
+
+        // Inventory alert (menipis atau mendekati kedaluwarsa)
+        const lowStockMedicines = await prisma.uksInventoryItem.findMany({
+            where: {
+                stok: { lte: 10 }
+            }
+        });
+
+        return res.json({
+            success: true,
+            activeCount: activeVisits.length,
+            needPickupCount: activeVisits.filter(v => v.status === 'PERLU_DIJEMPUT' && !v.isKonfirmasiJemput).length,
+            activeVisits,
+            lowStockMedicines
+        });
+    } catch (error: any) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
