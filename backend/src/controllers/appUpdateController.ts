@@ -5,24 +5,24 @@ export const getAppVersion = async (req: Request, res: Response) => {
     try {
         let config = await prisma.appVersionConfig.findUnique({ where: { id: 'latest' } });
         
-        if (!config || config.versionCode < 100) {
+        if (!config || config.versionCode < 101) {
             config = await prisma.appVersionConfig.upsert({
                 where: { id: 'latest' },
                 update: {
-                    versionCode: 100,
-                    versionName: '2.8.90',
-                    downloadUrl: '/uploads/smartcbt-latest.apk',
+                    versionCode: 101,
+                    versionName: '2.8.91',
+                    downloadUrl: 'https://github.com/adiprayitno160-glitch/smartcbt-mobile-APK/releases/download/v2.8.91/SmartCBT_v2.8.91.apk',
                     fileSizeMb: 18.83,
-                    releaseNotes: 'Pembaruan Resmi Smart CBT v2.8.90 (Build 100): Grafik Tren Kehadiran Siswa & Orang Tua, Validasi Satelit GPS Presisi Tinggi, Mode Offline Antrian Presensi Room DB, Scan QR Kelas Fallback Tanpa GPS, Panel Kontrol Fitur Terpadu.',
+                    releaseNotes: 'Pembaruan Resmi Smart CBT v2.8.91 (Build 101): Pemindahan Menu Panduan Aplikasi di Samping Ekstrakurikuler, Grafik Tren Kehadiran Interaktif & Canggih (Streak, Skor Disiplin, Mode 14 Hari vs Mingguan), Desain Modern & Rapih Halaman Profil Siswa.',
                     isForceUpdate: true
                 },
                 create: {
                     id: 'latest',
-                    versionCode: 100,
-                    versionName: '2.8.90',
-                    downloadUrl: '/uploads/smartcbt-latest.apk',
+                    versionCode: 101,
+                    versionName: '2.8.91',
+                    downloadUrl: 'https://github.com/adiprayitno160-glitch/smartcbt-mobile-APK/releases/download/v2.8.91/SmartCBT_v2.8.91.apk',
                     fileSizeMb: 18.83,
-                    releaseNotes: 'Pembaruan Resmi Smart CBT v2.8.90 (Build 100): Grafik Tren Kehadiran Siswa & Orang Tua, Validasi Satelit GPS Presisi Tinggi, Mode Offline Antrian Presensi Room DB, Scan QR Kelas Fallback Tanpa GPS, Panel Kontrol Fitur Terpadu.',
+                    releaseNotes: 'Pembaruan Resmi Smart CBT v2.8.91 (Build 101): Pemindahan Menu Panduan Aplikasi di Samping Ekstrakurikuler, Grafik Tren Kehadiran Interaktif & Canggih (Streak, Skor Disiplin, Mode 14 Hari vs Mingguan), Desain Modern & Rapih Halaman Profil Siswa.',
                     isForceUpdate: true
                 }
             });

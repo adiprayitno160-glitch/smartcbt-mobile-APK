@@ -1011,9 +1011,9 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Menu: e-Voting OSIS (Feature Toggle) -->
+                        <!-- Menu: Panduan Aplikasi (Bersebelahan dengan Ekstrakurikuler) -->
                         <LinearLayout
-                            android:id="@+id/gridMenuEvoting"
+                            android:id="@+id/gridMenuPanduan"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -1021,18 +1021,17 @@
                             android:focusable="true"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="6dp"
-                            android:visibility="gone">
+                            android:padding="6dp">
 
                             <LinearLayout
                                 android:layout_width="52dp"
                                 android:layout_height="52dp"
-                                android:background="@drawable/bg_icon_indigo"
+                                android:background="@drawable/bg_icon_blue"
                                 android:gravity="center">
                                 <ImageView
                                     android:layout_width="26dp"
                                     android:layout_height="26dp"
-                                    android:src="@drawable/ic_vote_ballot"
+                                    android:src="@drawable/ic_menu_panduan"
                                     app:tint="#FFFFFF" />
                             </LinearLayout>
 
@@ -1040,14 +1039,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
-                                android:text="e-Voting OSIS"
-                                android:textColor="#4F46E5"
+                                android:text="Panduan Aplikasi"
+                                android:textColor="#0284C7"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Grid Row 5: Guru Piket, Cek Update & Panduan Aplikasi -->
+                    <!-- Grid Row 5: Cek Update APK, Guru Piket & e-Voting OSIS -->
                     <LinearLayout
                         android:id="@+id/layoutRow5Grid"
                         android:layout_width="match_parent"
@@ -1055,6 +1054,40 @@
                         android:layout_marginTop="8dp"
                         android:orientation="horizontal"
                         android:weightSum="3">
+
+                        <!-- Menu: Cek Update APK -->
+                        <LinearLayout
+                            android:id="@+id/gridMenuUpdate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <LinearLayout
+                                android:layout_width="52dp"
+                                android:layout_height="52dp"
+                                android:background="@drawable/bg_icon_teal"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="26dp"
+                                    android:layout_height="26dp"
+                                    android:src="@drawable/ic_system_update"
+                                    app:tint="#FFFFFF" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Cek Update"
+                                android:textColor="#0F766E"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
                         <!-- Menu: Jadwal Guru Piket (Khusus Pengurus Kelas) -->
                         <LinearLayout
@@ -1091,9 +1124,9 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Menu: Cek Update APK -->
+                        <!-- Menu: e-Voting OSIS (Feature Toggle) -->
                         <LinearLayout
-                            android:id="@+id/gridMenuUpdate"
+                            android:id="@+id/gridMenuEvoting"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -1101,17 +1134,18 @@
                             android:focusable="true"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="6dp">
+                            android:padding="6dp"
+                            android:visibility="gone">
 
                             <LinearLayout
                                 android:layout_width="52dp"
                                 android:layout_height="52dp"
-                                android:background="@drawable/bg_icon_teal"
+                                android:background="@drawable/bg_icon_indigo"
                                 android:gravity="center">
                                 <ImageView
                                     android:layout_width="26dp"
                                     android:layout_height="26dp"
-                                    android:src="@drawable/ic_system_update"
+                                    android:src="@drawable/ic_vote_ballot"
                                     app:tint="#FFFFFF" />
                             </LinearLayout>
 
@@ -1119,42 +1153,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
-                                android:text="Cek Update"
-                                android:textColor="#1E293B"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <!-- Menu: Panduan Aplikasi -->
-                        <LinearLayout
-                            android:id="@+id/gridMenuPanduan"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:padding="6dp">
-
-                            <LinearLayout
-                                android:layout_width="52dp"
-                                android:layout_height="52dp"
-                                android:background="@drawable/bg_icon_blue"
-                                android:gravity="center">
-                                <ImageView
-                                    android:layout_width="26dp"
-                                    android:layout_height="26dp"
-                                    android:src="@drawable/ic_menu_panduan"
-                                    app:tint="#FFFFFF" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:text="Panduan Aplikasi"
-                                android:textColor="#0284C7"
+                                android:text="e-Voting OSIS"
+                                android:textColor="#4F46E5"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -1539,189 +1539,726 @@
         </LinearLayout>
     </ScrollView>
 
-        <!-- ================= PAGE 4: PROFIL SAYA (DASHBOARD-MATCHING) ================= -->
+        <!-- ================= PAGE 4: PROFIL SAYA (MODERN & MINIMALIS) ================= -->
         <ScrollView
             android:id="@+id/pageProfile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
+            android:background="#F8FAFC"
             android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="96dp">
 
-                <!-- Header Hero Banner (Matching Dashboard) -->
-                <LinearLayout
+                <!-- 1. Hero Card: Modern Gradient Header -->
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_profile_card"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="3dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:background="@drawable/bg_profile_card"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="22dp">
 
-                        <ImageView
-                            android:id="@+id/ivProfileAvatar"
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:src="@drawable/ic_default_avatar" />
+                        <!-- Avatar with Change Photo overlay -->
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                            <!-- Avatar Frame -->
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardAvatarFrame"
+                                android:layout_width="76dp"
+                                android:layout_height="76dp"
+                                app:cardCornerRadius="38dp"
+                                app:cardElevation="2dp"
+                                app:cardBackgroundColor="#FFFFFF">
+
+                                <ImageView
+                                    android:id="@+id/ivProfileAvatar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_default_avatar" />
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Camera Edit Badge -->
+                            <LinearLayout
+                                android:id="@+id/btnChangePhoto"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_alignEnd="@id/cardAvatarFrame"
+                                android:layout_alignBottom="@id/cardAvatarFrame"
+                                android:background="@drawable/bg_badge_emerald"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/ic_camera_scan"
+                                    app:tint="#FFFFFF" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <!-- Student Name -->
+                        <TextView
+                            android:id="@+id/tvProfName"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:text="Nama Lengkap Siswa"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/tvProfName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Nama Lengkap Siswa"
-                                android:textColor="#FFFFFF"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                        <!-- Badges: NISN & Class -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/tvProfNisn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="NISN: 131412082"
-                                android:textColor="#BBDEFB"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/tvProfClass"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="#1E88E5"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="4dp"
-                            android:text="Kelas VII-A"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Change Photo Action inside Banner -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:id="@+id/btnChangePhoto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="#26FFFFFF"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="6dp">
+                                android:background="#26FFFFFF"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="NISN: -"
+                                android:textColor="#E2E8F0"
+                                android:textSize="11.5sp" />
 
                             <TextView
+                                android:id="@+id/tvProfClass"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ganti Foto Profil"
-                                android:textColor="#FFFFFF"
-                                android:textSize="11sp"
+                                android:layout_marginStart="8dp"
+                                android:background="#38BDF8"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="Kelas: -"
+                                android:textColor="#0F172A"
+                                android:textSize="11.5sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
+                        <!-- Action Pills: Kartu QR & Data Diri -->
                         <LinearLayout
-                            android:id="@+id/btnViewStudentIdCard"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:background="#40FFFFFF"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="6dp">
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
-                            <TextView
+                            <LinearLayout
+                                android:id="@+id/btnViewStudentIdCard"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Kartu QR"
-                                android:textColor="#FFFFFF"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
+                                android:background="#33FFFFFF"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="14dp"
+                                android:paddingVertical="7dp">
 
-                        <LinearLayout
-                            android:id="@+id/btnViewStudentBiodata"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:background="#40FFFFFF"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="6dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="💳  Kartu QR"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
 
-                            <TextView
+                            <LinearLayout
+                                android:id="@+id/btnViewStudentBiodata"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="📋 Data Diri"
-                                android:textColor="#FFFFFF"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
+                                android:layout_marginStart="10dp"
+                                android:background="#33FFFFFF"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="14dp"
+                                android:paddingVertical="7dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="📋  Data Diri"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-                <LinearLayout
+                <!-- 2. Biodata Siswa Entry Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardStudentBiodata"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="14dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?selectableItemBackground"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
 
-                    <!-- Card 0: Menu Profile Data Diri / Biodata Lengkap -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardStudentBiodata"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?selectableItemBackground"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="3dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:background="#E0F2FE"
+                            android:gravity="center"
+                            android:text="📋"
+                            android:textSize="20sp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Biodata Siswa Lengkap"
+                                android:textColor="#0F172A"
+                                android:textSize="13.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Data pribadi, wali, kontak &amp; dokumen"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="#0284C7" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 3. Section: Informasi Akademik & Disiplin -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Informasi Akademik &amp; Kesehatan"
+                    android:textColor="#334155"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Wali Kelas -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="👨‍🏫"
+                                android:textSize="15sp"
+                                android:layout_marginEnd="8dp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Wali Kelas"
+                                android:textColor="#64748B"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvProfWaliKelas"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:textColor="#1E293B"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="#F1F5F9" />
+
+                        <!-- Guru BK -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🕊️"
+                                android:textSize="15sp"
+                                android:layout_marginEnd="8dp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Guru BK"
+                                android:textColor="#64748B"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvProfGuruBk"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:textColor="#0D9488"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="#F1F5F9" />
+
+                        <!-- Golongan Darah -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🩸"
+                                android:textSize="15sp"
+                                android:layout_marginEnd="8dp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Golongan Darah"
+                                android:textColor="#64748B"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvProfBlood"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:textColor="#1E293B"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="#F1F5F9" />
+
+                        <!-- Poin Disiplin -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_discipline_badge"
+                                android:layout_marginEnd="8dp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Poin Kedisiplinan"
+                                android:textColor="#64748B"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvProfPoints"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100 Poin (Disiplin)"
+                                android:textColor="#16A34A"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 4. Section: Susunan Pengurus Kelas -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardStudentClassCommittee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="14dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="16dp">
+                            android:orientation="horizontal">
 
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="👥 Susunan Pengurus Kelas"
+                                android:textColor="#0F172A"
+                                android:textSize="13.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvCommitteeClassNameBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#EFF6FF"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="Kelas"
+                                android:textColor="#1D4ED8"
+                                android:textSize="10.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Wali & BK Compact Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="vertical">
+
+                            <!-- Wali Kelas -->
                             <LinearLayout
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                android:background="#E0F2FE"
-                                android:gravity="center">
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#F8FAFC"
+                                android:padding="10dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:background="#EFF6FF"
+                                    android:gravity="center"
+                                    android:text="👨‍🏫"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:text="📋"
-                                    android:textSize="22sp" />
+                                    android:layout_marginStart="10dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Wali Kelas"
+                                        android:textColor="#64748B"
+                                        android:textSize="10sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvCommitteeHomeroom"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="-"
+                                        android:textColor="#0F172A"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
                             </LinearLayout>
+
+                            <!-- Guru BK -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:background="#F8FAFC"
+                                android:padding="10dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:background="#ECFDF5"
+                                    android:gravity="center"
+                                    android:text="🕊️"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Guru BK"
+                                        android:textColor="#64748B"
+                                        android:textSize="10sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvCommitteeCounselor"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="-"
+                                        android:textColor="#0F172A"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Ketua & Wakil Grid -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="3dp"
+                                    android:background="#F8FAFC"
+                                    android:orientation="vertical"
+                                    android:padding="10dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="👑 Ketua Kelas"
+                                        android:textColor="#D97706"
+                                        android:textSize="10.5sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvCommitteeLeader"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:text="-"
+                                        android:textColor="#0F172A"
+                                        android:textSize="11.5sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="3dp"
+                                    android:background="#F8FAFC"
+                                    android:orientation="vertical"
+                                    android:padding="10dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="🎖️ Wakil Ketua"
+                                        android:textColor="#2563EB"
+                                        android:textSize="10.5sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvCommitteeViceLeader"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:text="-"
+                                        android:textColor="#0F172A"
+                                        android:textSize="11.5sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Sekretaris & Bendahara Grid -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="3dp"
+                                    android:background="#F8FAFC"
+                                    android:orientation="vertical"
+                                    android:padding="10dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="✍️ Sekretaris"
+                                        android:textColor="#059669"
+                                        android:textSize="10.5sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvCommitteeSecretary"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:text="-"
+                                        android:textColor="#0F172A"
+                                        android:textSize="11.5sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="3dp"
+                                    android:background="#F8FAFC"
+                                    android:orientation="vertical"
+                                    android:padding="10dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="💰 Bendahara"
+                                        android:textColor="#7C3AED"
+                                        android:textSize="10.5sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvCommitteeTreasurer"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:text="-"
+                                        android:textColor="#0F172A"
+                                        android:textSize="11.5sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 5. Section: Pengaturan Akun & Layanan (Clean Grouped Card) -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Pengaturan &amp; Layanan"
+                    android:textColor="#334155"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Item 1: Ganti Password -->
+                        <LinearLayout
+                            android:id="@+id/btnProfChangePassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="14dp">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/ic_key_proctor"
+                                app:tint="#F59E0B" />
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -1733,477 +2270,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Profile Data Diri / Biodata Siswa"
-                                    android:textColor="#0F172A"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:text="NISN, Tempat/Tgl Lahir, Alamat, Orang Tua &amp; Kontak"
-                                    android:textColor="#64748B"
-                                    android:textSize="11sp" />
-                            </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_chevron_right"
-                                app:tint="#0284C7" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Card 1: Data Guru Pembimbing & Kesehatan -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Informasi Akademik &amp; Kesehatan"
-                        android:textColor="#1E293B"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="2dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Wali Kelas"
-                                    android:textColor="#64748B"
-                                    android:textSize="12sp" />
-                                <TextView
-                                    android:id="@+id/tvProfWaliKelas"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Bpk. Drs. Agus Santoso, M.Pd"
-                                    android:textColor="#1E293B"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginVertical="8dp"
-                                android:background="#F1F5F9" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Guru BK Pembimbing"
-                                    android:textColor="#64748B"
-                                    android:textSize="12sp" />
-                                <TextView
-                                    android:id="@+id/tvProfGuruBk"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="-"
-                                    android:textColor="#00796B"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginVertical="8dp"
-                                android:background="#F1F5F9" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Golongan Darah"
-                                    android:textColor="#64748B"
-                                    android:textSize="12sp" />
-                                <TextView
-                                    android:id="@+id/tvProfBlood"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="O (Rhesus +)"
-                                    android:textColor="#1E293B"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginVertical="8dp"
-                                android:background="#F1F5F9" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-                                    <ImageView
-                                        android:layout_width="16dp"
-                                        android:layout_height="16dp"
-                                        android:src="@drawable/ic_discipline_badge"
-                                        android:layout_marginEnd="6dp" />
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Poin Kedisiplinan"
-                                        android:textColor="#64748B"
-                                        android:textSize="12sp" />
-                                </LinearLayout>
-                                <TextView
-                                    android:id="@+id/tvProfPoints"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="100 Poin (Disiplin Baik)"
-                                    android:textColor="#2E7D32"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- ================= CARD SUSUNAN PENGURUS KELAS & WALI KELAS ================= -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardStudentClassCommittee"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        app:cardBackgroundColor="#FFFFFF"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <!-- Header -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="👥 Susunan Pengurus Kelas"
-                                    android:textColor="#0F172A"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tvCommitteeClassNameBadge"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="#EFF6FF"
-                                    android:paddingHorizontal="8dp"
-                                    android:paddingVertical="3dp"
-                                    android:text="Rombel Kelas"
-                                    android:textColor="#1D4ED8"
-                                    android:textSize="10.5sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="Struktur organisasi kepengurusan rombel kelas aktif"
-                                android:textColor="#64748B"
-                                android:textSize="11sp" />
-
-                            <!-- List Pengurus 2-Kolom / Card Rapi -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:orientation="vertical">
-
-                                <!-- Wali Kelas -->
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="#F8FAFC"
-                                    android:padding="10dp"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-                                    <TextView
-                                        android:layout_width="32dp"
-                                        android:layout_height="32dp"
-                                        android:background="#EFF6FF"
-                                        android:gravity="center"
-                                        android:text="👨‍🏫"
-                                        android:textSize="16sp" />
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:layout_marginStart="10dp"
-                                        android:orientation="vertical">
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="Wali Kelas"
-                                            android:textColor="#64748B"
-                                            android:textSize="10.5sp" />
-                                        <TextView
-                                            android:id="@+id/tvCommitteeHomeroom"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="Bpk. Drs. H. Bambang S., M.Pd"
-                                            android:textColor="#0F172A"
-                                            android:textSize="12.5sp"
-                                            android:textStyle="bold" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <!-- Guru BK Kelas -->
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="6dp"
-                                    android:background="#F8FAFC"
-                                    android:padding="10dp"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-                                    <TextView
-                                        android:layout_width="32dp"
-                                        android:layout_height="32dp"
-                                        android:background="#ECFDF5"
-                                        android:gravity="center"
-                                        android:text="🕊️"
-                                        android:textSize="16sp" />
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:layout_marginStart="10dp"
-                                        android:orientation="vertical">
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="Guru BK Kelas"
-                                            android:textColor="#64748B"
-                                            android:textSize="10.5sp" />
-                                        <TextView
-                                            android:id="@+id/tvCommitteeCounselor"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textColor="#0F172A"
-                                            android:textSize="12.5sp"
-                                            android:textStyle="bold" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <!-- Row Ketua & Wakil Ketua -->
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="6dp"
-                                    android:orientation="horizontal"
-                                    android:weightSum="2">
-
-                                    <!-- Ketua Kelas -->
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:background="#F8FAFC"
-                                        android:padding="10dp"
-                                        android:layout_marginEnd="3dp"
-                                        android:orientation="vertical">
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="👑 Ketua Kelas"
-                                            android:textColor="#D97706"
-                                            android:textSize="10.5sp"
-                                            android:textStyle="bold" />
-                                        <TextView
-                                            android:id="@+id/tvCommitteeLeader"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="2dp"
-                                            android:text="M. Rizky Pratama"
-                                            android:textColor="#0F172A"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-                                    </LinearLayout>
-
-                                    <!-- Wakil Ketua -->
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:background="#F8FAFC"
-                                        android:padding="10dp"
-                                        android:layout_marginStart="3dp"
-                                        android:orientation="vertical">
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="🎖️ Wakil Ketua"
-                                            android:textColor="#2563EB"
-                                            android:textSize="10.5sp"
-                                            android:textStyle="bold" />
-                                        <TextView
-                                            android:id="@+id/tvCommitteeViceLeader"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="2dp"
-                                            android:text="Nabila Putri Amanda"
-                                            android:textColor="#0F172A"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <!-- Row Sekretaris & Bendahara -->
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="6dp"
-                                    android:orientation="horizontal"
-                                    android:weightSum="2">
-
-                                    <!-- Sekretaris -->
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:background="#F8FAFC"
-                                        android:padding="10dp"
-                                        android:layout_marginEnd="3dp"
-                                        android:orientation="vertical">
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="✍️ Sekretaris"
-                                            android:textColor="#059669"
-                                            android:textSize="10.5sp"
-                                            android:textStyle="bold" />
-                                        <TextView
-                                            android:id="@+id/tvCommitteeSecretary"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="2dp"
-                                            android:text="Siti Aisyah Azzahra"
-                                            android:textColor="#0F172A"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-                                    </LinearLayout>
-
-                                    <!-- Bendahara -->
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:background="#F8FAFC"
-                                        android:padding="10dp"
-                                        android:layout_marginStart="3dp"
-                                        android:orientation="vertical">
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="💰 Bendahara"
-                                            android:textColor="#7C3AED"
-                                            android:textSize="10.5sp"
-                                            android:textStyle="bold" />
-                                        <TextView
-                                            android:id="@+id/tvCommitteeTreasurer"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="2dp"
-                                            android:text="Ahmad Fauzan Nugroho"
-                                            android:textColor="#0F172A"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-                                    </LinearLayout>
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Section 2: Quick Action Cards -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="Pengaturan &amp; Layanan Akun"
-                        android:textColor="#1E293B"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <!-- Action 1: Ganti Password -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/btnProfChangePassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="1dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="14dp">
-
-                            <ImageView
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
-                                android:src="@drawable/ic_key_proctor"
-                                app:tint="#F59E0B" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Ganti Password Akun"
+                                    android:text="Ganti Password"
                                     android:textColor="#1E293B"
                                     android:textSize="13sp"
                                     android:textStyle="bold" />
@@ -2211,90 +2278,28 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="1dp"
                                     android:text="Ubah kata sandi login Anda secara berkala"
                                     android:textColor="#64748B"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="›"
-                                android:textColor="#94A3B8"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Action 2: Rekap Absensi Lengkap -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/btnProfAttendanceDetail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="1dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="14dp">
-
                             <ImageView
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
-                                android:src="@drawable/ic_attendance"
-                                app:tint="#1565C0" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Rekap Absensi Masuk &amp; Pulang"
-                                    android:textColor="#1E293B"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Histori waktu Gate-In dan Gate-Out harian"
-                                    android:textColor="#64748B"
-                                    android:textSize="11sp" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="›"
-                                android:textColor="#94A3B8"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_chevron_right"
+                                app:tint="#94A3B8" />
                         </LinearLayout>
-                    </androidx.cardview.widget.CardView>
 
-                    <!-- Action 4: Pembaruan Aplikasi (Cek Update APK) -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardProfAppUpdate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        app:cardBackgroundColor="#FFFFFF"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="1dp">
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="16dp"
+                            android:background="#F1F5F9" />
 
+                        <!-- Item 2: Rekap Absensi -->
                         <LinearLayout
-                            android:id="@+id/btnProfAppUpdate"
+                            android:id="@+id/btnProfAttendanceDetail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="?attr/selectableItemBackground"
@@ -2302,59 +2307,127 @@
                             android:focusable="true"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:padding="14dp">
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="14dp">
 
                             <ImageView
-                                android:layout_width="26dp"
-                                android:layout_height="26dp"
-                                android:src="@drawable/ic_system_update"
-                                app:tint="#0284C7" />
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/ic_attendance"
+                                app:tint="#2563EB" />
 
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
+                                android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Pembaruan Aplikasi (Cek Update APK)"
+                                    android:text="Rekap Presensi Lengkap"
                                     android:textColor="#1E293B"
                                     android:textSize="13sp"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tvAppVersionStatus"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Versi saat ini: v2.8.88 • Ketuk untuk cek rilis terbaru"
+                                    android:layout_marginTop="1dp"
+                                    android:text="Histori waktu Gate-In dan Gate-Out harian"
                                     android:textColor="#64748B"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="›"
-                                android:textColor="#94A3B8"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_chevron_right"
+                                app:tint="#94A3B8" />
                         </LinearLayout>
-                    </androidx.cardview.widget.CardView>
 
-                    <!-- Action 6: Logout Button -->
-                    <Button
-                        android:id="@+id/btnProfLogout"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="22dp"
-                        android:backgroundTint="#EF4444"
-                        android:text="Keluar dari Akun (Logout)"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="16dp"
+                            android:background="#F1F5F9" />
+
+                        <!-- Item 3: Pembaruan Aplikasi -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardProfAppUpdate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="0dp"
+                            app:cardElevation="0dp"
+                            app:cardBackgroundColor="@android:color/transparent">
+
+                            <LinearLayout
+                                android:id="@+id/btnProfAppUpdate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="16dp"
+                                android:paddingVertical="14dp">
+
+                                <ImageView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:src="@drawable/ic_system_update"
+                                    app:tint="#0284C7" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="14dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Pembaruan Aplikasi"
+                                        android:textColor="#1E293B"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvAppVersionStatus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="1dp"
+                                        android:text="Versi terkini • Ketuk untuk cek rilis terbaru"
+                                        android:textColor="#64748B"
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    app:tint="#94A3B8" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 6. Action Logout Button -->
+                <Button
+                    android:id="@+id/btnProfLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="24dp"
+                    android:backgroundTint="#EF4444"
+                    android:text="Keluar dari Akun (Logout)"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
         </ScrollView>
     </FrameLayout>

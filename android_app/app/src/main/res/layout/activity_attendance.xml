@@ -374,7 +374,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="📈 GRAFIK TREN KEHADIRAN"
+                                android:text="📈 ANALISIS &amp; TREN KEHADIRAN"
                                 android:textColor="#1E40AF"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -392,25 +392,136 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <!-- Sub-badges: Streak Kehadiran & Skor Disiplin -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Visualisasi tren dan konsistensi presensi gerbang sekolah"
-                            android:textColor="#64748B"
-                            android:textSize="11sp" />
+                            android:layout_marginTop="6dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvDisciplineStreakBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#FEF3C7"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="🔥 7 Hari Beruntun Hadir"
+                                android:textColor="#B45309"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvDisciplineScoreBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:background="#EFF6FF"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="⭐ Skor Disiplin: 96/100"
+                                android:textColor="#1D4ED8"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Mode Switcher: 14 Hari vs 4 Pekan -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="#F1F5F9"
+                            android:padding="3dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/btnTrendMode14Days"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="#FFFFFF"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:paddingVertical="6dp"
+                                android:text="📅 14 Hari Terakhir"
+                                android:textColor="#1E293B"
+                                android:textSize="10.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/btnTrendModeWeekly"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:paddingVertical="6dp"
+                                android:text="📊 4 Pekan / Bulan"
+                                android:textColor="#64748B"
+                                android:textSize="10.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Interactive Box: Detail Hari / Batang yang Dipilih -->
+                        <LinearLayout
+                            android:id="@+id/layoutTrendSelectedDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="#F8FAFC"
+                            android:padding="10dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvTrendSelectedDate"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Ketuk batang grafik di bawah untuk melihat detail harian"
+                                    android:textColor="#334155"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvTrendSelectedStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="🟢 Info Lengkap"
+                                    android:textColor="#16A34A"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvTrendSelectedTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Setiap batang mewakili presensi harian, nilai disiplin, dan waktu gerbang masuk."
+                                android:textColor="#64748B"
+                                android:textSize="10sp" />
+                        </LinearLayout>
 
                         <!-- Horizontal Scrollable Visual Trend Bars Container -->
                         <HorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="10dp"
                             android:scrollbars="none">
 
                             <LinearLayout
                                 android:id="@+id/layoutAttendanceTrendBars"
                                 android:layout_width="wrap_content"
-                                android:layout_height="125dp"
+                                android:layout_height="130dp"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
                                 android:paddingHorizontal="4dp"
